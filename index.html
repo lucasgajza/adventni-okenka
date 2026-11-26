@@ -181,6 +181,13 @@
     border-bottom: 1px solid var(--linka); padding: 22px 16px 14px;
   }
   .scena::before { content: ""; position: absolute; left: 50%; top: 0; width: 64px; height: 3px; transform: translateX(-50%); background: var(--zlato-syte); }
+  .autor { display: inline-flex; align-items: center; gap: 10px; margin-top: 16px; padding: 5px 14px 5px 5px; border-radius: 999px; background: rgba(53,10,18,.45); border: 1px solid rgba(226,194,125,.35); text-align: left; }
+  .autor[hidden] { display: none; }
+  .autor .ava { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex: none; border: 1px solid var(--zlato); background: var(--vino); color: var(--zlato); display: grid; place-items: center; font-family: "DM Serif Display", Georgia, serif; font-size: 15px; }
+  .autor small { display: block; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--zlato); font-weight: 600; line-height: 1.2; }
+  .autor b { display: block; font-size: 13px; font-weight: 600; color: #fff; line-height: 1.25; }
+  .vlastni-foto { display: block; width: 100%; max-height: 300px; object-fit: cover; border-radius: 6px; box-shadow: 0 8px 20px rgba(60,20,20,.15); }
+  .lahve .vlastni { height: 100%; width: 90%; object-fit: cover; border-radius: 3px; }
   .police { display: flex; justify-content: center; align-items: flex-end; gap: 6px; }
   .police figure { margin: 0; flex: 0 1 112px; text-align: center; }
   .police .foto { width: 100%; height: auto; display: block; mix-blend-mode: multiply; }
@@ -346,6 +353,7 @@
       <div class="den" id="k-den"></div>
       <h2 id="k-nazev"></h2>
       <p id="k-nalada"></p>
+      <div class="autor" id="k-autor" hidden><span class="ava" id="k-ava"></span><span><small>Recept sdílí</small><b id="k-jmeno"></b></span></div>
     </div>
     <div class="scena">
       <div class="police" id="k-police"></div>
@@ -368,7 +376,7 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="tipy.js?v=3"></script>
+<script src="tipy.js?v=4"></script>
 <script>
 (function () {
   const ROK = 2026;
@@ -434,7 +442,7 @@
     if (!zamceno && otevrena.includes(den)) btn.classList.add('otevrene');
     btn.setAttribute('aria-label', zamceno ? `Okénko ${den}, otevře se ${den}. prosince` : `Okénko ${den}: ${t.nazev}`);
     btn.innerHTML = `
-      <span class="vnitrek">${zamceno ? '' : `<span class="lahve n${t.slozeni.length}">${t.slozeni.map(([o]) => lahvicka(o)).join('')}</span><span class="jm">${t.nazev}</span>`}</span>
+      <span class="vnitrek">${zamceno ? '' : `<span class="lahve n${t.slozeni.length}">${t.foto ? `<img class="vlastni" src="${t.foto}" alt="" loading="lazy">` : t.slozeni.map(([o]) => lahvicka(o)).join('')}</span><span class="jm">${t.nazev}</span>`}</span>
       <span class="dvirka"><span class="cislo">${den}</span><span class="motiv">${MOTIVY[i % 3]}</span><span class="knofl"></span>${zamceno ? ZAMEK : ''}</span>`;
     btn.addEventListener('click', () => klik(btn, den));
     mrizka.appendChild(btn);
@@ -513,7 +521,26 @@
     document.getElementById('k-pouziti').textContent = t.pouziti;
     document.getElementById('k-postup').textContent = t.postup;
     document.getElementById('k-tip').textContent = t.tip;
-    document.getElementById('k-police').innerHTML = t.slozeni.map(([o]) => `<figure>${lahvicka(o)}<figcaption>${OLEJE[o].stitek}</figcaption></figure>`).join('');
+    const police = document.getElementById('k-police');
+    if (t.foto) {
+      police.innerHTML = '<img class="vlastni-foto" alt="">';
+      police.firstChild.src = t.foto; police.firstChild.alt = t.nazev;
+    } else {
+      police.innerHTML = t.slozeni.map(([o]) => `<figure>${lahvicka(o)}<figcaption>${OLEJE[o].stitek}</figcaption></figure>`).join('');
+    }
+    // Kdo recept poslal: malá fotka (nebo iniciála) a jméno
+    const autor = document.getElementById('k-autor'), ava = document.getElementById('k-ava');
+    autor.hidden = !t.autor;
+    if (t.autor) {
+      document.getElementById('k-jmeno').textContent = t.autor.jmeno;
+      if (t.autor.foto) {
+        ava.outerHTML = '<img class="ava" id="k-ava" alt="">';
+        document.getElementById('k-ava').src = t.autor.foto;
+      } else {
+        ava.outerHTML = '<span class="ava" id="k-ava"></span>';
+        document.getElementById('k-ava').textContent = t.autor.jmeno.trim().charAt(0).toUpperCase();
+      }
+    }
     const ul = document.getElementById('k-oleje');
     ul.innerHTML = '';
     t.slozeni.forEach(([klic, n]) => {

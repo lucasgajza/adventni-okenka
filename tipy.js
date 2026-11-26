@@ -32,6 +32,9 @@ window.OLEJE = {
 };
 
 // 24 tipů – jeden na každý adventní den. "Difuzér" = kapky do difuzéru se 100–200 ml vody.
+// Nepovinné:
+//   autor: { jmeno: "Jana Nováková", foto: "img/autori/jana.jpg" }  – kdo recept poslal; bez fotky se ukáže iniciála.
+//   foto: "img/recepty/den-7.jpg" – vlastní fotka hotové směsi (sůl, roll-on, sprej…); ukáže se místo lahviček.
 window.TIPY = [
   { den: 1, nazev: "Zimní ráno", nalada: "Probuzení a dobrá nálada", pouziti: "Difuzér",
     slozeni: [["orange", 4], ["peppermint", 2]],
