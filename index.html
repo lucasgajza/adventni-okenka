@@ -5,209 +5,247 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Voňavý adventní kalendář</title>
 <meta name="description" content="24 okének, 24 vánočních směsí z esenciálních olejů Young Living. Každý den jedno nové okénko.">
-<meta property="og:title" content="🎄 Voňavý adventní kalendář">
-<meta property="og:description" content="Každý den v prosinci jedna nová směs esenciálních olejů. Otevřete si dnešní okénko!">
+<meta property="og:title" content="Voňavý adventní kalendář 2026">
+<meta property="og:description" content="Každý den v prosinci jedna nová směs olejů Young Living. Otevřete si dnešní okénko!">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://lucasgajza.github.io/adventni-okenka/nahled.jpg">
-<meta name="theme-color" content="#0b1a2e">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎄</text></svg>">
+<meta name="theme-color" content="#5a1420">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237a1d2b'/><circle cx='50' cy='50' r='16' fill='none' stroke='%23e2c27d' stroke-width='5'/><g stroke='%23e2c27d' stroke-width='5' stroke-linecap='round'><path d='M50 18v10M50 72v10M18 50h10M72 50h10M27 27l7 7M66 66l7 7M27 73l7-7M66 34l7-7'/></g></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b1a2e;
-    --bg2: #12294a;
-    --text: #f6f1e7;
-    --muted: #b9c3d3;
-    --gold: #e9c46a;
-    --gold-deep: #c99a3b;
-    --card: rgba(255,255,255,.06);
-    --line: rgba(255,255,255,.12);
-    --sheet: #fffaf0;
-    --sheet-text: #1d2a3a;
-    --sheet-muted: #5b6878;
-    --green: #2d6a4f;
-    --red: #9b2c3a;
+    --vino: #7a1d2b;
+    --vino-tmave: #4f0f1a;
+    --vino-nejtmavsi: #350a12;
+    --zlato: #e2c27d;
+    --zlato-syte: #c9a14f;
+    --zlato-tmave: #9c7631;
+    --fialova: #6e4a9e;
+    --fialova-tmave: #563a7d;
+    --krem: #fbf6ee;
+    --text: #2b2b2b;
+    --sedy: #6b6b6b;
+    --linka: #ece4d6;
+    /* Zlaté nebeské motivy (slunce, měsíc, hvězdy) jako vzor na pozadí */
+    --vzor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' viewBox='0 0 260 260' fill='none' stroke='%23e2c27d' stroke-width='1.2' stroke-linecap='round'%3E%3Cg opacity='.55'%3E%3Ccircle cx='48' cy='56' r='9'/%3E%3Cpath d='M48 38v-6M48 80v-6M30 56h-6M72 56h-6M35 43l-4-4M65 73l-4-4M35 69l-4 4M65 39l-4 4'/%3E%3Cpath d='M196 34a16 16 0 1 0 14 24a12 12 0 1 1-14-24z'/%3E%3Cpath d='M130 128l3 9 9 3-9 3-3 9-3-9-9-3 9-3z'/%3E%3Cpath d='M214 190l2 6 6 2-6 2-2 6-2-6-6-2 6-2z'/%3E%3Cpath d='M58 196l2 5 5 2-5 2-2 5-2-5-5-2 5-2z'/%3E%3Cpath d='M92 96c30 -24 66 -24 96 0' stroke-dasharray='1 6'/%3E%3Cpath d='M20 150c40 30 90 30 130 0' stroke-dasharray='1 6'/%3E%3C/g%3E%3Cg fill='%23e2c27d' stroke='none' opacity='.6'%3E%3Ccircle cx='160' cy='86' r='1.4'/%3E%3Ccircle cx='238' cy='120' r='1.2'/%3E%3Ccircle cx='104' cy='224' r='1.4'/%3E%3Ccircle cx='20' cy='112' r='1'/%3E%3Ccircle cx='178' cy='238' r='1'/%3E%3C/g%3E%3C/svg%3E");
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
   body {
     min-height: 100vh;
-    font-family: Inter, system-ui, -apple-system, sans-serif;
-    color: var(--text);
-    background:
-      radial-gradient(1200px 600px at 50% -10%, #1f4470 0%, transparent 60%),
-      radial-gradient(800px 500px at 100% 100%, #1a3b2f 0%, transparent 60%),
-      linear-gradient(180deg, var(--bg2), var(--bg));
+    font-family: Montserrat, "Helvetica Neue", Arial, sans-serif;
+    color: var(--krem);
+    background-color: var(--vino-tmave);
+    background-image:
+      radial-gradient(900px 520px at 50% 0%, rgba(160, 46, 62, .75), transparent 70%),
+      radial-gradient(700px 500px at 0% 100%, rgba(30, 6, 12, .7), transparent 70%),
+      var(--vzor),
+      linear-gradient(180deg, var(--vino-tmave), var(--vino-nejtmavsi));
+    background-size: auto, auto, 260px 260px, auto;
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
-  #snih { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  main { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 40px 16px 56px; }
+  #trpyt { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
-  header { text-align: center; margin-bottom: 28px; }
-  .stitek {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px;
-    font-size: 13px; color: var(--gold); letter-spacing: .04em; background: var(--card);
+  .lista {
+    position: relative; z-index: 2; background: var(--fialova); color: #fff; text-align: center;
+    font-size: 13px; font-weight: 600; padding: 9px 16px; letter-spacing: .01em;
   }
+  main { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 44px 16px 56px; }
+
+  header { text-align: center; }
+  .nadpis-mala {
+    font-size: 12px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--zlato);
+    display: inline-flex; align-items: center; gap: 14px;
+  }
+  .nadpis-mala::before, .nadpis-mala::after { content: ""; width: 38px; height: 1px; background: linear-gradient(90deg, transparent, var(--zlato)); }
+  .nadpis-mala::after { transform: scaleX(-1); }
   h1 {
-    font-family: Fraunces, Georgia, serif; font-weight: 700;
-    font-size: clamp(34px, 7vw, 62px); line-height: 1.05; margin: 16px 0 10px;
-    letter-spacing: -.01em;
+    font-family: "DM Serif Display", Georgia, serif; font-weight: 400;
+    font-size: clamp(38px, 7.4vw, 72px); line-height: 1.02; margin: 16px 0 14px;
   }
-  h1 em { font-style: normal; color: var(--gold); }
-  .podtitul { color: var(--muted); font-size: clamp(15px, 2.2vw, 18px); max-width: 560px; margin: 0 auto; line-height: 1.5; }
+  h1 em { font-style: italic; color: var(--zlato); }
+  .podtitul { color: #e9d9cf; font-size: clamp(14px, 2vw, 17px); font-weight: 300; max-width: 560px; margin: 0 auto; line-height: 1.65; }
   .stav {
-    margin: 22px auto 0; display: inline-block; padding: 12px 18px; border-radius: 14px;
-    background: linear-gradient(135deg, rgba(233,196,106,.16), rgba(233,196,106,.05));
-    border: 1px solid rgba(233,196,106,.35); font-size: 15px; line-height: 1.4;
+    margin: 26px auto 0; display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px;
+    border: 1px solid rgba(226,194,125,.5); border-radius: 2px; background: rgba(53,10,18,.45);
+    font-size: 14px; font-weight: 500; letter-spacing: .02em;
   }
-  .stav strong { color: var(--gold); }
+  .stav strong { color: var(--zlato); font-weight: 700; }
 
-  .mrizka {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;
-    margin-top: 30px;
+  /* Krabička s šuplíčky */
+  .krabice {
+    margin-top: 36px; padding: clamp(10px, 2.4vw, 22px); border-radius: 6px;
+    background: linear-gradient(160deg, #8a2333, #5c1422);
+    box-shadow: 0 30px 70px rgba(0,0,0,.45), inset 0 0 0 1px rgba(226,194,125,.45), inset 0 0 0 6px rgba(53,10,18,.35), inset 0 0 0 7px rgba(226,194,125,.25);
   }
+  .mrizka { display: grid; grid-template-columns: repeat(6, 1fr); gap: clamp(6px, 1.4vw, 12px); }
   .okenko {
-    position: relative; aspect-ratio: 1 / 1.1; border-radius: 18px; border: 0; padding: 0;
-    cursor: pointer; perspective: 800px; background: transparent; color: inherit; font: inherit;
-    -webkit-tap-highlight-color: transparent;
+    position: relative; aspect-ratio: 1 / 1.08; border: 0; padding: 0; background: transparent; color: inherit; font: inherit;
+    cursor: pointer; perspective: 900px; -webkit-tap-highlight-color: transparent; border-radius: 3px;
   }
   .vnitrek {
-    position: absolute; inset: 0; border-radius: 18px; display: grid; place-items: center;
-    background: rgba(255,250,240,.95); color: var(--sheet-text); overflow: hidden;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+    position: absolute; inset: 0; border-radius: 3px; background: var(--krem); color: var(--text);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    box-shadow: inset 0 6px 14px rgba(0,0,0,.25); overflow: hidden; padding: 6px 4px;
   }
-  .vnitrek .em { font-size: clamp(26px, 5vw, 40px); }
-  .vnitrek .jm { font-size: 11px; font-weight: 600; text-align: center; padding: 0 6px; margin-top: 4px; line-height: 1.2; }
+  .vnitrek svg { height: 62%; width: auto; filter: drop-shadow(0 4px 4px rgba(0,0,0,.18)); }
+  .vnitrek .jm { font-size: 10px; font-weight: 600; text-align: center; line-height: 1.15; color: var(--vino); letter-spacing: .02em; }
   .dvirka {
-    position: absolute; inset: 0; border-radius: 18px; transform-origin: left center;
-    transition: transform .9s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    border: 1px solid rgba(255,255,255,.14);
-    box-shadow: 0 10px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.18);
+    position: absolute; inset: 0; border-radius: 3px; transform-origin: left center;
+    transition: transform 1s cubic-bezier(.2,.8,.2,1);
+    background:
+      var(--vzor) center / 180px 180px,
+      linear-gradient(160deg, #94283a, #6a1726);
+    box-shadow: inset 0 0 0 1px rgba(226,194,125,.55), inset 0 0 0 4px rgba(106,23,38,1), inset 0 0 0 5px rgba(226,194,125,.3), 0 6px 14px rgba(0,0,0,.3);
     backface-visibility: hidden;
+    display: block;
   }
-  .dvirka::after {
-    content: ""; position: absolute; right: 10px; top: 50%; width: 5px; height: 16px;
-    margin-top: -8px; border-radius: 3px; background: rgba(255,255,255,.35);
-  }
-  .barva-0 .dvirka { background: linear-gradient(150deg, #9b2c3a, #6e1d2a); }
-  .barva-1 .dvirka { background: linear-gradient(150deg, #2d6a4f, #1b4332); }
-  .barva-2 .dvirka { background: linear-gradient(150deg, #1f4e79, #163657); }
-  .barva-3 .dvirka { background: linear-gradient(150deg, #d4a640, #a8781f); }
+  .okenko:nth-child(3n+2) .dvirka { background: var(--vzor) 60px 40px / 180px 180px, linear-gradient(160deg, #862235, #5d1321); }
+  .okenko:nth-child(4n+3) .dvirka { background: var(--vzor) 30px 90px / 180px 180px, linear-gradient(160deg, #9d2f40, #701a2a); }
   .cislo {
-    font-family: Fraunces, Georgia, serif; font-weight: 700;
-    font-size: clamp(26px, 5.4vw, 44px); line-height: 1; text-shadow: 0 2px 8px rgba(0,0,0,.25);
+    position: absolute; left: 12%; top: 10%;
+    font-family: "DM Serif Display", Georgia, serif; font-size: clamp(22px, 4.4vw, 40px); line-height: 1;
+    color: var(--zlato); text-shadow: 0 1px 0 rgba(0,0,0,.35);
   }
-  .zamek { font-size: 12px; opacity: .7; margin-top: 6px; }
-  .okenko.zamcene .dvirka { filter: saturate(.55) brightness(.8); }
-  .okenko.dnes .dvirka {
-    box-shadow: 0 0 0 3px var(--gold), 0 0 28px rgba(233,196,106,.55), 0 10px 24px rgba(0,0,0,.3);
-    animation: puls 2.4s ease-in-out infinite;
+  .motiv { position: absolute; right: 10%; top: 11%; width: 22%; height: auto; opacity: .9; }
+  .knofl {
+    position: absolute; left: 50%; bottom: 14%; width: 17%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff3c9 0%, #e2c27d 35%, #a27a30 75%, #6f5120 100%);
+    box-shadow: 0 3px 5px rgba(0,0,0,.45), inset 0 -1px 2px rgba(0,0,0,.3);
   }
-  @keyframes puls { 50% { box-shadow: 0 0 0 3px var(--gold), 0 0 44px rgba(233,196,106,.8), 0 10px 24px rgba(0,0,0,.3); } }
-  .okenko.otevrene .dvirka { transform: rotateY(-108deg); box-shadow: none; pointer-events: none; }
-  .okenko:not(.zamcene):hover .dvirka { transform: rotateY(-12deg); }
-  .okenko.otevrene:hover .dvirka { transform: rotateY(-108deg); }
-  .okenko:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .zamek {
+    position: absolute; right: 9%; bottom: 9%; width: 14px; height: 14px; opacity: .55;
+  }
+  .okenko.zamcene .dvirka { filter: brightness(.78) saturate(.85); }
+  .okenko.zamcene .knofl { filter: grayscale(.35) brightness(.85); }
+  .okenko.dnes { z-index: 2; }
+  .okenko.dnes .dvirka { box-shadow: inset 0 0 0 1px var(--zlato), inset 0 0 0 4px rgba(106,23,38,1), inset 0 0 0 5px var(--zlato), 0 0 0 2px var(--zlato), 0 0 30px rgba(226,194,125,.6); }
+  .okenko.dnes .knofl { animation: zare 2.2s ease-in-out infinite; }
+  @keyframes zare { 50% { box-shadow: 0 0 18px 6px rgba(255,226,150,.75), 0 3px 5px rgba(0,0,0,.45); } }
+  .okenko.otevrene .dvirka { transform: rotateY(-105deg); box-shadow: none; pointer-events: none; }
+  .okenko:not(.zamcene):not(.otevrene):hover .dvirka { transform: rotateY(-14deg); }
+  .okenko:focus-visible { outline: 2px solid var(--zlato); outline-offset: 3px; }
   .okenko.zatrest { animation: zatrest .45s; }
-  @keyframes zatrest { 20%,60% { transform: translateX(-5px); } 40%,80% { transform: translateX(5px); } }
+  @keyframes zatrest { 20%,60% { transform: translateX(-4px); } 40%,80% { transform: translateX(4px); } }
 
-  .info {
-    margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  .info { margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .info div {
+    background: rgba(53,10,18,.5); border: 1px solid rgba(226,194,125,.28); border-radius: 4px; padding: 20px;
+    font-size: 13.5px; line-height: 1.6; color: #e6d6cc; font-weight: 400;
   }
-  .info div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; font-size: 14px; line-height: 1.5; color: var(--muted); }
-  .info b { display: block; color: var(--text); font-size: 15px; margin-bottom: 6px; }
-  footer { margin-top: 28px; text-align: center; font-size: 12px; color: #8592a6; line-height: 1.6; }
+  .info b { display: block; color: var(--zlato); font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 19px; margin-bottom: 6px; }
+  footer { margin-top: 30px; text-align: center; font-size: 11.5px; color: #c4a9a6; line-height: 1.7; }
+  footer a { color: var(--zlato); }
 
   /* Detail okénka */
   .zavoj {
-    position: fixed; inset: 0; z-index: 10; background: rgba(5,12,24,.7); backdrop-filter: blur(6px);
+    position: fixed; inset: 0; z-index: 10; background: rgba(28,5,10,.72); backdrop-filter: blur(6px);
     display: grid; place-items: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity .3s;
   }
   .zavoj.ukaz { opacity: 1; pointer-events: auto; }
   .karta {
-    width: 100%; max-width: 460px; max-height: calc(100vh - 32px); overflow-y: auto;
-    background: var(--sheet); color: var(--sheet-text); border-radius: 24px;
-    box-shadow: 0 30px 80px rgba(0,0,0,.5); transform: translateY(24px) scale(.96); transition: transform .4s cubic-bezier(.2,.8,.2,1);
+    width: 100%; max-width: 480px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto;
+    background: #fff; color: var(--text); border-radius: 6px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55); transform: translateY(24px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1);
   }
   .zavoj.ukaz .karta { transform: none; }
   .karta-hlava {
-    position: relative; padding: 26px 24px 22px; text-align: center; color: #fff;
-    background: linear-gradient(150deg, #1f4e79, #0b1a2e); border-radius: 24px 24px 0 0;
+    position: relative; padding: 24px 24px 0; text-align: center; color: #fff;
+    background: var(--vzor) center / 200px 200px, linear-gradient(170deg, #8a2333, #4f0f1a);
+    border-radius: 6px 6px 0 0; overflow: hidden;
   }
-  .karta-hlava .em { font-size: 48px; display: block; }
-  .karta-hlava .den { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-top: 8px; font-weight: 600; }
-  .karta-hlava h2 { font-family: Fraunces, Georgia, serif; font-size: 30px; margin: 4px 0 4px; line-height: 1.1; }
-  .karta-hlava p { margin: 0; color: #c8d3e3; font-size: 14px; }
+  .karta-hlava .den { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--zlato); font-weight: 600; }
+  .karta-hlava h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 34px; margin: 8px 0 4px; line-height: 1.05; }
+  .karta-hlava p { margin: 0; color: #f0dcd6; font-size: 14px; font-weight: 300; }
+  .police {
+    display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-top: 18px; padding: 0 10px;
+    height: 136px; position: relative;
+  }
+  .police::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: 0; height: 10px; border-radius: 50%; background: rgba(0,0,0,.35); filter: blur(6px); }
+  .police svg { height: 124px; width: auto; position: relative; z-index: 1; filter: drop-shadow(0 6px 8px rgba(0,0,0,.35)); }
+  .police svg:nth-child(2) { height: 132px; }
   .zavrit {
-    position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%;
-    border: 0; background: rgba(255,255,255,.14); color: #fff; font-size: 20px; cursor: pointer; line-height: 1;
+    position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; z-index: 2;
+    border: 1px solid rgba(226,194,125,.5); background: rgba(53,10,18,.5); color: #fff; font-size: 20px; cursor: pointer; line-height: 1;
   }
-  .karta-telo { padding: 20px 24px 26px; }
-  .pilulka { display: inline-block; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px; background: #eef4ec; color: var(--green); }
-  .karta h3 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--sheet-muted); margin: 20px 0 10px; }
-  .oleje { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-  .oleje li {
-    display: flex; justify-content: space-between; align-items: center; gap: 12px;
-    padding: 11px 14px; border-radius: 12px; background: #fff; border: 1px solid #ece3d0; font-weight: 500;
+  .karta-telo { padding: 22px 24px 26px; }
+  .pilulka { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 6px 12px; border-radius: 2px; background: #f1ecf7; color: var(--fialova); }
+  .karta h3 { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--sedy); margin: 22px 0 10px; font-weight: 600; }
+  .oleje { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--linka); }
+  .oleje li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linka); }
+  .tecka { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .olej { flex: 1; min-width: 0; }
+  .olej a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; line-height: 1.35; }
+  .olej a:hover { color: var(--fialova); text-decoration: underline; }
+  .olej small { display: block; font-size: 11px; color: var(--fialova); font-weight: 600; margin-top: 2px; letter-spacing: .02em; }
+  .kapky { font-family: "DM Serif Display", Georgia, serif; color: var(--vino); font-size: 18px; white-space: nowrap; }
+  .kapky span { font-family: Montserrat, sans-serif; font-size: 11px; color: var(--sedy); margin-left: 3px; }
+  .karta p.text { margin: 0; line-height: 1.65; font-size: 14.5px; }
+  .tip {
+    margin-top: 20px; padding: 16px 18px; border-left: 3px solid var(--zlato-syte); background: #fbf6ec;
+    line-height: 1.6; font-size: 14.5px; font-style: italic; color: #4a3b2a;
   }
-  .kapky { color: var(--gold-deep); font-weight: 600; white-space: nowrap; font-size: 14px; }
-  .karta p.text { margin: 0; line-height: 1.55; font-size: 15px; }
-  .tip { margin-top: 18px; padding: 14px 16px; border-radius: 14px; background: #fbf1d8; line-height: 1.5; font-size: 15px; }
-  .tip b { color: #8a6114; }
-  .sdilet {
-    margin-top: 20px; width: 100%; padding: 14px; border: 0; border-radius: 14px; cursor: pointer;
-    background: #25d366; color: #fff; font: 600 15px Inter, sans-serif;
+  .tlacitka { margin-top: 22px; display: grid; gap: 10px; }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border: 0; border-radius: 2px;
+    cursor: pointer; font: 600 14px Montserrat, sans-serif; letter-spacing: .02em; text-decoration: none;
   }
-  .sdilet:hover { filter: brightness(.95); }
+  .btn-fial { background: var(--fialova); color: #fff; }
+  .btn-fial:hover { background: var(--fialova-tmave); }
+  .btn svg { width: 18px; height: 18px; }
 
   .toast {
     position: fixed; left: 50%; bottom: 24px; z-index: 20; transform: translate(-50%, 20px);
-    background: #fffaf0; color: var(--sheet-text); padding: 12px 18px; border-radius: 14px;
-    font-size: 14px; font-weight: 500; box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    background: #fff; color: var(--text); padding: 12px 20px; border-radius: 3px; border-top: 3px solid var(--zlato-syte);
+    font-size: 13.5px; font-weight: 500; box-shadow: 0 12px 30px rgba(0,0,0,.4);
     opacity: 0; transition: .3s; pointer-events: none; max-width: calc(100% - 32px); text-align: center;
   }
   .toast.ukaz { opacity: 1; transform: translate(-50%, 0); }
 
   @media (max-width: 720px) {
-    .mrizka { grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .okenko, .vnitrek, .dvirka { border-radius: 14px; }
+    .mrizka { grid-template-columns: repeat(4, 1fr); }
     .vnitrek .jm { display: none; }
+    .vnitrek svg { height: 74%; }
     .info { grid-template-columns: 1fr; }
-    main { padding-top: 28px; }
+    main { padding-top: 32px; }
+    .zamek { width: 11px; height: 11px; }
+    .police svg { height: 104px; } .police svg:nth-child(2) { height: 112px; }
+    .police { height: 116px; gap: 6px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .dvirka, .karta, .zavoj { transition: none; }
-    .okenko.dnes .dvirka { animation: none; }
+    .okenko.dnes .knofl { animation: none; }
   }
 </style>
 </head>
 <body>
-<canvas id="snih" aria-hidden="true"></canvas>
+<canvas id="trpyt" aria-hidden="true"></canvas>
+<div class="lista">Advent 2026 pro naši Young Living rodinu · 24 dní, 24 směsí</div>
 <main>
   <header>
-    <span class="stitek">🌿 Advent 2026 · Young Living</span>
-    <h1>Voňavý <em>adventní</em> kalendář</h1>
-    <p class="podtitul">Každý den jedno okénko a v něm jedna vánoční směs esenciálních olejů. Otevřít jde vždy jen dnešní okénko a ta předchozí.</p>
+    <div class="nadpis-mala">Adventní kalendář</div>
+    <h1>Voňavé <em>Vánoce</em><br>po kapkách</h1>
+    <p class="podtitul">Každý den jeden šuplíček a v něm jedna vánoční směs z olejů Young Living. Otevřít jde vždy jen dnešní okénko a ta předchozí.</p>
     <div class="stav" id="stav"></div>
   </header>
 
-  <section class="mrizka" id="mrizka" aria-label="Adventní okénka"></section>
+  <div class="krabice">
+    <section class="mrizka" id="mrizka" aria-label="Adventní okénka"></section>
+  </div>
 
   <section class="info">
-    <div><b>💧 Difuzér</b>Počty kapek jsou pro difuzér se 100–200 ml vody. U menšího difuzéru ubírejte, u většího přidejte.</div>
-    <div><b>🫙 Na kůži vždy ředit</b>Do roll-onu a koupele oleje míchejte s nosným olejem. Skořici a hřebíček používejte jen do difuzéru.</div>
-    <div><b>☀️ Opatrně</b>Citrusy na kůži nepoužívejte před sluncem. U malých dětí, v těhotenství a se zvířaty (hlavně kočkami) buďte opatrní.</div>
+    <div><b>Difuzér</b>Počty kapek jsou pro difuzér se 100–200 ml vody. U menšího difuzéru ubírejte, u většího přidejte.</div>
+    <div><b>Na kůži vždy ředit</b>Do roll-onu a koupele oleje míchejte s nosným olejem, třeba V-6. Skořici a hřebíček používejte jen do difuzéru.</div>
+    <div><b>Opatrně</b>Citrusy na kůži nepoužívejte před sluncem. U malých dětí, v těhotenství a se zvířaty (hlavně kočkami) buďte opatrní.</div>
   </section>
 
   <footer>
-    Tipy slouží pro radost a inspiraci, nenahrazují rady lékaře.<br>
-    Neoficiální kalendář sdílený mezi přáteli, nejde o stránku společnosti Young Living.
+    Tipy slouží pro radost a inspiraci, nenahrazují rady lékaře. Produkty najdete na <a href="https://www.youngliving.com/cs_cz" target="_blank" rel="noopener">youngliving.com</a>.<br>
+    Neoficiální kalendář sdílený mezi členy. Nejde o stránku společnosti Young Living; názvy produktů jsou jejími ochrannými známkami.
   </footer>
 </main>
 
@@ -215,10 +253,10 @@
   <article class="karta">
     <div class="karta-hlava">
       <button class="zavrit" id="zavrit" aria-label="Zavřít">×</button>
-      <span class="em" id="k-emoji"></span>
       <div class="den" id="k-den"></div>
       <h2 id="k-nazev"></h2>
       <p id="k-nalada"></p>
+      <div class="police" id="k-police"></div>
     </div>
     <div class="karta-telo">
       <span class="pilulka" id="k-pouziti"></span>
@@ -226,8 +264,13 @@
       <ul class="oleje" id="k-oleje"></ul>
       <h3>Jak na to</h3>
       <p class="text" id="k-postup"></p>
-      <div class="tip"><b>Tip:</b> <span id="k-tip"></span></div>
-      <button class="sdilet" id="k-sdilet">Poslat do WhatsAppu</button>
+      <div class="tip" id="k-tip"></div>
+      <div class="tlacitka">
+        <button class="btn btn-fial" id="k-sdilet">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
+          Poslat do WhatsAppu
+        </button>
+      </div>
     </div>
   </article>
 </div>
@@ -238,9 +281,47 @@
 (function () {
   const ROK = 2026;
   const PORADI = [7, 15, 1, 22, 11, 4, 19, 9, 24, 13, 2, 17, 6, 20, 12, 3, 23, 10, 16, 5, 21, 8, 14, 18];
+  const OLEJE = window.OLEJE;
   const tipy = Object.fromEntries(window.TIPY.map(t => [t.den, t]));
+  const eshop = id => `https://www.youngliving.com/cs_CZ/products/id/${id}`;
+  const kapek = n => n === 1 ? 'kapka' : n < 5 ? 'kapky' : 'kapek';
+  const dni = n => n === 1 ? 'den' : n < 5 ? 'dny' : 'dní';
 
-  // Kolikátý prosincový den je dnes (0 = ještě není prosinec, 24 = vše otevřené)
+  // Lahvička: jantarové sklo, bílé víčko, barevný štítek
+  let lahId = 0;
+  function lahvicka(olej) {
+    const o = OLEJE[olej], i = lahId++;
+    const t = o.stitek, fs = t.length > 12 ? 4.6 : t.length > 9 ? 5.6 : 6.6;
+    return `<svg viewBox="0 0 60 124" role="img" aria-label="${o.nazev}">
+      <defs>
+        <linearGradient id="sk${i}" x1="0" x2="1"><stop offset="0" stop-color="#3a1a07"/><stop offset=".35" stop-color="#7a3e12"/><stop offset=".7" stop-color="#5a2a0a"/><stop offset="1" stop-color="#2a1205"/></linearGradient>
+        <linearGradient id="st${i}" x1="0" x2="1"><stop offset="0" stop-color="${o.barva}" stop-opacity=".85"/><stop offset=".45" stop-color="${o.barva}"/><stop offset="1" stop-color="${o.barva}" stop-opacity=".8"/></linearGradient>
+        <linearGradient id="vk${i}" x1="0" x2="1"><stop offset="0" stop-color="#d9d9d9"/><stop offset=".4" stop-color="#ffffff"/><stop offset="1" stop-color="#cfcfcf"/></linearGradient>
+      </defs>
+      <rect x="17" y="2" width="26" height="27" rx="3" fill="url(#vk${i})"/>
+      <g stroke="#c4c4c4" stroke-width=".6">${[21,25,29,33,37,41].map(x => `<line x1="${x-1}" y1="5" x2="${x-1}" y2="26"/>`).join('')}</g>
+      <rect x="15" y="27" width="30" height="4" rx="1" fill="#e9e9e9"/>
+      <path d="M20 31h20v5c8 0 14 4 14 10v66a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8V46c0-6 6-10 14-10z" fill="url(#sk${i})"/>
+      <rect x="6" y="50" width="48" height="58" fill="url(#st${i})"/>
+      <rect x="6" y="50" width="48" height="2" fill="#fff" opacity=".35"/>
+      <path d="M30 55c-1.6 2.4-2.6 4-2.6 5.3a2.6 2.6 0 0 0 5.2 0c0-1.3-1-2.9-2.6-5.3z" fill="#fff" opacity=".9"/>
+      <rect x="9" y="67" width="42" height="14" rx="1.5" fill="#000" opacity=".28"/>
+      <text x="30" y="${75.4 + fs * .33}" text-anchor="middle" font-family="DM Serif Display, Georgia, serif" font-size="${fs}" fill="#fff" letter-spacing=".3">${t.replace('&', '&amp;')}</text>
+      <circle cx="30" cy="92" r="5.5" fill="none" stroke="#fff" stroke-width=".9" opacity=".85"/>
+      <circle cx="30" cy="92" r="2.4" fill="#fff" opacity=".85"/>
+      <rect x="16" y="101" width="28" height="1" fill="#fff" opacity=".6"/>
+      <rect x="10" y="38" width="5" height="76" rx="2.5" fill="#fff" opacity=".13"/>
+    </svg>`;
+  }
+
+  // Nebeské motivy na dvířka
+  const MOTIVY = [
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#e2c27d" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#e2c27d" stroke-width="1.3" stroke-linecap="round"><path d="M15 3a9 9 0 1 0 6 14A7 7 0 1 1 15 3z"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none" stroke="#e2c27d" stroke-width="1.3" stroke-linejoin="round"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>'
+  ];
+  const ZAMEK = '<svg class="zamek" viewBox="0 0 24 24" fill="none" stroke="#e2c27d" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+
   function dnesniDen() {
     const nahled = new URLSearchParams(location.search).get('nahled');
     if (nahled !== null && !isNaN(+nahled)) return Math.max(0, Math.min(24, +nahled));
@@ -251,7 +332,6 @@
   }
   const dnes = dnesniDen();
 
-  // Otevřená okénka si pamatuje prohlížeč
   let otevrena = [];
   try { otevrena = JSON.parse(localStorage.getItem('advent-otevrena') || '[]'); } catch (e) {}
   function ulozOtevrene(den) {
@@ -259,35 +339,31 @@
     try { localStorage.setItem('advent-otevrena', JSON.stringify(otevrena)); } catch (e) {}
   }
 
-  // Stav nahoře
   const stav = document.getElementById('stav');
   if (dnes === 0) {
-    const zacatek = new Date(ROK, 11, 1);
-    const zbyva = Math.ceil((zacatek - new Date().setHours(0,0,0,0)) / 86400000);
-    stav.innerHTML = zbyva === 1
-      ? 'První okénko se otevře <strong>už zítra</strong> ✨'
-      : `Do prvního okénka zbývá <strong>${zbyva} ${zbyva < 5 ? 'dny' : 'dní'}</strong>. Těšte se ✨`;
+    const zbyva = Math.ceil((new Date(ROK, 11, 1) - new Date().setHours(0, 0, 0, 0)) / 86400000);
+    stav.innerHTML = zbyva <= 1
+      ? 'První okénko se otevře <strong>už zítra</strong>'
+      : `Do prvního okénka zbývá <strong>${zbyva} ${dni(zbyva)}</strong>`;
   } else if (dnes >= 24) {
-    stav.innerHTML = '<strong>Všechna okénka jsou otevřená.</strong> Krásné Vánoce! 🎄';
+    stav.innerHTML = '<strong>Všechna okénka jsou otevřená.</strong> Krásné Vánoce!';
   } else {
-    stav.innerHTML = `Dnes je <strong>${dnes}. prosince</strong> – otevřete si dnešní okénko 🎁`;
+    stav.innerHTML = `Dnes je <strong>${dnes}. prosince</strong> · otevřete si dnešní okénko`;
   }
 
-  // Mřížka
   const mrizka = document.getElementById('mrizka');
   PORADI.forEach((den, i) => {
     const t = tipy[den];
-    const btn = document.createElement('button');
-    btn.className = 'okenko barva-' + (i % 4);
-    btn.dataset.den = den;
     const zamceno = den > dnes;
+    const btn = document.createElement('button');
+    btn.className = 'okenko';
     if (zamceno) btn.classList.add('zamcene');
     if (den === dnes) btn.classList.add('dnes');
     if (!zamceno && otevrena.includes(den)) btn.classList.add('otevrene');
     btn.setAttribute('aria-label', zamceno ? `Okénko ${den}, otevře se ${den}. prosince` : `Okénko ${den}: ${t.nazev}`);
     btn.innerHTML = `
-      <span class="vnitrek"><span><span class="em" style="display:block;text-align:center">${zamceno ? '' : t.emoji}</span><span class="jm" style="display:block">${zamceno ? '' : t.nazev}</span></span></span>
-      <span class="dvirka"><span class="cislo">${den}</span>${zamceno ? '<span class="zamek">🔒</span>' : ''}</span>`;
+      <span class="vnitrek">${zamceno ? '' : lahvicka(t.slozeni[0][0]) + `<span class="jm">${t.nazev}</span>`}</span>
+      <span class="dvirka"><span class="cislo">${den}</span><span class="motiv">${MOTIVY[i % 3]}</span><span class="knofl"></span>${zamceno ? ZAMEK : ''}</span>`;
     btn.addEventListener('click', () => klik(btn, den));
     mrizka.appendChild(btn);
   });
@@ -297,43 +373,46 @@
       btn.classList.remove('zatrest'); void btn.offsetWidth; btn.classList.add('zatrest');
       const za = den - dnes;
       zprava(dnes === 0
-        ? `Okénko ${den} se otevře ${den}. prosince 🔒`
-        : `Ještě chvilku trpělivosti – okénko ${den} se otevře za ${za} ${za === 1 ? 'den' : za < 5 ? 'dny' : 'dní'} 🔒`);
+        ? `Okénko ${den} se otevře ${den}. prosince`
+        : `Ještě chvilku trpělivosti – okénko ${den} se otevře za ${za} ${dni(za)}`);
       return;
     }
     const uzBylo = btn.classList.contains('otevrene');
     btn.classList.add('otevrene');
     ulozOtevrene(den);
-    setTimeout(() => ukazKartu(den), uzBylo ? 0 : 650);
+    setTimeout(() => ukazKartu(den), uzBylo ? 0 : 700);
   }
 
-  // Detail
   const zavoj = document.getElementById('zavoj');
   let posledniFokus = null;
   function ukazKartu(den) {
     const t = tipy[den];
     posledniFokus = document.activeElement;
-    document.getElementById('k-emoji').textContent = t.emoji;
     document.getElementById('k-den').textContent = `${den}. prosince`;
     document.getElementById('k-nazev').textContent = t.nazev;
     document.getElementById('k-nalada').textContent = t.nalada;
     document.getElementById('k-pouziti').textContent = t.pouziti;
     document.getElementById('k-postup').textContent = t.postup;
     document.getElementById('k-tip').textContent = t.tip;
+    document.getElementById('k-police').innerHTML = t.slozeni.map(([o]) => lahvicka(o)).join('');
     const ul = document.getElementById('k-oleje');
     ul.innerHTML = '';
-    t.slozeni.forEach(([olej, kapky]) => {
+    t.slozeni.forEach(([klic, n]) => {
+      const o = OLEJE[klic];
       const li = document.createElement('li');
-      li.innerHTML = `<span></span><span class="kapky">${kapky} ${kapky === 1 ? 'kapka' : kapky < 5 ? 'kapky' : 'kapek'}</span>`;
-      li.firstChild.textContent = olej;
+      li.innerHTML = `<span class="tecka" style="background:${o.barva}"></span>
+        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Zobrazit v e-shopu ↗</small></span>
+        <span class="kapky">${n}<span>${kapek(n)}</span></span>`;
+      li.querySelector('a').textContent = o.nazev;
       ul.appendChild(li);
     });
     document.getElementById('k-sdilet').onclick = () => {
-      const slozeni = t.slozeni.map(([o, k]) => `• ${o} – ${k}`).join('\n');
-      const text = `🎄 Okénko ${den}: ${t.emoji} ${t.nazev}\n(${t.pouziti})\n${slozeni}\n\n${location.origin + location.pathname}`;
+      const slozeni = t.slozeni.map(([o, n]) => `• ${OLEJE[o].nazev} – ${n} ${kapek(n)}`).join('\n');
+      const text = `🎄 Okénko ${den}: ${t.nazev}\n${t.pouziti}\n${slozeni}\n\n${location.origin + location.pathname}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
     zavoj.classList.add('ukaz');
+    document.querySelector('.karta').scrollTop = 0;
     document.getElementById('zavrit').focus();
   }
   function zavri() {
@@ -344,7 +423,6 @@
   zavoj.addEventListener('click', e => { if (e.target === zavoj) zavri(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && zavoj.classList.contains('ukaz')) zavri(); });
 
-  // Hláška
   let casovac;
   function zprava(text) {
     const el = document.getElementById('toast');
@@ -352,26 +430,26 @@
     clearTimeout(casovac); casovac = setTimeout(() => el.classList.remove('ukaz'), 2600);
   }
 
-  // Sníh
-  const c = document.getElementById('snih'), ctx = c.getContext('2d');
+  // Zlaté třpytky
+  const c = document.getElementById('trpyt'), ctx = c.getContext('2d');
   if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let vlocky = [];
+    let body = [];
     function velikost() {
-      c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio;
-      const n = Math.round(innerWidth / 12);
-      vlocky = Array.from({ length: n }, () => ({
-        x: Math.random() * c.width, y: Math.random() * c.height,
-        r: (Math.random() * 2 + .6) * devicePixelRatio, v: (Math.random() * .6 + .3) * devicePixelRatio,
-        f: Math.random() * Math.PI * 2
+      const r = devicePixelRatio || 1;
+      c.width = innerWidth * r; c.height = innerHeight * r;
+      body = Array.from({ length: Math.round(innerWidth / 14) }, () => ({
+        x: Math.random() * c.width, y: Math.random() * c.height, r: (Math.random() * 1.3 + .4) * r,
+        v: (Math.random() * .25 + .08) * r, f: Math.random() * Math.PI * 2, s: Math.random() * .02 + .008
       }));
     }
     function krok() {
       ctx.clearRect(0, 0, c.width, c.height);
-      ctx.fillStyle = 'rgba(255,255,255,.75)';
-      for (const s of vlocky) {
-        s.y += s.v; s.f += .01; s.x += Math.sin(s.f) * .3 * devicePixelRatio;
-        if (s.y > c.height) { s.y = -5; s.x = Math.random() * c.width; }
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+      for (const b of body) {
+        b.y -= b.v; b.f += b.s;
+        if (b.y < -5) { b.y = c.height + 5; b.x = Math.random() * c.width; }
+        ctx.globalAlpha = .25 + .55 * (Math.sin(b.f) * .5 + .5);
+        ctx.fillStyle = '#f3d98f';
+        ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2); ctx.fill();
       }
       requestAnimationFrame(krok);
     }

@@ -1,196 +1,132 @@
-// 24 tipů na směsi z esenciálních olejů Young Living – jeden na každý adventní den.
-// pouziti: "difuzér" = kapky do difuzéru se 100–200 ml vody
+// Oleje: český název podle e-shopu Young Living CZ, číslo produktu (odkaz na youngliving.com/cs_CZ/products/id/…),
+// text na štítku lahvičky a barva štítku.
+window.OLEJE = {
+  orange:      { nazev: "Pomeranč (Orange)", id: 34645, stitek: "ORANGE", barva: "#e5761c" },
+  peppermint:  { nazev: "Máta peprná (Peppermint)", id: 34626, stitek: "PEPPERMINT", barva: "#2e8b57" },
+  cinnamon:    { nazev: "Skořicová kůra (Cinnamon Bark)", id: 34707, stitek: "CINNAMON", barva: "#a3352a" },
+  clove:       { nazev: "Hřebíček (Clove)", id: 34698, stitek: "CLOVE", barva: "#6e3a2c" },
+  nutmeg:      { nazev: "Muškátový oříšek (Nutmeg)", id: 34749, stitek: "NUTMEG", barva: "#a8743d" },
+  lavender:    { nazev: "Levandule (Lavender)", id: 34625, stitek: "LAVENDER", barva: "#6b3fa0" },
+  cedarwood:   { nazev: "Cedr (Cedarwood)", id: 34643, stitek: "CEDARWOOD", barva: "#8a5a3b" },
+  nlbs:        { nazev: "Smrk černý z Northern Lights (Northern Lights Black Spruce)", id: 34748, stitek: "BLACK SPRUCE", barva: "#1f4f5a" },
+  pine:        { nazev: "Borovice (Pine)", id: 34700, stitek: "PINE", barva: "#3d6b3a" },
+  frankincense:{ nazev: "Kadidlovník (Frankincense)", id: 34646, stitek: "FRANKINCENSE", barva: "#8c1d2c" },
+  ginger:      { nazev: "Zázvor (Ginger)", id: 34716, stitek: "GINGER", barva: "#c38a26" },
+  christmas:   { nazev: "Christmas Spirit", id: 67842, stitek: "CHRISTMAS SPIRIT", barva: "#b3242f" },
+  tangerine:   { nazev: "Mandarinka (Tangerine)", id: 34691, stitek: "TANGERINE", barva: "#f08a24" },
+  thieves:     { nazev: "Thieves® Wellness", id: 34627, stitek: "THIEVES", barva: "#7e1a28" },
+  lemon:       { nazev: "Citron (Lemon)", id: 34624, stitek: "LEMON", barva: "#e2b80f" },
+  eucalyptus:  { nazev: "Eukalyptus úzkolistý (Eucalyptus Radiata)", id: 34713, stitek: "EUCALYPTUS", barva: "#2a8a8a" },
+  stressaway:  { nazev: "Stress Away", id: 34644, stitek: "STRESS AWAY", barva: "#3f9d98" },
+  rosemary:    { nazev: "Rozmarýn (Rosemary)", id: 34683, stitek: "ROSEMARY", barva: "#557a3a" },
+  bluespruce:  { nazev: "Smrk pichlavý z Idaha (Idaho Blue Spruce)", id: 34722, stitek: "BLUE SPRUCE", barva: "#3f6f9e" },
+  joy:         { nazev: "Joy", id: 34689, stitek: "JOY", barva: "#c9466f" },
+  bergamot:    { nazev: "Bergamot", id: 34699, stitek: "BERGAMOT", barva: "#8fae2f" },
+  peace:       { nazev: "Peace & Calming", id: 34686, stitek: "PEACE & CALMING", barva: "#5b8fc7" },
+  valor:       { nazev: "Original Valor®", id: 64524, stitek: "VALOR", barva: "#2b4f8c" },
+  ylang:       { nazev: "Ylang Ylang", id: 35601, stitek: "YLANG YLANG", barva: "#d99a2b" },
+  purification:{ nazev: "Purification", id: 34642, stitek: "PURIFICATION", barva: "#2f7f9f" },
+  lemongrass:  { nazev: "Citronová tráva (Lemongrass)", id: 34665, stitek: "LEMONGRASS", barva: "#7fa034" },
+  wisemen:     { nazev: "3 Wise Men", id: 34808, stitek: "3 WISE MEN", barva: "#a67c2a" },
+  gratitude:   { nazev: "Gratitude", id: 34829, stitek: "GRATITUDE", barva: "#8e4f8a" }
+};
+
+// 24 tipů – jeden na každý adventní den. "Difuzér" = kapky do difuzéru se 100–200 ml vody.
 window.TIPY = [
-  {
-    den: 1, emoji: "☀️", nazev: "Zimní ráno",
-    nalada: "Probuzení a dobrá nálada",
-    pouziti: "Difuzér",
-    slozeni: [["Orange", 4], ["Peppermint", 2]],
+  { den: 1, nazev: "Zimní ráno", nalada: "Probuzení a dobrá nálada", pouziti: "Difuzér",
+    slozeni: [["orange", 4], ["peppermint", 2]],
     postup: "Nakapejte do difuzéru hned po probuzení a nechte běžet při snídani.",
-    tip: "Pomerančová svěžest s mátou je jako šálek kávy pro nos – ideální start prvního prosincového dne."
-  },
-  {
-    den: 2, emoji: "🏠", nazev: "Perníková chaloupka",
-    nalada: "Útulno a vůně pečení",
-    pouziti: "Difuzér",
-    slozeni: [["Orange", 3], ["Cinnamon Bark", 1], ["Clove", 1], ["Nutmeg", 1]],
+    tip: "Pomeranč s mátou peprnou je jako šálek kávy pro nos – ideální start prvního prosincového dne." },
+  { den: 2, nazev: "Perníková chaloupka", nalada: "Útulno a vůně pečení", pouziti: "Difuzér",
+    slozeni: [["orange", 3], ["cinnamon", 1], ["clove", 1], ["nutmeg", 1]],
     postup: "Nakapejte do difuzéru, nejlépe odpoledne, když se stmívá.",
-    tip: "Byt bude vonět jako čerstvě upečené perníčky, i když jste ještě nic nepekli."
-  },
-  {
-    den: 3, emoji: "🌙", nazev: "Klidná noc",
-    nalada: "Zklidnění před spaním",
-    pouziti: "Difuzér",
-    slozeni: [["Lavender", 4], ["Cedarwood", 2]],
+    tip: "Byt bude vonět jako čerstvě upečené perníčky, i když jste ještě nic nepekli." },
+  { den: 3, nazev: "Klidná noc", nalada: "Zklidnění před spaním", pouziti: "Difuzér",
+    slozeni: [["lavender", 4], ["cedarwood", 2]],
     postup: "Pusťte difuzér v ložnici asi 30 minut před ulehnutím.",
-    tip: "Levandule s cedrem je klasika na večer. Ztlumte k tomu světla a odložte telefon."
-  },
-  {
-    den: 4, emoji: "🌲", nazev: "Lesní procházka",
-    nalada: "Hluboký nádech a uzemnění",
-    pouziti: "Difuzér",
-    slozeni: [["Northern Lights Black Spruce", 3], ["Pine", 2], ["Frankincense", 1]],
+    tip: "Levandule s cedrem je klasika na večer. Ztlumte k tomu světla a odložte telefon." },
+  { den: 4, nazev: "Lesní procházka", nalada: "Hluboký nádech a uzemnění", pouziti: "Difuzér",
+    slozeni: [["nlbs", 3], ["pine", 2], ["frankincense", 1]],
     postup: "Nakapejte do difuzéru v obývacím pokoji.",
-    tip: "Vůně zasněženého jehličnatého lesa, aniž byste museli vytáhnout zimní boty."
-  },
-  {
-    den: 5, emoji: "🍷", nazev: "Svařákový večer",
-    nalada: "Hřejivá pohoda s přáteli",
-    pouziti: "Difuzér",
-    slozeni: [["Orange", 3], ["Cinnamon Bark", 1], ["Clove", 1], ["Ginger", 1]],
+    tip: "Vůně zasněženého jehličnatého lesa, aniž byste museli vytáhnout zimní boty." },
+  { den: 5, nazev: "Svařákový večer", nalada: "Hřejivá pohoda s přáteli", pouziti: "Difuzér",
+    slozeni: [["orange", 3], ["cinnamon", 1], ["clove", 1], ["ginger", 1]],
     postup: "Nakapejte do difuzéru, když čekáte návštěvu.",
-    tip: "Atmosféra vánočních trhů doma. Skořici a hřebíček používejte jen do difuzéru, na kůži jsou příliš silné."
-  },
-  {
-    den: 6, emoji: "🎁", nazev: "Mikulášská nadílka",
-    nalada: "Dětská radost a těšení",
-    pouziti: "Difuzér",
-    slozeni: [["Christmas Spirit", 3], ["Tangerine", 3]],
+    tip: "Atmosféra vánočních trhů doma. Skořici a hřebíček používejte jen do difuzéru, na kůži jsou příliš silné." },
+  { den: 6, nazev: "Mikulášská nadílka", nalada: "Dětská radost a těšení", pouziti: "Difuzér",
+    slozeni: [["christmas", 3], ["tangerine", 3]],
     postup: "Nakapejte do difuzéru večer, kdy se rozdává nadílka.",
-    tip: "Christmas Spirit (pomeranč, skořice, smrk) se sladkou mandarinkou voní jako punčocha plná mandarinek."
-  },
-  {
-    den: 7, emoji: "🍋", nazev: "Čistý vzduch",
-    nalada: "Svěží a čistý domov",
-    pouziti: "Difuzér",
-    slozeni: [["Thieves", 3], ["Lemon", 3]],
+    tip: "Christmas Spirit (pomeranč, skořice, smrk) se sladkou mandarinkou voní jako punčocha plná mandarinek." },
+  { den: 7, nazev: "Čistý vzduch", nalada: "Svěží a čistý domov", pouziti: "Difuzér",
+    slozeni: [["thieves", 3], ["lemon", 3]],
     postup: "Nakapejte do difuzéru po úklidu nebo po návštěvě.",
-    tip: "Kořeněná směs Thieves s citronem je oblíbená volba do zimních měsíců, kdy se méně větrá."
-  },
-  {
-    den: 8, emoji: "❄️", nazev: "Mrazivý nádech",
-    nalada: "Svěžest a lehkost",
-    pouziti: "Difuzér",
-    slozeni: [["Eucalyptus Radiata", 2], ["Lemon", 2], ["Peppermint", 1]],
+    tip: "Kořeněná směs Thieves s citronem je oblíbená volba do zimních měsíců, kdy se méně větrá." },
+  { den: 8, nazev: "Mrazivý nádech", nalada: "Svěžest a lehkost", pouziti: "Difuzér",
+    slozeni: [["eucalyptus", 2], ["lemon", 2], ["peppermint", 1]],
     postup: "Nakapejte do difuzéru v pracovně nebo v koupelně.",
-    tip: "Chladivá kombinace jako procházka po čerstvém sněhu. Hodí se i po dlouhém dni venku."
-  },
-  {
-    den: 9, emoji: "🧣", nazev: "Útulná deka",
-    nalada: "Uvolnění a pohodlí",
-    pouziti: "Difuzér",
-    slozeni: [["Stress Away", 4], ["Cedarwood", 1]],
+    tip: "Chladivá kombinace jako procházka po čerstvém sněhu. Hodí se i po dlouhém dni venku." },
+  { den: 9, nazev: "Útulná deka", nalada: "Uvolnění a pohodlí", pouziti: "Difuzér",
+    slozeni: [["stressaway", 4], ["cedarwood", 1]],
     postup: "Nakapejte do difuzéru, zalezte pod deku a pusťte si film.",
-    tip: "Stress Away obsahuje vanilku a limetku, cedr k nim přidá dřevitou hloubku."
-  },
-  {
-    den: 10, emoji: "🎯", nazev: "Soustředění",
-    nalada: "Jasná hlava na práci",
-    pouziti: "Difuzér",
-    slozeni: [["Lemon", 2], ["Rosemary", 2], ["Peppermint", 1]],
+    tip: "Stress Away obsahuje vanilku a limetku, cedr k nim přidá dřevitou hloubku." },
+  { den: 10, nazev: "Soustředění", nalada: "Jasná hlava na práci", pouziti: "Difuzér",
+    slozeni: [["lemon", 2], ["rosemary", 2], ["peppermint", 1]],
     postup: "Nakapejte do difuzéru na pracovní stůl.",
-    tip: "Ideální na předvánoční seznamy, plánování dárků a dotahování pracovních úkolů."
-  },
-  {
-    den: 11, emoji: "🏔️", nazev: "Zasněžené hory",
-    nalada: "Klid a nadhled",
-    pouziti: "Difuzér",
-    slozeni: [["Idaho Blue Spruce", 3], ["Frankincense", 2], ["Peppermint", 1]],
+    tip: "Ideální na předvánoční seznamy, plánování dárků a dotahování pracovních úkolů." },
+  { den: 11, nazev: "Zasněžené hory", nalada: "Klid a nadhled", pouziti: "Difuzér",
+    slozeni: [["bluespruce", 3], ["frankincense", 2], ["peppermint", 1]],
     postup: "Nakapejte do difuzéru, třeba při ranní meditaci nebo józe.",
-    tip: "Čistá horská vůně smrku, kterou máta trochu „ochladí“."
-  },
-  {
-    den: 12, emoji: "💆", nazev: "Roll-on na krk a spánky",
-    nalada: "Uvolnění v shonu",
-    pouziti: "Roll-on 10 ml",
-    slozeni: [["Lavender", 5], ["Frankincense", 3], ["Cedarwood", 2]],
+    tip: "Čistá horská vůně smrku z Idaha, kterou máta trochu „ochladí“." },
+  { den: 12, nazev: "Roll-on na krk a spánky", nalada: "Uvolnění v shonu", pouziti: "Roll-on 10 ml",
+    slozeni: [["lavender", 5], ["frankincense", 3], ["cedarwood", 2]],
     postup: "Nakapejte oleje do 10ml roll-on lahvičky a dolijte nosným olejem (V-6 nebo frakcionovaný kokosový olej). Protřepejte.",
-    tip: "Noste ho v kabelce a natřete na zátylek, když je toho moc. Krásný malý dárek i pro kamarádku."
-  },
-  {
-    den: 13, emoji: "😊", nazev: "Citrusová radost",
-    nalada: "Úsměv a lehkost",
-    pouziti: "Difuzér",
-    slozeni: [["Joy", 2], ["Bergamot", 2], ["Lemon", 2]],
+    tip: "Noste ho v kabelce a natřete na zátylek, když je toho moc. Krásný malý dárek i pro kamarádku." },
+  { den: 13, nazev: "Citrusová radost", nalada: "Úsměv a lehkost", pouziti: "Difuzér",
+    slozeni: [["joy", 2], ["bergamot", 2], ["lemon", 2]],
     postup: "Nakapejte do difuzéru v šedivém zimním dni.",
-    tip: "Květinová směs Joy s bergamotem a citronem přinese do pokoje trochu slunce."
-  },
-  {
-    den: 14, emoji: "🫚", nazev: "Zázvorový čaj",
-    nalada: "Prohřátí a pohoda",
-    pouziti: "Difuzér",
-    slozeni: [["Lemon", 3], ["Ginger", 2], ["Cinnamon Bark", 1]],
+    tip: "Květinová směs Joy s bergamotem a citronem přinese do pokoje trochu slunce." },
+  { den: 14, nazev: "Zázvorový čaj", nalada: "Prohřátí a pohoda", pouziti: "Difuzér",
+    slozeni: [["lemon", 3], ["ginger", 2], ["cinnamon", 1]],
     postup: "Nakapejte do difuzéru a uvařte si k tomu opravdový čaj.",
-    tip: "Vůně, která zahřeje po návratu z mrazu."
-  },
-  {
-    den: 15, emoji: "✨", nazev: "Vánoční sprej do bytu",
-    nalada: "Sváteční vůně na pár střiků",
-    pouziti: "Sprej 100 ml",
-    slozeni: [["Christmas Spirit", 15], ["Northern Lights Black Spruce", 5]],
+    tip: "Vůně, která zahřeje po návratu z mrazu." },
+  { den: 15, nazev: "Vánoční sprej do bytu", nalada: "Sváteční vůně na pár střiků", pouziti: "Sprej 100 ml",
+    slozeni: [["christmas", 15], ["nlbs", 5]],
     postup: "Do skleněné lahvičky s rozprašovačem dejte 1 lžíci vodky nebo lihu, přidejte oleje, promíchejte a dolijte destilovanou vodou. Před každým použitím protřepejte.",
-    tip: "Stříkejte do vzduchu, na rohožku nebo na šišky ve výzdobě. Na látky nejdřív vyzkoušejte na skrytém místě."
-  },
-  {
-    den: 16, emoji: "🕊️", nazev: "Mír a pohoda",
-    nalada: "Klid pro celou rodinu",
-    pouziti: "Difuzér",
-    slozeni: [["Peace & Calming", 3], ["Tangerine", 2]],
+    tip: "Stříkejte do vzduchu, na rohožku nebo na šišky ve výzdobě. Na látky nejdřív vyzkoušejte na skrytém místě." },
+  { den: 16, nazev: "Mír a pohoda", nalada: "Klid pro celou rodinu", pouziti: "Difuzér",
+    slozeni: [["peace", 3], ["tangerine", 2]],
     postup: "Nakapejte do difuzéru, když se doma začne zvyšovat předvánoční napětí.",
-    tip: "Jemná a sladká směs, kterou mají rády i děti."
-  },
-  {
-    den: 17, emoji: "🦁", nazev: "Odvaha do finiše",
-    nalada: "Síla a vytrvalost",
-    pouziti: "Difuzér",
-    slozeni: [["Valor", 3], ["Orange", 2]],
+    tip: "Jemná a sladká směs, kterou mají rády i děti." },
+  { den: 17, nazev: "Odvaha do finiše", nalada: "Síla a vytrvalost", pouziti: "Difuzér",
+    slozeni: [["valor", 3], ["orange", 2]],
     postup: "Nakapejte do difuzéru ráno před náročným dnem.",
-    tip: "Týden před Vánoci se hodí každá kapka odvahy. Valor s pomerančem dodá energii."
-  },
-  {
-    den: 18, emoji: "🛁", nazev: "Relaxační koupel",
-    nalada: "Hýčkání a odpočinek",
-    pouziti: "Koupel",
-    slozeni: [["Lavender", 5], ["Frankincense", 3]],
+    tip: "Týden před Vánoci se hodí každá kapka odvahy. Valor s pomerančem dodá energii." },
+  { den: 18, nazev: "Relaxační koupel", nalada: "Hýčkání a odpočinek", pouziti: "Koupel",
+    slozeni: [["lavender", 5], ["frankincense", 3]],
     postup: "Oleje nejdřív smíchejte s 1 lžící nosného oleje a hrnkem Epsomské (hořké) soli. Teprve pak nasypte do teplé vany.",
-    tip: "Esenciální oleje se ve vodě nerozpustí, proto je vždy nejdřív smíchejte se solí a olejem."
-  },
-  {
-    den: 19, emoji: "🌸", nazev: "Květinová něha",
-    nalada: "Romantika a jemnost",
-    pouziti: "Difuzér",
-    slozeni: [["Lavender", 2], ["Bergamot", 2], ["Ylang Ylang", 1]],
+    tip: "Esenciální oleje se ve vodě nerozpustí, proto je vždy nejdřív smíchejte se solí a olejem." },
+  { den: 19, nazev: "Květinová něha", nalada: "Romantika a jemnost", pouziti: "Difuzér",
+    slozeni: [["lavender", 2], ["bergamot", 2], ["ylang", 1]],
     postup: "Nakapejte do difuzéru při večeři pro dva.",
-    tip: "Ylang ylang je výrazný, jedna kapka úplně stačí."
-  },
-  {
-    den: 20, emoji: "🍽️", nazev: "Svěží kuchyň",
-    nalada: "Čistota po vaření",
-    pouziti: "Difuzér",
-    slozeni: [["Purification", 3], ["Lemongrass", 2]],
+    tip: "Ylang ylang je výrazný, jedna kapka úplně stačí." },
+  { den: 20, nazev: "Svěží kuchyň", nalada: "Čistota po vaření", pouziti: "Difuzér",
+    slozeni: [["purification", 3], ["lemongrass", 2]],
     postup: "Nakapejte do difuzéru v kuchyni po smažení nebo pečení.",
-    tip: "Pomůže rozehnat pachy z vaření, než dorazí sváteční návštěvy."
-  },
-  {
-    den: 21, emoji: "🌌", nazev: "Nejdelší noc",
-    nalada: "Zastavení a vděčnost",
-    pouziti: "Difuzér",
-    slozeni: [["Cedarwood", 2], ["Bergamot", 2], ["Frankincense", 1]],
+    tip: "Pomůže rozehnat pachy z vaření, než dorazí sváteční návštěvy." },
+  { den: 21, nazev: "Nejdelší noc", nalada: "Zastavení a vděčnost", pouziti: "Difuzér",
+    slozeni: [["gratitude", 3], ["cedarwood", 2], ["bergamot", 1]],
     postup: "Nakapejte do difuzéru, zapalte svíčku a na chvíli se zastavte.",
-    tip: "Zimní slunovrat. Od zítřka už bude světla přibývat. Zkuste si napsat 3 věci, za které jste letos vděční."
-  },
-  {
-    den: 22, emoji: "👑", nazev: "Dary tří králů",
-    nalada: "Slavnostní a hluboká",
-    pouziti: "Difuzér",
-    slozeni: [["Frankincense", 3], ["Tangerine", 2], ["Myrrh", 1]],
+    tip: "Zimní slunovrat – od zítřka bude světla přibývat. Ke směsi Gratitude si zkuste napsat 3 věci, za které jste letos vděční." },
+  { den: 22, nazev: "Dary tří králů", nalada: "Slavnostní a hluboká", pouziti: "Difuzér",
+    slozeni: [["wisemen", 3], ["tangerine", 2]],
     postup: "Nakapejte do difuzéru při balení dárků.",
-    tip: "Kadidlo a myrha patří k Vánocům odjakživa. Mandarinka směs zjemní."
-  },
-  {
-    den: 23, emoji: "🎄", nazev: "Vůně stromečku",
-    nalada: "Těšení na Štědrý den",
-    pouziti: "Difuzér",
-    slozeni: [["Idaho Blue Spruce", 3], ["Orange", 2], ["Clove", 1]],
+    tip: "Směs 3 Wise Men obsahuje kadidlovník a myrhu, které k Vánocům patří odjakživa. Mandarinka ji zjemní." },
+  { den: 23, nazev: "Vůně stromečku", nalada: "Těšení na Štědrý den", pouziti: "Difuzér",
+    slozeni: [["bluespruce", 3], ["orange", 2], ["clove", 1]],
     postup: "Nakapejte do difuzéru při zdobení stromečku.",
-    tip: "Pro umělý stromeček je to záchrana – celý pokoj bude vonět jako v lese."
-  },
-  {
-    den: 24, emoji: "⭐", nazev: "Štědrý večer",
-    nalada: "Láska, klid a radost",
-    pouziti: "Difuzér",
-    slozeni: [["Christmas Spirit", 3], ["Frankincense", 2], ["Tangerine", 1]],
+    tip: "Pro umělý stromeček je to záchrana – celý pokoj bude vonět jako v lese." },
+  { den: 24, nazev: "Štědrý večer", nalada: "Láska, klid a radost", pouziti: "Difuzér",
+    slozeni: [["christmas", 3], ["frankincense", 2], ["tangerine", 1]],
     postup: "Nakapejte do difuzéru, až se začne prostírat sváteční stůl.",
-    tip: "Děkujeme, že jste s námi otevírali okénka. Krásné a voňavé Vánoce! 🎄"
-  }
+    tip: "Děkujeme, že jste s námi otevírali okénka. Krásné a voňavé Vánoce!" }
 ];
