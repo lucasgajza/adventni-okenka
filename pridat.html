@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Přidat recept · Voňavé Vánoce po kapkách</title>
+<meta name="theme-color" content="#4f0f1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vino: #7a1d2b; --vino-tmave: #4f0f1a; --vino-nejtmavsi: #350a12;
+    --zlato: #e2c27d; --zlato-syte: #c9a14f; --fialova: #6e4a9e;
+    --krem: #fbf6ee; --text: #2b2b2b; --sedy: #6b6b6b; --linka: #e6dccb; --chyba: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  html { scrollbar-width: none; } html::-webkit-scrollbar { display: none; }
+  body {
+    margin: 0; min-height: 100vh; font-family: Montserrat, "Helvetica Neue", Arial, sans-serif; color: var(--text);
+    background: linear-gradient(180deg, var(--vino-tmave), var(--vino-nejtmavsi)) fixed; background-color: var(--vino-tmave);
+    padding: 28px 16px 48px;
+  }
+  .hlava { text-align: center; color: #fff; max-width: 560px; margin: 0 auto 22px; }
+  .hlava small { display: block; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--zlato); font-weight: 600; }
+  .hlava h1 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: clamp(30px, 8vw, 42px); line-height: 1.05; margin: 8px 0 10px; }
+  .hlava h1 em { color: var(--zlato); }
+  .hlava p { margin: 0; color: #f0dcd6; font-size: 14px; line-height: 1.5; font-weight: 300; }
+  form, .diky { max-width: 560px; margin: 0 auto; background: var(--krem); border-radius: 10px; padding: 22px 18px 24px; box-shadow: 0 30px 80px rgba(0,0,0,.4); }
+  fieldset { border: 0; margin: 0 0 6px; padding: 0; min-width: 0; }
+  legend { font-family: "DM Serif Display", Georgia, serif; color: var(--vino); font-size: 22px; padding: 0; margin: 10px 0 12px; }
+  .pole { margin-bottom: 16px; }
+  label, .popis { display: block; font-size: 13px; font-weight: 600; color: var(--vino); margin-bottom: 6px; }
+  .napoveda { display: block; font-size: 12px; font-weight: 400; color: var(--sedy); margin-top: 2px; }
+  input[type=text], input[type=number], select, textarea {
+    width: 100%; font: inherit; font-size: 16px; color: var(--text); background: #fff; border: 1px solid var(--linka);
+    border-radius: 6px; padding: 11px 12px; appearance: none; -webkit-appearance: none;
+  }
+  select { background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237a1d2b' stroke-width='1.6'/%3E%3C/svg%3E") right 12px center / 12px no-repeat; padding-right: 34px; }
+  textarea { min-height: 84px; resize: vertical; line-height: 1.45; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--zlato-syte); outline-offset: 1px; border-color: transparent; }
+  .chyba-pole { border-color: var(--chyba) !important; }
+  .volby { display: flex; flex-wrap: wrap; gap: 8px; }
+  .volby label { margin: 0; }
+  .volby input { position: absolute; opacity: 0; pointer-events: none; }
+  .volby span { display: inline-block; font-size: 13px; font-weight: 600; color: var(--fialova); background: #f1ecf7; border: 1px solid transparent; border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+  .volby input:checked + span { background: var(--fialova); color: #fff; }
+  .volby input:focus-visible + span { outline: 2px solid var(--zlato-syte); outline-offset: 2px; }
+  .olej-radek { display: grid; grid-template-columns: 1fr 86px 38px; gap: 8px; margin-bottom: 8px; align-items: start; }
+  .olej-radek .jiny { grid-column: 1 / 3; }
+  .kapky { position: relative; }
+  .kapky input { padding-right: 8px; text-align: center; }
+  .odebrat { width: 38px; height: 46px; border: 1px solid var(--linka); background: #fff; border-radius: 6px; color: var(--sedy); font-size: 20px; cursor: pointer; }
+  .pridat { font: inherit; font-size: 13px; font-weight: 600; color: var(--fialova); background: none; border: 1px dashed #c9b8e0; border-radius: 6px; padding: 10px 14px; cursor: pointer; width: 100%; }
+  .hlavicka-oleju { display: grid; grid-template-columns: 1fr 86px 38px; gap: 8px; font-size: 11px; color: var(--sedy); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 4px; }
+  .foto-pole { display: flex; align-items: center; gap: 14px; }
+  .foto-nahled { width: 64px; height: 64px; flex: none; border-radius: 50%; background: #efe6d6 center / cover no-repeat; border: 1px solid var(--linka); display: grid; place-items: center; color: var(--sedy); font-size: 22px; }
+  .foto-nahled.smes { width: 96px; height: 96px; border-radius: 8px; }
+  .foto-btn { font: inherit; font-size: 13px; font-weight: 600; color: var(--fialova); background: #fff; border: 1px solid #d9cdea; border-radius: 6px; padding: 10px 14px; cursor: pointer; }
+  .foto-pole input[type=file] { display: none; }
+  .zrusit-foto { font: inherit; font-size: 12px; color: var(--sedy); background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 4px; }
+  .povinne::after { content: " *"; color: var(--chyba); }
+  .odeslat { width: 100%; font: inherit; font-size: 16px; font-weight: 700; letter-spacing: .02em; color: #fff; background: var(--vino); border: 0; border-radius: 8px; padding: 15px; cursor: pointer; margin-top: 8px; }
+  .odeslat:disabled { opacity: .6; cursor: wait; }
+  .hlaska { margin: 12px 0 0; font-size: 14px; color: var(--chyba); text-align: center; min-height: 1em; }
+  .diky { text-align: center; padding: 34px 22px; }
+  .diky h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; color: var(--vino); font-size: 30px; margin: 10px 0 8px; }
+  .diky p { color: var(--sedy); line-height: 1.5; margin: 0 0 20px; }
+  .diky .hv { width: 40px; height: 40px; }
+  .diky a, .diky button { display: inline-block; margin: 4px; font: inherit; font-size: 14px; font-weight: 600; border-radius: 8px; padding: 12px 18px; cursor: pointer; text-decoration: none; }
+  .diky button { color: #fff; background: var(--vino); border: 0; }
+  .diky a { color: var(--vino); border: 1px solid var(--linka); background: #fff; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="hlava">
+  <small>Adventní kalendář · Oil Crew</small>
+  <h1>Přidejte svou <em>směs</em></h1>
+  <p>Vyplňte, co jde, a odešlete. Recept se po schválení sám objeví v kalendáři, nic se nemusí přepisovat. Pole s hvězdičkou jsou povinná.</p>
+</header>
+
+<form id="formular" novalidate>
+  <fieldset>
+    <legend>O vás</legend>
+    <div class="pole">
+      <label for="jmeno" class="povinne">Vaše jméno</label>
+      <input type="text" id="jmeno" maxlength="60" autocomplete="name" required>
+    </div>
+    <div class="pole">
+      <span class="popis">Vaše fotka <span class="napoveda">Nepovinné. Malá fotka se ukáže u receptu vedle jména.</span></span>
+      <div class="foto-pole">
+        <span class="foto-nahled" id="nahled-autor" aria-hidden="true">☺</span>
+        <button type="button" class="foto-btn" data-pro="foto-autor">Vybrat fotku</button>
+        <button type="button" class="zrusit-foto" data-zrusit="autor" hidden>Odebrat</button>
+        <input type="file" id="foto-autor" accept="image/*">
+      </div>
+    </div>
+    <div class="pole">
+      <label for="kod"><span class="povinne">Kód skupiny</span> <span class="napoveda">Najdete ho ve zprávě ve skupině Oil Crew.</span></label>
+      <input type="text" id="kod" maxlength="40" autocomplete="off" autocapitalize="off" required>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Směs</legend>
+    <div class="pole">
+      <label for="nazev"><span class="povinne">Název směsi</span> <span class="napoveda">Krátký a vánoční, 1 až 3 slova. Např. Perníková chaloupka</span></label>
+      <input type="text" id="nazev" maxlength="40" required>
+    </div>
+    <div class="pole">
+      <label for="nalada"><span class="povinne">Nálada</span> <span class="napoveda">Co směs navodí, pár slov. Např. Útulno a vůně pečení</span></label>
+      <input type="text" id="nalada" maxlength="80" required>
+    </div>
+    <div class="pole">
+      <span class="popis povinne">Použití</span>
+      <div class="volby" id="pouziti" role="radiogroup" aria-label="Použití">
+        <label><input type="radio" name="pouziti" value="Difuzér" checked><span>Difuzér</span></label>
+        <label><input type="radio" name="pouziti" value="Roll-on"><span>Roll-on</span></label>
+        <label><input type="radio" name="pouziti" value="Sprej"><span>Sprej</span></label>
+        <label><input type="radio" name="pouziti" value="Koupelová sůl"><span>Koupelová sůl</span></label>
+        <label><input type="radio" name="pouziti" value="Masáž"><span>Masáž</span></label>
+        <label><input type="radio" name="pouziti" value="jine"><span>Jiné</span></label>
+      </div>
+      <input type="text" id="pouziti-jine" maxlength="30" placeholder="Napište jak, např. Svíčka" style="margin-top:8px" hidden>
+    </div>
+    <div class="pole">
+      <span class="popis"><span class="povinne">Oleje a kapky</span> <span class="napoveda">Nejlépe 2 až 4 oleje. Když olej v seznamu není, vyberte „Jiný olej“ a napište ho.</span></span>
+      <div class="hlavicka-oleju" aria-hidden="true"><span>Olej</span><span>Kapek</span><span></span></div>
+      <div id="oleje"></div>
+      <button type="button" class="pridat" id="pridat-olej">+ Přidat další olej</button>
+    </div>
+    <div class="pole" id="pole-foto-smes">
+      <span class="popis" id="popis-foto-smes">Fotka hotové směsi</span>
+      <span class="napoveda" id="napoveda-foto-smes" style="margin:-4px 0 8px"></span>
+      <div class="foto-pole">
+        <span class="foto-nahled smes" id="nahled-smes" aria-hidden="true">📷</span>
+        <button type="button" class="foto-btn" data-pro="foto-smes">Vybrat fotku</button>
+        <button type="button" class="zrusit-foto" data-zrusit="smes" hidden>Odebrat</button>
+        <input type="file" id="foto-smes" accept="image/*">
+      </div>
+    </div>
+    <div class="pole">
+      <label for="postup"><span class="povinne">Jak na to</span> <span class="napoveda">Jedna nebo dvě věty, kdy a jak směs použít.</span></label>
+      <textarea id="postup" maxlength="500" required></textarea>
+    </div>
+    <div class="pole">
+      <label for="tip">Tip <span class="napoveda">Nepovinné. Osobní poznámka nebo zajímavost, krátce.</span></label>
+      <textarea id="tip" maxlength="400"></textarea>
+    </div>
+    <div class="pole">
+      <label for="den">Den v kalendáři <span class="napoveda">Nepovinné. Máte-li oblíbený den, vyberte ho, jinak ho doplníme.</span></label>
+      <select id="den"><option value="">Je mi to jedno</option></select>
+    </div>
+  </fieldset>
+
+  <button type="submit" class="odeslat" id="odeslat">Odeslat recept</button>
+  <p class="hlaska" id="hlaska" role="alert"></p>
+</form>
+
+<section class="diky" id="diky" hidden>
+  <svg class="hv" viewBox="0 0 24 24" fill="none" stroke="#c9a14f" stroke-width="1.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
+  <h2>Moc děkujeme!</h2>
+  <p>Recept je odeslaný. Jakmile ho schválíme, objeví se v kalendáři ve svém okénku.</p>
+  <button type="button" id="dalsi">Přidat další recept</button>
+  <a href="./">Zpět do kalendáře</a>
+</section>
+
+<script src="tipy.js?v=5"></script>
+<script>
+(() => {
+  const OLEJE = window.OLEJE;
+  const $ = id => document.getElementById(id);
+  const form = $('formular');
+  const ULOZENO = 'advent-formular';
+  const MAX_OLEJU = 8;
+
+  // Seznam olejů podle abecedy + možnost napsat vlastní
+  const moznosti = Object.entries(OLEJE).sort((a, b) => a[1].nazev.localeCompare(b[1].nazev, 'cs'));
+  function radekOleje(hodnota = '', kapky = '', jiny = '') {
+    const r = document.createElement('div');
+    r.className = 'olej-radek';
+    r.innerHTML = `<select aria-label="Olej"><option value="">Vyberte olej…</option>${moznosti.map(([k, o]) => `<option value="${k}">${o.nazev}</option>`).join('')}<option value="jiny">Jiný olej…</option></select>
+      <div class="kapky"><input type="number" inputmode="numeric" min="1" max="20" aria-label="Počet kapek" placeholder="kapek"></div>
+      <button type="button" class="odebrat" aria-label="Odebrat olej">×</button>
+      <input type="text" class="jiny" maxlength="60" placeholder="Název oleje" aria-label="Název jiného oleje" hidden>`;
+    const sel = r.querySelector('select'), jin = r.querySelector('.jiny');
+    sel.value = hodnota; r.querySelector('[type=number]').value = kapky; jin.value = jiny;
+    jin.hidden = sel.value !== 'jiny';
+    sel.addEventListener('change', () => { jin.hidden = sel.value !== 'jiny'; if (!jin.hidden) jin.focus(); })
+    r.querySelector('.odebrat').addEventListener('click', () => {
+      if ($('oleje').children.length > 1) r.remove(); else { sel.value = ''; jin.hidden = true; r.querySelector('[type=number]').value = ''; }
+      $('pridat-olej').hidden = false; uloz();
+    });
+    $('oleje').appendChild(r);
+    $('pridat-olej').hidden = $('oleje').children.length >= MAX_OLEJU;
+  }
+  $('pridat-olej').addEventListener('click', () => radekOleje());
+
+  for (let d = 1; d <= 24; d++) $('den').insertAdjacentHTML('beforeend', `<option value="${d}">${d}. prosince</option>`);
+
+  // Použití: u čehokoli jiného než difuzéru je potřeba vlastní fotka
+  const pouziti = () => { const v = form.pouziti.value; return v === 'jine' ? $('pouziti-jine').value.trim() : v; };
+  function prepniPouziti() {
+    const jine = form.pouziti.value === 'jine', difuzer = form.pouziti.value === 'Difuzér';
+    $('pouziti-jine').hidden = !jine;
+    $('popis-foto-smes').classList.toggle('povinne', !difuzer);
+    $('napoveda-foto-smes').textContent = difuzer
+      ? 'Nepovinné. U difuzéru ukážeme fotky lahviček olejů.'
+      : 'Vyfoťte hotovou směs (sůl, roll-on, sprej…). Ukáže se v kalendáři místo lahviček.';
+  }
+  form.querySelectorAll('[name=pouziti]').forEach(r => r.addEventListener('change', () => { prepniPouziti(); uloz(); }));
+
+  // Fotky: zmenšit v telefonu, ať se odesílají rychle
+  const fotky = { autor: '', smes: '' };
+  function zmensi(soubor, max) {
+    return new Promise((ok, chyba) => {
+      const img = new Image(), url = URL.createObjectURL(soubor);
+      img.onload = () => {
+        const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        ok(c.toDataURL('image/jpeg', .84));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); chyba(); };
+      img.src = url;
+    });
+  }
+  function nastavFoto(co, data) {
+    fotky[co] = data;
+    const n = $('nahled-' + co);
+    n.style.backgroundImage = data ? `url("${data}")` : '';
+    n.textContent = data ? '' : (co === 'autor' ? '☺' : '📷');
+    form.querySelector(`[data-zrusit="${co}"]`).hidden = !data;
+  }
+  form.querySelectorAll('.foto-btn').forEach(b => b.addEventListener('click', () => $(b.dataset.pro).click()));
+  form.querySelectorAll('[data-zrusit]').forEach(b => b.addEventListener('click', () => nastavFoto(b.dataset.zrusit, '')));
+  [['foto-autor', 'autor', 400], ['foto-smes', 'smes', 1400]].forEach(([id, co, max]) => {
+    $(id).addEventListener('change', async e => {
+      const f = e.target.files[0]; e.target.value = '';
+      if (!f) return;
+      try { nastavFoto(co, await zmensi(f, max)); hlaska(''); }
+      catch (err) { hlaska('Tuhle fotku se nepodařilo načíst, zkuste prosím jinou.'); }
+    });
+  });
+
+  // Rozepsaný recept se pamatuje v telefonu (bez fotek), kdyby se stránka zavřela
+  function data() {
+    return {
+      jmeno: $('jmeno').value.trim(), kod: $('kod').value.trim(), nazev: $('nazev').value.trim(), nalada: $('nalada').value.trim(),
+      pouzitiVolba: form.pouziti.value, pouzitiJine: $('pouziti-jine').value.trim(),
+      oleje: [...$('oleje').children].map(r => ({ v: r.querySelector('select').value, k: r.querySelector('[type=number]').value, j: r.querySelector('.jiny').value.trim() })),
+      postup: $('postup').value.trim(), tip: $('tip').value.trim(), den: $('den').value
+    };
+  }
+  function uloz() { try { localStorage.setItem(ULOZENO, JSON.stringify(data())); } catch (e) {} }
+  function nacti() {
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem(ULOZENO)); } catch (e) {}
+    if (d) {
+      ['jmeno', 'kod', 'nazev', 'nalada', 'postup', 'tip', 'den'].forEach(k => { if (d[k] != null) $(k).value = d[k]; });
+      const r = form.querySelector(`[name=pouziti][value="${CSS.escape(d.pouzitiVolba || 'Difuzér')}"]`);
+      if (r) r.checked = true;
+      $('pouziti-jine').value = d.pouzitiJine || '';
+      (d.oleje && d.oleje.length ? d.oleje : [{}, {}]).forEach(o => radekOleje(OLEJE[o.v] || o.v === 'jiny' ? o.v : '', o.k || '', o.j || ''));
+    } else { radekOleje(); radekOleje(); }
+    prepniPouziti();
+  }
+  form.addEventListener('input', uloz);
+
+  function hlaska(t) { $('hlaska').textContent = t; }
+  function oznac(el, spatne) { el.classList.toggle('chyba-pole', spatne); return spatne; }
+
+  function zkontroluj() {
+    let prvni = null;
+    const chyba = (el, spatne) => { if (oznac(el, spatne) && !prvni) prvni = el; };
+    ['jmeno', 'kod', 'nazev', 'nalada', 'postup'].forEach(id => chyba($(id), !$(id).value.trim()));
+    chyba($('pouziti-jine'), form.pouziti.value === 'jine' && !$('pouziti-jine').value.trim());
+    const slozeni = [];
+    [...$('oleje').children].forEach(r => {
+      const sel = r.querySelector('select'), kap = r.querySelector('[type=number]'), jin = r.querySelector('.jiny');
+      const prazdny = !sel.value && !kap.value;
+      if (prazdny) { oznac(sel, false); oznac(kap, false); oznac(jin, false); return; }
+      const n = parseInt(kap.value, 10);
+      chyba(sel, !sel.value);
+      chyba(jin, sel.value === 'jiny' && !jin.value.trim());
+      chyba(kap, !(n >= 1 && n <= 20));
+      if (sel.value && n >= 1 && n <= 20) slozeni.push({ olej: sel.value === 'jiny' ? jin.value.trim() : OLEJE[sel.value].nazev, kapky: n });
+    });
+    if (!slozeni.length) chyba($('oleje').querySelector('select'), true);
+    const bezFotky = form.pouziti.value !== 'Difuzér' && !fotky.smes;
+    oznac(form.querySelector('[data-pro="foto-smes"]'), bezFotky);
+    if (bezFotky && !prvni) prvni = form.querySelector('[data-pro="foto-smes"]');
+    if (prvni) {
+      prvni.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      prvni.focus({ preventScroll: true });
+      hlaska(bezFotky && prvni.dataset.pro ? 'Přidejte prosím fotku hotové směsi.' : 'Doplňte prosím označená pole.');
+      return null;
+    }
+    return slozeni;
+  }
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    hlaska('');
+    const slozeni = zkontroluj();
+    if (!slozeni) return;
+    if (!window.RECEPTY_URL) { hlaska('Formulář ještě není propojený s tabulkou. Dejte prosím vědět správci kalendáře.'); return; }
+    const d = data();
+    const btn = $('odeslat');
+    btn.disabled = true; btn.textContent = 'Odesílám…';
+    try {
+      const odpoved = await fetch(window.RECEPTY_URL, {
+        method: 'POST',
+        body: JSON.stringify({ jmeno: d.jmeno, kod: d.kod, nazev: d.nazev, nalada: d.nalada, pouziti: pouziti(), slozeni,
+                               postup: d.postup, tip: d.tip, den: d.den, fotoAutor: fotky.autor, fotoSmes: fotky.smes })
+      });
+      const v = await odpoved.json();
+      if (v.ok) {
+        try { const k = d.kod; localStorage.removeItem(ULOZENO); localStorage.setItem(ULOZENO, JSON.stringify({ jmeno: d.jmeno, kod: k })); } catch (err) {}
+        form.hidden = true; $('diky').hidden = false; window.scrollTo(0, 0);
+      } else if (v.chyba === 'kod') { oznac($('kod'), true); $('kod').focus(); hlaska('Kód skupiny nesedí. Zkontrolujte ho prosím ve zprávě ve skupině.'); }
+      else if (v.chyba === 'foto') hlaska('Fotku se nepodařilo uložit. Zkuste prosím jinou.');
+      else hlaska('Něco se pokazilo. Zkuste to prosím za chvíli znovu.');
+    } catch (err) {
+      hlaska('Recept se nepodařilo odeslat. Zkontrolujte připojení k internetu a zkuste to znovu.');
+    }
+    btn.disabled = false; btn.textContent = 'Odeslat recept';
+  });
+
+  $('dalsi').addEventListener('click', () => {
+    form.reset(); $('oleje').innerHTML = ''; nastavFoto('autor', ''); nastavFoto('smes', '');
+    nacti(); form.hidden = false; $('diky').hidden = true; window.scrollTo(0, 0);
+  });
+
+  nacti();
+})();
+</script>
+</body>
+</html>

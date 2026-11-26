@@ -1,0 +1,101 @@
+/**
+ * Adventní kalendář – recepty z Google tabulky.
+ *
+ * Vložte do tabulky přes Rozšíření → Apps Script, změňte KOD níže,
+ * jednou spusťte funkci „nastavit“ a nasaďte jako webovou aplikaci
+ * (Spustit jako: já, Přístup: kdokoli). Postup je v NAVOD-TABULKA.md.
+ */
+
+// Kód skupiny – členky ho zadají ve formuláři, bez něj se recept neuloží.
+// Přepište ho jen v editoru Apps Script, sem do repozitáře (je veřejný) ho nepište.
+const KOD = 'ZMENTE-ME';
+
+const LIST = 'Recepty';
+const SLOZKA = 'Adventní kalendář – fotky';
+const SLOUPCE = ['Odesláno', 'Schváleno', 'Den', 'Jméno', 'Název směsi', 'Nálada', 'Použití',
+                 'Složení (olej – kapky)', 'Jak na to', 'Tip', 'Fotka autora (ID)', 'Fotka směsi (ID)'];
+const MAX_FOTO = 4 * 1024 * 1024;
+
+/** Spusťte jednou ručně: připraví list, zaškrtávátka a složku na fotky. */
+function nastavit() {
+  if (KOD === 'ZMENTE-ME') throw new Error('Nejdřív nahoře změňte KOD na vlastní kód skupiny.');
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sh = ss.getSheetByName(LIST) || ss.insertSheet(LIST);
+  sh.getRange(1, 1, 1, SLOUPCE.length).setValues([SLOUPCE]).setFontWeight('bold');
+  sh.setFrozenRows(1);
+  sh.getRange('B2:B1000').insertCheckboxes();
+  sh.getRange('H2:J1000').setWrap(true);
+  slozka();
+}
+
+function slozka() {
+  const p = PropertiesService.getScriptProperties();
+  const id = p.getProperty('slozka');
+  if (id) { try { return DriveApp.getFolderById(id); } catch (e) {} }
+  const f = DriveApp.createFolder(SLOZKA);
+  p.setProperty('slozka', f.getId());
+  return f;
+}
+
+function vystup(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+// Text do buňky: oříznout a zabránit tomu, aby se z textu stal vzorec.
+function text(v, max) {
+  v = String(v == null ? '' : v).replace(/\r/g, '').trim().slice(0, max);
+  return /^[=+\-@\t]/.test(v) ? "'" + v : v;
+}
+
+function ulozFoto(data, nazev) {
+  if (!data) return '';
+  const m = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/=]+)$/.exec(String(data));
+  if (!m) throw new Error('foto');
+  const bajty = Utilities.base64Decode(m[2]);
+  if (bajty.length > MAX_FOTO) throw new Error('foto');
+  const soubor = slozka().createFile(Utilities.newBlob(bajty, 'image/' + m[1], nazev.slice(0, 80) + '.' + (m[1] === 'jpeg' ? 'jpg' : m[1])));
+  soubor.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return soubor.getId();
+}
+
+/** Formulář posílá nový recept. */
+function doPost(e) {
+  const zamek = LockService.getScriptLock();
+  zamek.waitLock(20000);
+  try {
+    if (!KOD || KOD === 'ZMENTE-ME') return vystup({ ok: false, chyba: 'server' });
+    const d = JSON.parse(e.postData.contents);
+    if (String(d.kod || '').trim().toLowerCase() !== KOD.toLowerCase()) return vystup({ ok: false, chyba: 'kod' });
+    const slozeni = Array.isArray(d.slozeni) ? d.slozeni.slice(0, 8)
+      .map(r => String(r && r.olej || '').replace(/[\r\n]/g, ' ').replace(/^[\s=+\-@'\t]+/, '').trim().slice(0, 80) + ' – ' + Math.max(1, Math.min(20, parseInt(r && r.kapky, 10) || 1)))
+      .filter(r => !/^ –/.test(r)) : [];
+    if (!d.jmeno || !d.nazev || !slozeni.length) return vystup({ ok: false, chyba: 'pole' });
+    let fotoAutor, fotoSmes;
+    try {
+      fotoAutor = ulozFoto(d.fotoAutor, 'autor ' + d.jmeno);
+      fotoSmes = ulozFoto(d.fotoSmes, 'smes ' + d.nazev);
+    } catch (err) { return vystup({ ok: false, chyba: 'foto' }); }
+    const den = parseInt(d.den, 10);
+    const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(LIST);
+    sh.appendRow([new Date(), false, den >= 1 && den <= 24 ? den : '',
+      text(d.jmeno, 60), text(d.nazev, 60), text(d.nalada, 120), text(d.pouziti, 40),
+      slozeni.join('\n'), text(d.postup, 600), text(d.tip, 600), fotoAutor, fotoSmes]);
+    return vystup({ ok: true });
+  } catch (err) {
+    return vystup({ ok: false, chyba: 'server' });
+  } finally {
+    zamek.releaseLock();
+  }
+}
+
+/** Kalendář si stahuje jen schválené recepty s vyplněným dnem. */
+function doGet() {
+  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(LIST);
+  const radky = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, SLOUPCE.length).getValues() : [];
+  const recepty = radky
+    .filter(r => r[1] === true && r[2] >= 1 && r[2] <= 24)
+    .map(r => ({ den: Number(r[2]), jmeno: String(r[3]), nazev: String(r[4]), nalada: String(r[5]),
+                 pouziti: String(r[6]), slozeni: String(r[7]), postup: String(r[8]), tip: String(r[9]),
+                 fotoAutor: String(r[10]), fotoSmes: String(r[11]) }));
+  return vystup({ recepty });
+}

@@ -203,6 +203,7 @@
   .karta h3::after { content: ""; flex: 1; height: 1px; background: var(--linka); }
   .oleje { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
   .oleje li { display: flex; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border: 1px solid var(--linka); border-radius: 6px; background: #fff; }
+  .mini-jiny { display: grid; place-items: center; } .mini-jiny svg { width: 18px; height: 24px; }
   .mini { width: 48px; height: 64px; flex: none; object-fit: contain; mix-blend-mode: multiply; background: #fbf8f3; border-radius: 4px; padding: 4px 8px; box-sizing: content-box; }
   .olej { flex: 1; min-width: 0; }
   .olej a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; line-height: 1.35; display: block; }
@@ -364,7 +365,7 @@
       <ul class="oleje" id="k-oleje"></ul>
       <h3>Jak na to</h3>
       <p class="text" id="k-postup"></p>
-      <div class="tip"><b>Tip od nás</b><span id="k-tip"></span></div>
+      <div class="tip"><b id="k-tip-nadpis">Tip od nás</b><span id="k-tip"></span></div>
       <div class="tlacitka">
         <button class="btn btn-fial" id="k-sdilet">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
@@ -376,9 +377,35 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="tipy.js?v=4"></script>
+<script src="tipy.js?v=5"></script>
 <script>
-(function () {
+// Schválené recepty z Google tabulky přepíšou výchozí tipy pro dané dny.
+window.RECEPTY = (async () => {
+  const url = window.RECEPTY_URL;
+  if (!url) return;
+  const OLEJE = window.OLEJE, klic = Object.create(null);
+  for (const [k, o] of Object.entries(OLEJE)) [k, o.nazev, o.stitek].forEach(n => klic[n.toLowerCase()] = k);
+  const foto = id => /^[\w-]{20,80}$/.test(id) ? `https://drive.google.com/thumbnail?id=${id}&sz=w1000` : '';
+  try {
+    const c = new AbortController(), cas = setTimeout(() => c.abort(), 4000);
+    const data = await (await fetch(url, { signal: c.signal })).json();
+    clearTimeout(cas);
+    for (const r of data.recepty || []) {
+      const slozeni = String(r.slozeni).split('\n').map(l => /^(.+?)\s*[–-]\s*(\d{1,2})\s*$/.exec(l.trim())).filter(Boolean)
+        .map(m => [klic[m[1].toLowerCase()] || m[1], Math.min(20, +m[2])]);
+      if (!slozeni.length || !r.nazev) continue;
+      const tip = { den: r.den, nazev: r.nazev, nalada: r.nalada, pouziti: r.pouziti || 'Difuzér', slozeni,
+                    postup: r.postup, tip: r.tip, foto: foto(r.fotoSmes),
+                    autor: r.jmeno ? { jmeno: r.jmeno, foto: foto(r.fotoAutor) } : null };
+      const i = window.TIPY.findIndex(x => x.den === r.den);
+      if (i >= 0) window.TIPY[i] = tip; else window.TIPY.push(tip);
+    }
+  } catch (e) {}
+})();
+</script>
+<script>
+(async function () {
+  await window.RECEPTY;
   const ROK = 2026;
   const PORADI = [7, 15, 1, 22, 11, 4, 19, 9, 24, 13, 2, 17, 6, 20, 12, 3, 23, 10, 16, 5, 21, 8, 14, 18];
   const OLEJE = window.OLEJE;
@@ -386,6 +413,9 @@
   const eshop = id => `https://www.youngliving.com/cs_CZ/products/id/${id}`;
   const kapek = n => n === 1 ? 'kapka' : n < 5 ? 'kapky' : 'kapek';
   const dni = n => n === 1 ? 'den' : n < 5 ? 'dny' : 'dní';
+
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const znamy = t => t.slozeni.filter(([o]) => Object.hasOwn(OLEJE, o));
 
   // Oficiální fotka lahvičky z e-shopu Young Living
   function lahvicka(olej) {
@@ -442,7 +472,7 @@
     if (!zamceno && otevrena.includes(den)) btn.classList.add('otevrene');
     btn.setAttribute('aria-label', zamceno ? `Okénko ${den}, otevře se ${den}. prosince` : `Okénko ${den}: ${t.nazev}`);
     btn.innerHTML = `
-      <span class="vnitrek">${zamceno ? '' : `<span class="lahve n${t.slozeni.length}">${t.foto ? `<img class="vlastni" src="${t.foto}" alt="" loading="lazy">` : t.slozeni.map(([o]) => lahvicka(o)).join('')}</span><span class="jm">${t.nazev}</span>`}</span>
+      <span class="vnitrek">${zamceno ? '' : `<span class="lahve n${znamy(t).length}">${t.foto ? `<img class="vlastni" src="${esc(t.foto)}" alt="" loading="lazy">` : znamy(t).map(([o]) => lahvicka(o)).join('')}</span><span class="jm">${esc(t.nazev)}</span>`}</span>
       <span class="dvirka"><span class="cislo">${den}</span><span class="motiv">${MOTIVY[i % 3]}</span><span class="knofl"></span>${zamceno ? ZAMEK : ''}</span>`;
     btn.addEventListener('click', () => klik(btn, den));
     mrizka.appendChild(btn);
@@ -520,13 +550,15 @@
     document.getElementById('k-nalada').textContent = t.nalada;
     document.getElementById('k-pouziti').textContent = t.pouziti;
     document.getElementById('k-postup').textContent = t.postup;
-    document.getElementById('k-tip').textContent = t.tip;
+    document.getElementById('k-tip').textContent = t.tip || '';
+    document.querySelector('.tip').hidden = !t.tip;
+    document.getElementById('k-tip-nadpis').textContent = t.autor ? 'Tip' : 'Tip od nás';
     const police = document.getElementById('k-police');
     if (t.foto) {
       police.innerHTML = '<img class="vlastni-foto" alt="">';
       police.firstChild.src = t.foto; police.firstChild.alt = t.nazev;
     } else {
-      police.innerHTML = t.slozeni.map(([o]) => `<figure>${lahvicka(o)}<figcaption>${OLEJE[o].stitek}</figcaption></figure>`).join('');
+      police.innerHTML = znamy(t).map(([o]) => `<figure>${lahvicka(o)}<figcaption>${OLEJE[o].stitek}</figcaption></figure>`).join('');
     }
     // Kdo recept poslal: malá fotka (nebo iniciála) a jméno
     const autor = document.getElementById('k-autor'), ava = document.getElementById('k-ava');
@@ -544,12 +576,16 @@
     const ul = document.getElementById('k-oleje');
     ul.innerHTML = '';
     t.slozeni.forEach(([klic, n]) => {
-      const o = OLEJE[klic];
+      const o = Object.hasOwn(OLEJE, klic) ? OLEJE[klic] : null;
+      const kapka = barva => `<svg viewBox="0 0 8 11" aria-hidden="true"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="${barva}"/></svg>`;
       const li = document.createElement('li');
-      li.innerHTML = `<img class="mini" src="img/${klic}.jpg?v=4" alt="" width="48" height="64">
-        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Koupit v e-shopu<span class="sipka"> ↗</span></small></span>
-        <span class="kapicky" role="img" aria-label="${n} ${kapek(n)}">${`<svg viewBox="0 0 8 11" aria-hidden="true"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="${o.barva}"/></svg>`.repeat(n)}</span>`;
-      li.querySelector('a').textContent = o.nazev;
+      // Olej mimo náš seznam (napsaný ve formuláři): bez fotky a odkazu do e-shopu
+      li.innerHTML = (o
+        ? `<img class="mini" src="img/${klic}.jpg?v=4" alt="" width="48" height="64">
+        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Koupit v e-shopu<span class="sipka"> ↗</span></small></span>`
+        : `<span class="mini mini-jiny">${kapka('#c9a14f')}</span><span class="olej"><a></a></span>`)
+        + `<span class="kapicky" role="img" aria-label="${n} ${kapek(n)}">${kapka(o ? o.barva : '#c9a14f').repeat(n)}</span>`;
+      li.querySelector('a').textContent = o ? o.nazev : klic;
       ul.appendChild(li);
     });
     document.getElementById('k-sdilet').onclick = async () => {
