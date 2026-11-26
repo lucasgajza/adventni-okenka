@@ -275,22 +275,24 @@
   #uvod.pryc { opacity: 0; visibility: hidden; }
   #uvod canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .uvod-stred { position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 16px; }
-  .uvod-hv { width: min(52px, 6vh); height: min(52px, 6vh); margin-bottom: min(48px, 5vh); animation: uvodHv 1.3s .2s cubic-bezier(.2,.8,.2,1) both, uvodPuls 2.6s 1.5s ease-in-out infinite; }
+  .uvod-hv { width: min(52px, 6vh); height: min(52px, 6vh); margin-bottom: min(48px, 5vh); animation: uvodHv .9s 0s cubic-bezier(.2,.8,.2,1) both, uvodPuls 2.6s .9s ease-in-out infinite; }
   .uvod-pre { font-family: 'Montserrat', sans-serif; font-size: min(22px, 5.4vw); color: #f0dcd6; letter-spacing: .06em; margin: 0 0 min(18px, 2vh); }
   .uvod-h { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: min(15vw, 10.5vh, 128px); line-height: 1.02; margin: 0; }
   .uvod-h span { display: block; } .uvod-h em { color: var(--zlato); }
-  .uvod-cara { width: 90px; height: 1px; background: var(--zlato); opacity: .7; margin: min(52px, 5.5vh) 0 min(26px, 3vh); animation: uvodCara 1s 2.3s cubic-bezier(.2,.8,.2,1) both; }
+  .uvod-cara { width: 90px; height: 1px; background: var(--zlato); opacity: .7; margin: min(52px, 5.5vh) 0 min(26px, 3vh); animation: uvodCara .7s 1s cubic-bezier(.2,.8,.2,1) both; }
   .uvod-crew { font-family: 'Montserrat', sans-serif; color: var(--zlato); letter-spacing: .46em; padding-left: .46em; font-size: min(17px, 4.2vw); font-weight: 600; }
-  .uvod-logo { position: absolute; left: 50%; bottom: max(36px, 5vh); width: min(150px, 38vw); transform: translateX(-50%); opacity: .85; animation: uvodFade 1.2s 2.9s both; }
-  .uvod-pre, .uvod-h span, .uvod-crew { animation: uvodIn 1s cubic-bezier(.2,.8,.2,1) both; }
-  .uvod-pre { animation-delay: .7s; } .uvod-h span:nth-child(1) { animation-delay: 1s; } .uvod-h span:nth-child(2) { animation-delay: 1.25s; }
-  .uvod-h span:nth-child(3) { animation-delay: 1.5s; } .uvod-crew { animation-delay: 2.5s; }
+  .uvod-logo { position: absolute; left: 50%; bottom: max(36px, 5vh); width: min(150px, 38vw); transform: translateX(-50%); opacity: .85; animation: uvodFade .9s 1.2s both; }
+  .uvod-pre, .uvod-h span, .uvod-crew { animation: uvodIn .7s cubic-bezier(.2,.8,.2,1) both; }
+  .uvod-pre { animation-delay: .15s; } .uvod-h span:nth-child(1) { animation-delay: .3s; } .uvod-h span:nth-child(2) { animation-delay: .45s; }
+  .uvod-h span:nth-child(3) { animation-delay: .6s; } .uvod-crew { animation-delay: 1.1s; }
   @keyframes uvodIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
   @keyframes uvodFade { from { opacity: 0; } }
   @keyframes uvodCara { from { transform: scaleX(0); opacity: 0; } }
   @keyframes uvodHv { from { opacity: 0; transform: rotate(-90deg) scale(.5); } }
   @keyframes uvodPuls { 50% { transform: scale(1.08); } }
-  body.uvod-bezi { overflow: hidden; }
+  html.uvod-bezi, html.uvod-bezi body { overflow: hidden; overscroll-behavior: none; scrollbar-width: none; }
+  html.uvod-bezi::-webkit-scrollbar { display: none; }
+  #uvod { touch-action: none; overscroll-behavior: none; }
   @media (prefers-reduced-motion: reduce) {
     #uvod *, #uvod { animation: none !important; }
   }
@@ -623,7 +625,9 @@
 (() => {
   const uvod = document.getElementById('uvod');
   const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.body.classList.add('uvod-bezi');
+  document.documentElement.classList.add('uvod-bezi');
+  const stop = e => e.preventDefault();
+  addEventListener('touchmove', stop, { passive: false }); addEventListener('wheel', stop, { passive: false });
   const cv = document.getElementById('uvod-snih'), ctx = cv.getContext('2d');
   let w, h, vlocky = [], bezi = true;
   function rozmer() {
@@ -646,12 +650,13 @@
   (function smycka(now) { if (!bezi) return; kresli(klid ? 0 : (now - t0) / 1000); if (!klid) requestAnimationFrame(smycka); })(t0);
   function zavri() {
     if (uvod.classList.contains('pryc')) return;
-    uvod.classList.add('pryc'); document.body.classList.remove('uvod-bezi');
+    uvod.classList.add('pryc'); document.documentElement.classList.remove('uvod-bezi');
+    removeEventListener('touchmove', stop); removeEventListener('wheel', stop);
     setTimeout(() => { bezi = false; uvod.remove(); }, 1000);
   }
   uvod.addEventListener('click', zavri);
   addEventListener('keydown', e => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') zavri(); }, { once: true });
-  setTimeout(zavri, klid ? 2500 : 4800);
+  setTimeout(zavri, klid ? 2500 : 3800);
 })();
 </script>
 </body>
