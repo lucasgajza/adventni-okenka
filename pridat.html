@@ -92,11 +92,6 @@
   .kategorie input:checked + .volba { border-color: var(--fialova); background: #f7f3fb; box-shadow: inset 0 0 0 1px var(--fialova); }
   .kategorie input:checked + .volba .kolecko { border-color: var(--fialova); background: radial-gradient(circle, var(--fialova) 0 4px, transparent 5px); }
   .kategorie input:focus-visible + .volba { outline: 2px solid var(--zlato-syte); outline-offset: 2px; }
-  .rada {
-    margin: 12px 0 0; padding: 12px 14px; border-left: 3px solid var(--zlato-syte); background: var(--krem);
-    border-radius: 0 6px 6px 0; font-size: 12.5px; line-height: 1.55; color: #4a4a4a;
-  }
-  .rada b { color: var(--vino); }
 
   /* Suroviny */
   .radek { display: grid; grid-template-columns: 34px 1fr 92px 40px; gap: 8px; align-items: center; margin-bottom: 8px; }
@@ -213,7 +208,6 @@
       <div class="pole">
         <span class="popis povinne" id="popis-kategorie">Kategorie</span>
         <div class="kategorie" role="radiogroup" aria-labelledby="popis-kategorie" id="kategorie"></div>
-        <p class="rada" id="rada"></p>
       </div>
 
       <h3>Recept</h3>
@@ -302,30 +296,25 @@
   const MAX_RADKU = 10;
   const KAPKA = '<svg viewBox="0 0 8 11"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="#c9a14f"/></svg>';
 
-  // Kategorie: popis pod volbou, rada a příklady k polím
+  // Kategorie: popis pod volbou a příklady k polím
   const KATEGORIE = [
     { v: 'Kombinace do difuzéru', popis: 'Pár kapek olejů do vody v difuzéru.', kapky: true,
-      rada: '<b>Kapky počítejte na difuzér se 100–200 ml vody.</b> Vyberte jen oleje Young Living. V okénku ukážeme fotky jejich lahviček, vlastní fotku přidávat nemusíte.',
       nazev: 'Krátký a vánoční, 1 až 3 slova. Např. <i>Perníková chaloupka</i>',
       nalada: 'Co vůně navodí, pár slov. Např. <i>Útulno a vůně pečení</i>',
       postup: 'Kdy a kde směs pustit. Např. <i>Nakapejte do difuzéru odpoledne, když se stmívá.</i>' },
     { v: 'Péče o tělo', popis: 'Roll-on, masážní olej, koupel, krém nebo balzám.',
-      rada: '<b>Na kůži oleje vždy ředíme</b> nosným olejem, třeba V-6 nebo kokosovým. Uveďte i ten. Citrusy na kůži nepatří před sluncem.',
       nazev: 'Např. <i>Zimní roll-on</i> nebo <i>Vánoční koupel</i>',
       nalada: 'K čemu se hodí. Např. <i>Klid před spaním</i>',
       postup: 'Jak výrobek připravit a použít. Např. <i>Do 10ml lahvičky s kuličkou nakapejte oleje a dolijte nosným olejem.</i>' },
     { v: 'Doplňky stravy', popis: 'Oleje do jídla a pití, kapsle, čaj, pečení.',
-      rada: '<b>Do jídla a pití patří jen oleje určené k vnitřnímu užití,</b> u nás řada Plus. Stačí málo, často 1 kapka. Vyberte z nabídky „Plus“.',
       nazev: 'Např. <i>Perníkový čaj</i> nebo <i>Vánoční kapsle</i>',
       nalada: 'K čemu nebo kdy. Např. <i>Zahřátí po procházce</i>',
       postup: 'Postup krok za krokem. Např. <i>Do hrnku horkého čaje kápněte olej a osladěte medem.</i>' },
     { v: 'Výrobek do domácnosti', popis: 'Vonné sáčky, osvěžovač prádla, svíčka, dekorace.',
-      rada: '<b>Napište všechny suroviny</b>, i ty, které nejsou oleje, s množstvím, aby to šlo podle receptu udělat.',
       nazev: 'Např. <i>Vonné sáčky do skříně</i>',
       nalada: 'K čemu slouží. Např. <i>Svěží prádlo celou zimu</i>',
       postup: 'Postup krok za krokem. Např. <i>Rýži nasypte do sklenice, nakapejte oleje a nechte den odležet.</i>' },
     { v: 'Úklidový sprej', popis: 'Čisticí sprej na kuchyň, koupelnu nebo okna.',
-      rada: '<b>Na sprej použijte skleněnou lahev</b>, oleje plast časem narušují. Napište objem lahve a všechny suroviny.',
       nazev: 'Např. <i>Vánoční čisticí sprej</i>',
       nalada: 'Na co je. Např. <i>Kuchyňská linka a stůl</i>',
       postup: 'Jak sprej namíchat a používat. Např. <i>Do 500ml lahve dejte čistič, dolijte vodou a protřepejte.</i>' }
@@ -407,7 +396,6 @@
   // Při změně kategorie se přepíšou popisky, příklady a pole množství
   function prepniKategorii() {
     const k = kat();
-    $('rada').innerHTML = k.rada;
     $('napoveda-nazev').innerHTML = k.nazev;
     $('napoveda-nalada').innerHTML = k.nalada;
     $('napoveda-postup').innerHTML = k.postup;

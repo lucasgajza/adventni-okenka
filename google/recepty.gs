@@ -25,7 +25,9 @@ function nastavit() {
   sh.getRange(1, 1, 1, SLOUPCE.length).setValues([SLOUPCE]).setFontWeight('bold');
   sh.setFrozenRows(1);
   sh.getRange('B2:B1000').insertCheckboxes();
-  sh.getRange('H2:J1000').setWrap(true);
+  // Text se nezalamuje a řádky mají stejnou výšku, celý obsah buňky je vidět v řádku vzorců
+  sh.getRange('A:L').setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+  sh.setRowHeightsForced(2, sh.getMaxRows() - 1, 21);
   slozka();
 }
 

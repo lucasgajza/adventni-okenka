@@ -224,12 +224,16 @@
     display: block; font-family: "DM Serif Display", Georgia, serif; font-style: italic; font-size: 21px; line-height: 1.4; color: var(--vino);
   }
   .tlacitka { margin-top: 22px; display: grid; gap: 10px; }
+  .ulozit { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border: 0; border-radius: 999px;
     cursor: pointer; font: 600 14px Montserrat, sans-serif; letter-spacing: .02em; text-decoration: none; box-sizing: border-box;
   }
   .btn-fial { background: var(--fialova); color: #fff; }
   .btn-fial:hover { background: var(--fialova-tmave); }
+  .btn-bila { background: #fff; color: var(--fialova); border: 1px solid #d9cdea; }
+  .btn-bila:hover { background: #f7f3fb; }
+  .btn:disabled { opacity: .6; cursor: wait; }
   .btn svg { width: 18px; height: 18px; }
 
   /* Šuplíček, který vyjede z krabičky */
@@ -372,6 +376,16 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
           Sdílet okénko
         </button>
+        <div class="ulozit">
+          <button class="btn btn-bila" id="k-fotka">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+            Uložit fotku
+          </button>
+          <button class="btn btn-bila" id="k-pdf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 12v6M9 15l3 3 3-3"/></svg>
+            Uložit PDF
+          </button>
+        </div>
       </div>
     </div>
   </article>
@@ -394,7 +408,7 @@ window.RECEPTY = (async () => {
       const m = /^(.+?) \((.+)\)$/.exec(n);
       [n, ...(m ? [m[1], m[2]] : [])].forEach(a => { const k = klicJmena(a); if (!produkty[k]) produkty[k] = [id, n]; });
     }
-  const foto = id => /^[\w-]{20,80}$/.test(id) ? `https://drive.google.com/thumbnail?id=${id}&sz=w1000` : '';
+  const foto = id => /^[\w-]{20,80}$/.test(id) ? `https://lh3.googleusercontent.com/d/${id}=w1000` : '';
   try {
     const c = new AbortController(), cas = setTimeout(() => c.abort(), 4000);
     const data = await (await fetch(url, { signal: c.signal })).json();
@@ -575,7 +589,7 @@ window.RECEPTY = (async () => {
     document.getElementById('k-tip-nadpis').textContent = t.autor ? 'Tip' : 'Tip od nás';
     const police = document.getElementById('k-police');
     if (t.foto) {
-      police.innerHTML = '<img class="vlastni-foto" alt="">';
+      police.innerHTML = '<img class="vlastni-foto" alt="" crossorigin="anonymous">';
       police.firstChild.src = t.foto; police.firstChild.alt = t.nazev;
     } else {
       police.innerHTML = znamy(t).map(p => `<figure>${lahvicka(p)}<figcaption>${esc(olej(p).stitek)}</figcaption></figure>`).join('');
@@ -586,7 +600,7 @@ window.RECEPTY = (async () => {
     if (t.autor) {
       document.getElementById('k-jmeno').textContent = t.autor.jmeno;
       if (t.autor.foto) {
-        ava.outerHTML = '<img class="ava" id="k-ava" alt="">';
+        ava.outerHTML = '<img class="ava" id="k-ava" alt="" crossorigin="anonymous">';
         document.getElementById('k-ava').src = t.autor.foto;
       } else {
         ava.outerHTML = '<span class="ava" id="k-ava"></span>';
@@ -627,6 +641,8 @@ window.RECEPTY = (async () => {
         window.open('https://wa.me/?text=' + encodeURIComponent(`${text} ${url}`), '_blank');
       }
     };
+    document.getElementById('k-fotka').onclick = e => ulozRecept(e.currentTarget, 'jpg', den, t.nazev);
+    document.getElementById('k-pdf').onclick = e => ulozRecept(e.currentTarget, 'pdf', den, t.nazev);
     const karta = document.querySelector('.karta');
     zavoj.classList.add('ukaz');
     karta.scrollTop = 0;
@@ -677,6 +693,83 @@ window.RECEPTY = (async () => {
   document.getElementById('zavrit').addEventListener('click', zavri);
   zavoj.addEventListener('click', e => { if (e.target === zavoj) zavri(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && zavoj.classList.contains('ukaz')) zavri(); });
+
+  // Uložení receptu do telefonu jako fotka nebo PDF. Knihovny se stáhnou až při prvním použití.
+  const skripty = {};
+  const nactiSkript = src => skripty[src] ||= new Promise((ok, chyba) => {
+    const el = document.createElement('script');
+    el.src = src; el.crossOrigin = 'anonymous'; el.onload = ok;
+    el.onerror = () => { delete skripty[src]; chyba(); };
+    document.head.appendChild(el);
+  });
+  async function snimekKarty() {
+    await nactiSkript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+    await document.fonts.ready;
+    const karta = document.querySelector('.karta');
+    const vyska = karta.scrollHeight;
+    return html2canvas(karta, {
+      scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false,
+      windowWidth: Math.max(innerWidth, 540), windowHeight: vyska + 64, scrollX: 0, scrollY: 0,
+      onclone: doc => {
+        const z = doc.getElementById('zavoj');
+        z.style.cssText = 'position:absolute;inset:0 auto auto 0;width:100%;display:block;padding:0;opacity:1;backdrop-filter:none;background:none;transition:none';
+        const k = doc.querySelector('.karta');
+        k.style.cssText += ';max-height:none;overflow:visible;transform:none;box-shadow:none;border-radius:0;margin:0 auto;transition:none';
+        doc.querySelectorAll('.karta .tlacitka, .karta .zavrit').forEach(el => el.remove());
+        // Bez mix-blend-mode by bílé pozadí fotek lahviček bylo vidět na krémovém pozadí
+        doc.querySelector('.karta .scena').style.background = '#fff';
+        // html2canvas neumí object-fit, fotky s ořezem nahradí pozadí se stejným ořezem
+        doc.querySelectorAll('.karta img.vlastni-foto, .karta img.ava').forEach(img => {
+          const cs = doc.defaultView.getComputedStyle(img), d = doc.createElement('div');
+          d.style.cssText = `width:${cs.width};height:${cs.height};border-radius:${cs.borderRadius};border:${cs.border};box-shadow:${cs.boxShadow};flex:none;` +
+            `background:url("${img.currentSrc || img.src}") center / cover no-repeat`;
+          img.replaceWith(d);
+        });
+      }
+    });
+  }
+  const hotove = {};
+  async function ulozRecept(btn, typ, den, nazev) {
+    const klic = typ + den;
+    if (!hotove[klic]) {
+      const text = btn.lastChild.textContent;
+      btn.disabled = true; btn.lastChild.textContent = ' Připravuji…';
+      try {
+        const platno = await snimekKarty();
+        const jmeno = `recept-${den}-prosince`;
+        if (typ === 'jpg') {
+          const blob = await new Promise(ok => platno.toBlob(ok, 'image/jpeg', .9));
+          hotove[klic] = new File([blob], jmeno + '.jpg', { type: 'image/jpeg' });
+        } else {
+          await nactiSkript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+          // Jedna dlouhá stránka v šířce A5, recept se nerozdělí
+          const sirka = 148, vyska = sirka * platno.height / platno.width;
+          const pdf = new jspdf.jsPDF({ unit: 'mm', format: [sirka, vyska], orientation: vyska > sirka ? 'p' : 'l' });
+          pdf.addImage(platno.toDataURL('image/jpeg', .9), 'JPEG', 0, 0, sirka, vyska);
+          hotove[klic] = new File([pdf.output('blob')], jmeno + '.pdf', { type: 'application/pdf' });
+        }
+      } catch (e) {
+        zprava('Recept se nepodařilo připravit, zkuste to prosím znovu');
+        return;
+      } finally {
+        btn.disabled = false; btn.lastChild.textContent = text;
+      }
+    }
+    const soubor = hotove[klic];
+    if (navigator.canShare && navigator.canShare({ files: [soubor] })) {
+      try { await navigator.share({ files: [soubor], title: nazev }); return; }
+      catch (e) {
+        if (e.name === 'AbortError') return;
+        // Příprava trvala moc dlouho a telefon sdílení nepustil. Podruhé už je soubor hotový.
+        if (e.name === 'NotAllowedError') { zprava('Hotovo, klepněte na tlačítko ještě jednou'); return; }
+      }
+    }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(soubor); a.download = soubor.name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    zprava(typ === 'pdf' ? 'PDF je stažené' : 'Fotka je stažená');
+  }
 
   let casovac;
   function zprava(text) {

@@ -41,6 +41,7 @@ Každý odeslaný recept přibude jako nový řádek.
   volný text (`Kokosový olej – 10 ml`). Oleje pojmenované jako v e-shopu dostanou v kalendáři fotku lahvičky.
 - **Kategorie** je jedna z: Kombinace do difuzéru, Péče o tělo, Doplňky stravy, Výrobek do domácnosti, Úklidový sprej.
   U difuzéru kalendář ukáže lahvičky olejů, u ostatních fotku výrobku.
+- Text v buňkách se nezalamuje, aby řádky byly nízké. Celý obsah buňky uvidíte nahoře v řádku vzorců, když na ni kliknete.
 - Fotky jsou na Disku. V tabulce je jen jejich ID, nemažte ho.
 - Když recept nechcete, nechte ho nezaškrtnutý nebo řádek smažte.
 
