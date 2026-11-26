@@ -127,6 +127,22 @@
   .foto-pole input[type=file] { display: none; }
   .zrusit-foto { font: inherit; font-size: 12px; color: var(--sedy); background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 4px; }
 
+  .ava.ma-foto { cursor: pointer; }
+
+  /* Výřez fotky do kolečka */
+  .orez { position: fixed; inset: 0; z-index: 50; background: rgba(30,6,11,.78); display: grid; place-items: center; padding: 16px; }
+  .orez-okno { background: #fff; border-radius: 8px; width: 100%; max-width: 360px; padding: 22px 20px 20px; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
+  .orez-nadpis { font-family: "DM Serif Display", Georgia, serif; font-size: 24px; color: var(--vino); margin: 0 0 4px; }
+  .orez-rada { font-size: 13px; color: var(--sedy); margin: 0 0 16px; line-height: 1.5; }
+  .orez-plocha { position: relative; width: 260px; max-width: 100%; aspect-ratio: 1; margin: 0 auto; overflow: hidden; border-radius: 6px; background: #222; touch-action: none; cursor: grab; user-select: none; }
+  .orez-plocha:active { cursor: grabbing; }
+  .orez-plocha img { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; pointer-events: none; }
+  .orez-plocha::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 200px rgba(0,0,0,.55); border: 2px solid var(--zlato); pointer-events: none; }
+  .orez-zoom { display: flex; align-items: center; gap: 12px; margin: 16px 4px 4px; font-size: 12px; font-weight: 600; color: var(--sedy); }
+  .orez-zoom input { flex: 1; accent-color: var(--fialova); }
+  .orez-tlacitka { display: flex; gap: 10px; }
+  .orez-tlacitka .btn { margin-top: 14px; padding: 12px; }
+
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px; border: 0; border-radius: 999px;
     cursor: pointer; font: 600 15px Montserrat, sans-serif; letter-spacing: .02em; text-decoration: none; margin-top: 10px;
@@ -181,6 +197,7 @@
           <span class="ava" id="nahled-autor" aria-hidden="true"></span>
           <span class="foto-tlacitka">
             <button type="button" class="foto-btn" data-pro="foto-autor">Vybrat fotku</button>
+            <button type="button" class="zrusit-foto" id="upravit-autor" hidden>Upravit výřez</button>
             <button type="button" class="zrusit-foto" data-zrusit="autor" hidden>Odebrat</button>
           </span>
           <input type="file" id="foto-autor" accept="image/*">
@@ -261,6 +278,19 @@
     Neoficiální kalendář sdílený mezi členy. Nejde o stránku společnosti Young Living; názvy produktů jsou jejími ochrannými známkami.
   </footer>
 </main>
+
+<div class="orez" id="orez" hidden role="dialog" aria-modal="true" aria-labelledby="orez-nadpis">
+  <div class="orez-okno">
+    <p class="orez-nadpis" id="orez-nadpis">Upravte výřez</p>
+    <p class="orez-rada">Fotku posuňte prstem nebo myší tak, aby byla v kolečku. Posuvníkem ji zvětšíte.</p>
+    <div class="orez-plocha" id="orez-plocha"><img id="orez-img" alt=""></div>
+    <label class="orez-zoom"><span>Zvětšení</span><input type="range" id="orez-zoom" min="1" max="4" step="0.01" value="1"></label>
+    <div class="orez-tlacitka">
+      <button type="button" class="btn btn-bila" id="orez-zrusit">Zrušit</button>
+      <button type="button" class="btn btn-fial" id="orez-hotovo">Použít</button>
+    </div>
+  </div>
+</div>
 
 <script src="tipy.js?v=7"></script>
 <script src="oleje.js?v=2"></script>
@@ -409,7 +439,7 @@
         c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
         URL.revokeObjectURL(url);
-        ok(c.toDataURL('image/jpeg', .84));
+        ok(c.toDataURL('image/jpeg', .9));
       };
       img.onerror = () => { URL.revokeObjectURL(url); chyba(); };
       img.src = url;
@@ -426,19 +456,116 @@
     n.classList.toggle('ma-foto', !!data);
     if (co === 'autor') { n.textContent = ''; inicial(); } else n.textContent = data ? '' : 'Fotka';
     form.querySelector(`[data-zrusit="${co}"]`).hidden = !data;
+    if (co === 'autor') { $('upravit-autor').hidden = !data; if (!data) orez.zdroj = null; }
     form.querySelector(`[data-pro="foto-${co}"]`).textContent = data ? 'Vybrat jinou' : 'Vybrat fotku';
   }
   $('jmeno').addEventListener('input', inicial);
   form.querySelectorAll('.foto-btn').forEach(b => b.addEventListener('click', () => $(b.dataset.pro).click()));
   form.querySelectorAll('[data-zrusit]').forEach(b => b.addEventListener('click', () => nastavFoto(b.dataset.zrusit, '')));
-  [['foto-autor', 'autor', 400], ['foto-smes', 'smes', 1400]].forEach(([id, co, max]) => {
+  [['foto-autor', 'autor', 1200], ['foto-smes', 'smes', 1400]].forEach(([id, co, max]) => {
     $(id).addEventListener('change', async e => {
       const f = e.target.files[0]; e.target.value = '';
       if (!f) return;
-      try { nastavFoto(co, await zmensi(f, max)); oznac(form.querySelector(`[data-pro="${id}"]`), false); hlaska(''); }
+      try {
+        const data = await zmensi(f, max);
+        if (co === 'autor') await otevriOrez(data, true);
+        else nastavFoto(co, data);
+        oznac(form.querySelector(`[data-pro="${id}"]`), false); hlaska('');
+      }
       catch (err) { hlaska('Tuhle fotku se nepodařilo načíst, zkuste prosím jinou.'); }
     });
   });
+
+  // Výřez vlastní fotky: posunout a zvětšit, ven jde čtverec 400 × 400 pro kolečko
+  const orez = { zdroj: null, img: $('orez-img'), plocha: $('orez-plocha'), x: 0, y: 0, zoom: 1, s: 0, w: 0, h: 0, novy: false };
+  function orezMeritko() { return orez.s / Math.min(orez.w, orez.h) * orez.zoom; }
+  function orezVykresli() {
+    const k = orezMeritko();
+    orez.x = Math.min(0, Math.max(orez.s - orez.w * k, orez.x));
+    orez.y = Math.min(0, Math.max(orez.s - orez.h * k, orez.y));
+    orez.img.style.width = orez.w * k + 'px';
+    orez.img.style.transform = `translate(${orez.x}px, ${orez.y}px)`;
+  }
+  function otevriOrez(data, novy) {
+    return new Promise((ok, chyba) => {
+      const img = orez.img;
+      img.onload = () => {
+        img.onload = img.onerror = null;
+        orez.w = img.naturalWidth; orez.h = img.naturalHeight; orez.novy = novy;
+        $('orez').hidden = false; document.body.style.overflow = 'hidden';
+        orez.s = orez.plocha.clientWidth;
+        const stary = !novy && orez.zdroj && orez.zdroj.data === data ? orez.zdroj : null;
+        orez.zoom = stary ? stary.zoom : 1;
+        $('orez-zoom').value = orez.zoom;
+        const k = orezMeritko();
+        // Střed výřezu v souřadnicích fotky, u nové fotky její střed
+        const cx = stary ? stary.cx : orez.w / 2, cy = stary ? stary.cy : orez.h / 2;
+        orez.x = orez.s / 2 - cx * k; orez.y = orez.s / 2 - cy * k;
+        orez.data = data;
+        orezVykresli();
+        $('orez-hotovo').focus();
+        ok();
+      };
+      img.onerror = () => { img.onload = img.onerror = null; chyba(); };
+      img.src = data;
+    });
+  }
+  function zavriOrez() {
+    $('orez').hidden = true; document.body.style.overflow = '';
+    form.querySelector('[data-pro="foto-autor"]').focus();
+  }
+  function pouzijOrez() {
+    const k = orezMeritko(), c = document.createElement('canvas');
+    c.width = c.height = 400;
+    c.getContext('2d').drawImage(orez.img, -orez.x / k, -orez.y / k, orez.s / k, orez.s / k, 0, 0, 400, 400);
+    orez.zdroj = { data: orez.data, zoom: orez.zoom, cx: (orez.s / 2 - orez.x) / k, cy: (orez.s / 2 - orez.y) / k };
+    nastavFoto('autor', c.toDataURL('image/jpeg', .86));
+    zavriOrez();
+  }
+  function zoomNa(z) {
+    const stara = orezMeritko();
+    orez.zoom = Math.min(4, Math.max(1, z));
+    const k = orezMeritko(), stred = orez.s / 2;
+    orez.x = stred - (stred - orez.x) * k / stara; orez.y = stred - (stred - orez.y) * k / stara;
+    $('orez-zoom').value = orez.zoom;
+    orezVykresli();
+  }
+  const prsty = new Map();
+  let rozestup = 0;
+  orez.plocha.addEventListener('pointerdown', e => {
+    orez.plocha.setPointerCapture(e.pointerId);
+    prsty.set(e.pointerId, [e.clientX, e.clientY]);
+    if (prsty.size === 2) { const [a, b] = [...prsty.values()]; rozestup = Math.hypot(a[0] - b[0], a[1] - b[1]); }
+  });
+  orez.plocha.addEventListener('pointermove', e => {
+    const p = prsty.get(e.pointerId);
+    if (!p) return;
+    if (prsty.size === 1) { orez.x += e.clientX - p[0]; orez.y += e.clientY - p[1]; orezVykresli(); }
+    prsty.set(e.pointerId, [e.clientX, e.clientY]);
+    if (prsty.size === 2) {
+      const [a, b] = [...prsty.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (rozestup) zoomNa(orez.zoom * d / rozestup);
+      rozestup = d;
+    }
+  });
+  ['pointerup', 'pointercancel'].forEach(t => orez.plocha.addEventListener(t, e => { prsty.delete(e.pointerId); rozestup = 0; }));
+  orez.plocha.addEventListener('wheel', e => { e.preventDefault(); zoomNa(orez.zoom * (e.deltaY < 0 ? 1.08 : 1 / 1.08)); }, { passive: false });
+  $('orez-zoom').addEventListener('input', e => zoomNa(+e.target.value));
+  $('orez-hotovo').addEventListener('click', pouzijOrez);
+  $('orez-zrusit').addEventListener('click', zavriOrez);
+  $('orez').addEventListener('keydown', e => {
+    if (e.key === 'Escape') zavriOrez();
+    if (e.key === 'Tab') {   // fokus zůstává v okně
+      const b = [...$('orez').querySelectorAll('input, button')], i = b.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); b[b.length - 1].focus(); }
+      else if (!e.shiftKey && i === b.length - 1) { e.preventDefault(); b[0].focus(); }
+    }
+    const krok = { ArrowLeft: [10, 0], ArrowRight: [-10, 0], ArrowUp: [0, 10], ArrowDown: [0, -10] }[e.key];
+    if (krok && e.target.type !== 'range') { e.preventDefault(); orez.x += krok[0]; orez.y += krok[1]; orezVykresli(); }
+  });
+  const upravit = () => { if (orez.zdroj) otevriOrez(orez.zdroj.data, false); };
+  $('upravit-autor').addEventListener('click', upravit);
+  $('nahled-autor').addEventListener('click', upravit);
 
   // Rozepsaný recept se pamatuje v telefonu (bez fotek)
   const POLE = ['jmeno', 'kod', 'nazev', 'nalada', 'postup', 'tip', 'den'];
