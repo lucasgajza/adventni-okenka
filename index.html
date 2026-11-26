@@ -8,7 +8,7 @@
 <meta property="og:title" content="Voňavý adventní kalendář 2026">
 <meta property="og:description" content="Každý den v prosinci jedna nová směs olejů Young Living. Otevřete si dnešní okénko!">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://lucasgajza.github.io/adventni-okenka/nahled.jpg">
+<meta property="og:image" content="https://lucasgajza.github.io/adventni-okenka/nahled.jpg?v=3">
 <meta name="theme-color" content="#5a1420">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%237a1d2b'/><circle cx='50' cy='50' r='16' fill='none' stroke='%23e2c27d' stroke-width='5'/><g stroke='%23e2c27d' stroke-width='5' stroke-linecap='round'><path d='M50 18v10M50 72v10M18 50h10M72 50h10M27 27l7 7M66 66l7 7M27 73l7-7M66 34l7-7'/></g></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,6 +57,7 @@
   main { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 44px 16px 56px; }
 
   header { text-align: center; }
+  .logo { display: block; width: 190px; height: auto; margin: 0 auto 22px; }
   .nadpis-mala {
     font-size: 12px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--zlato);
     display: inline-flex; align-items: center; gap: 14px;
@@ -92,7 +93,7 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
     box-shadow: inset 0 6px 14px rgba(0,0,0,.25); overflow: hidden; padding: 6px 4px;
   }
-  .vnitrek svg { height: 62%; width: auto; filter: drop-shadow(0 4px 4px rgba(0,0,0,.18)); }
+  .vnitrek .foto { height: 72%; width: auto; mix-blend-mode: multiply; }
   .vnitrek .jm { font-size: 10px; font-weight: 600; text-align: center; line-height: 1.15; color: var(--vino); letter-spacing: .02em; }
   .dvirka {
     position: absolute; inset: 0; border-radius: 3px; transform-origin: left center;
@@ -162,12 +163,10 @@
   .karta-hlava h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 34px; margin: 8px 0 4px; line-height: 1.05; }
   .karta-hlava p { margin: 0; color: #f0dcd6; font-size: 14px; font-weight: 300; }
   .police {
-    display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin-top: 18px; padding: 0 10px;
-    height: 136px; position: relative;
+    display: flex; justify-content: center; align-items: flex-end; gap: 4px; margin: 20px -24px 0; padding: 14px 16px 6px;
+    position: relative; background: linear-gradient(#fff 70%, #f6f1ea); border-top: 3px solid var(--zlato-syte);
   }
-  .police::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: 0; height: 10px; border-radius: 50%; background: rgba(0,0,0,.35); filter: blur(6px); }
-  .police svg { height: 124px; width: auto; position: relative; z-index: 1; filter: drop-shadow(0 6px 8px rgba(0,0,0,.35)); }
-  .police svg:nth-child(2) { height: 132px; }
+  .police .foto { height: 150px; width: auto; mix-blend-mode: multiply; }
   .zavrit {
     position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; z-index: 2;
     border: 1px solid rgba(226,194,125,.5); background: rgba(53,10,18,.5); color: #fff; font-size: 20px; cursor: pointer; line-height: 1;
@@ -177,7 +176,7 @@
   .karta h3 { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--sedy); margin: 22px 0 10px; font-weight: 600; }
   .oleje { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--linka); }
   .oleje li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linka); }
-  .tecka { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .mini { width: 44px; height: 44px; flex: none; object-fit: contain; }
   .olej { flex: 1; min-width: 0; }
   .olej a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; line-height: 1.35; }
   .olej a:hover { color: var(--fialova); text-decoration: underline; }
@@ -209,12 +208,11 @@
   @media (max-width: 720px) {
     .mrizka { grid-template-columns: repeat(4, 1fr); }
     .vnitrek .jm { display: none; }
-    .vnitrek svg { height: 74%; }
+    .vnitrek .foto { height: 80%; }
     .info { grid-template-columns: 1fr; }
     main { padding-top: 32px; }
     .zamek { width: 11px; height: 11px; }
-    .police svg { height: 104px; } .police svg:nth-child(2) { height: 112px; }
-    .police { height: 116px; gap: 6px; }
+    .police .foto { height: 118px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .dvirka, .karta, .zavoj { transition: none; }
@@ -227,6 +225,7 @@
 <div class="lista">Advent 2026 pro naši Young Living rodinu · 24 dní, 24 směsí</div>
 <main>
   <header>
+    <img class="logo" src="img/yl-logo-svetle.svg" alt="Young Living" width="190" height="57">
     <div class="nadpis-mala">Adventní kalendář</div>
     <h1>Voňavé <em>Vánoce</em><br>po kapkách</h1>
     <p class="podtitul">Každý den jeden šuplíček a v něm jedna vánoční směs z olejů Young Living. Otevřít jde vždy jen dnešní okénko a ta předchozí.</p>
@@ -276,7 +275,7 @@
 </div>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="tipy.js?v=2"></script>
+<script src="tipy.js?v=3"></script>
 <script>
 (function () {
   const ROK = 2026;
@@ -287,31 +286,10 @@
   const kapek = n => n === 1 ? 'kapka' : n < 5 ? 'kapky' : 'kapek';
   const dni = n => n === 1 ? 'den' : n < 5 ? 'dny' : 'dní';
 
-  // Lahvička: jantarové sklo, bílé víčko, barevný štítek
-  let lahId = 0;
+  // Oficiální fotka lahvičky z e-shopu Young Living
   function lahvicka(olej) {
-    const o = OLEJE[olej], i = lahId++;
-    const t = o.stitek, fs = t.length > 12 ? 4.6 : t.length > 9 ? 5.6 : 6.6;
-    return `<svg viewBox="0 0 60 124" role="img" aria-label="${o.nazev}">
-      <defs>
-        <linearGradient id="sk${i}" x1="0" x2="1"><stop offset="0" stop-color="#3a1a07"/><stop offset=".35" stop-color="#7a3e12"/><stop offset=".7" stop-color="#5a2a0a"/><stop offset="1" stop-color="#2a1205"/></linearGradient>
-        <linearGradient id="st${i}" x1="0" x2="1"><stop offset="0" stop-color="${o.barva}" stop-opacity=".85"/><stop offset=".45" stop-color="${o.barva}"/><stop offset="1" stop-color="${o.barva}" stop-opacity=".8"/></linearGradient>
-        <linearGradient id="vk${i}" x1="0" x2="1"><stop offset="0" stop-color="#d9d9d9"/><stop offset=".4" stop-color="#ffffff"/><stop offset="1" stop-color="#cfcfcf"/></linearGradient>
-      </defs>
-      <rect x="17" y="2" width="26" height="27" rx="3" fill="url(#vk${i})"/>
-      <g stroke="#c4c4c4" stroke-width=".6">${[21,25,29,33,37,41].map(x => `<line x1="${x-1}" y1="5" x2="${x-1}" y2="26"/>`).join('')}</g>
-      <rect x="15" y="27" width="30" height="4" rx="1" fill="#e9e9e9"/>
-      <path d="M20 31h20v5c8 0 14 4 14 10v66a8 8 0 0 1-8 8H14a8 8 0 0 1-8-8V46c0-6 6-10 14-10z" fill="url(#sk${i})"/>
-      <rect x="6" y="50" width="48" height="58" fill="url(#st${i})"/>
-      <rect x="6" y="50" width="48" height="2" fill="#fff" opacity=".35"/>
-      <path d="M30 55c-1.6 2.4-2.6 4-2.6 5.3a2.6 2.6 0 0 0 5.2 0c0-1.3-1-2.9-2.6-5.3z" fill="#fff" opacity=".9"/>
-      <rect x="9" y="67" width="42" height="14" rx="1.5" fill="#000" opacity=".28"/>
-      <text x="30" y="${75.4 + fs * .33}" text-anchor="middle" font-family="DM Serif Display, Georgia, serif" font-size="${fs}" fill="#fff" letter-spacing=".3">${t.replace('&', '&amp;')}</text>
-      <circle cx="30" cy="92" r="5.5" fill="none" stroke="#fff" stroke-width=".9" opacity=".85"/>
-      <circle cx="30" cy="92" r="2.4" fill="#fff" opacity=".85"/>
-      <rect x="16" y="101" width="28" height="1" fill="#fff" opacity=".6"/>
-      <rect x="10" y="38" width="5" height="76" rx="2.5" fill="#fff" opacity=".13"/>
-    </svg>`;
+    const o = OLEJE[olej];
+    return `<img class="foto" src="img/${olej}.jpg" alt="${o.nazev}" width="300" height="300" loading="lazy">`;
   }
 
   // Nebeské motivy na dvířka
@@ -400,7 +378,7 @@
     t.slozeni.forEach(([klic, n]) => {
       const o = OLEJE[klic];
       const li = document.createElement('li');
-      li.innerHTML = `<span class="tecka" style="background:${o.barva}"></span>
+      li.innerHTML = `<img class="mini" src="img/${klic}.jpg" alt="" width="44" height="44">
         <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Zobrazit v e-shopu ↗</small></span>
         <span class="kapky">${n}<span>${kapek(n)}</span></span>`;
       li.querySelector('a').textContent = o.nazev;
