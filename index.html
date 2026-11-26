@@ -159,11 +159,10 @@
   }
   .zavoj.ukaz .karta { transform: none; }
   .karta-hlava {
-    position: relative; padding: 22px 24px 26px; text-align: center; color: #fff;
+    position: relative; padding: 30px 24px 28px; text-align: center; color: #fff;
     background: var(--vzor) center / 200px 200px, linear-gradient(170deg, #8a2333, #4f0f1a);
     border-radius: 8px 8px 0 0;
   }
-  .karta-hlava .k-logo { width: 112px; height: auto; display: block; margin: 0 auto 14px; }
   .karta-hlava .den { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--zlato); font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
   .karta-hlava .den::before, .karta-hlava .den::after { content: ""; width: 22px; height: 1px; background: var(--zlato); opacity: .6; }
   .karta-hlava h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 36px; margin: 8px 0 4px; line-height: 1.05; }
@@ -197,22 +196,19 @@
   .olej a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; line-height: 1.35; display: block; }
   .olej a:hover { color: var(--fialova); }
   .olej small { display: inline-block; font-size: 11px; color: var(--fialova); font-weight: 600; margin-top: 3px; letter-spacing: .02em; }
-  .kapky { text-align: right; flex: none; }
-  .kapky b { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; color: var(--vino); font-size: 22px; line-height: 1; }
-  .kapky span { display: block; font-size: 10px; color: var(--sedy); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
-  .kapky .kapicky { display: flex; gap: 2px; justify-content: flex-end; margin-top: 4px; }
-  .kapicky svg { width: 8px; height: 11px; }
-  .postup { display: flex; gap: 14px; align-items: flex-start; }
-  .postup .ikona { flex: none; width: 40px; height: 40px; border-radius: 50%; background: #f1ecf7; color: var(--fialova); display: grid; place-items: center; }
-  .postup .ikona svg { width: 20px; height: 20px; }
+  .kapicky { flex: none; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; max-width: 66px; }
+  .kapicky svg { width: 10px; height: 14px; }
   .karta p.text { margin: 0; line-height: 1.65; font-size: 14.5px; padding-top: 2px; }
   .tip {
-    margin-top: 22px; padding: 18px 20px 18px; border-radius: 6px; background: #fbf6ec; border: 1px solid #efe2c4;
-    line-height: 1.6; font-size: 14.5px; color: #4a3b2a; position: relative;
+    margin: 34px 0 0; padding: 26px 6px 0; border-top: 1px solid var(--zlato-syte); position: relative; text-align: center;
   }
-  .tip b { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a6a26; margin-bottom: 6px; }
-  .tip b svg { width: 14px; height: 14px; }
-  .tip span { font-style: italic; }
+  .tip b {
+    position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 0 14px; white-space: nowrap;
+    font-size: 11px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--zlato-syte);
+  }
+  .tip span {
+    display: block; font-family: "DM Serif Display", Georgia, serif; font-style: italic; font-size: 21px; line-height: 1.4; color: var(--vino);
+  }
   .tlacitka { margin-top: 22px; display: grid; gap: 10px; }
   .btn {
     display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border: 0; border-radius: 999px;
@@ -220,9 +216,25 @@
   }
   .btn-fial { background: var(--fialova); color: #fff; }
   .btn-fial:hover { background: var(--fialova-tmave); }
-  .btn-obrys { background: #fff; color: var(--fialova); border: 1.5px solid var(--fialova); }
-  .btn-obrys:hover { background: #f6f2fb; }
   .btn svg { width: 18px; height: 18px; }
+
+  /* Šuplíček, který vyjede z krabičky */
+  .okenko.prazdne .vnitrek, .okenko.prazdne .dvirka { visibility: hidden; }
+  .okenko.prazdne { background: #2a070e; box-shadow: inset 0 10px 18px rgba(0,0,0,.7); }
+  .okenko.bezanim .dvirka { transition: none; }
+  .suplik { position: fixed; z-index: 9; pointer-events: none; transform-origin: 50% 70%; }
+  .suplik .okenko { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; pointer-events: none; }
+  .suplik .okenko .dvirka { transition: none; }
+  .sup-box {
+    position: absolute; left: 3%; right: 3%; bottom: 100%; height: 0; overflow: hidden;
+    transform-origin: 50% 100%; transform: perspective(260px) rotateX(36deg);
+    background: linear-gradient(#e9dcc6, var(--krem) 60%);
+    border: solid #5c1422; border-width: 0 6px; box-shadow: inset 0 12px 16px rgba(0,0,0,.35);
+  }
+  .sup-box::after {
+    content: ""; position: absolute; left: 13%; right: 13%; top: 24%; bottom: -10%; background: #fff;
+    border-top: 2px solid var(--zlato-syte); box-shadow: 0 -3px 8px rgba(0,0,0,.18);
+  }
 
   .toast {
     position: fixed; left: 50%; bottom: 24px; z-index: 20; transform: translate(-50%, 20px);
@@ -278,30 +290,25 @@
   <article class="karta">
     <div class="karta-hlava">
       <button class="zavrit" id="zavrit" aria-label="Zavřít">×</button>
-      <img class="k-logo" src="img/yl-logo-svetle.svg" alt="Young Living" width="112" height="34">
       <div class="den" id="k-den"></div>
       <h2 id="k-nazev"></h2>
       <p id="k-nalada"></p>
     </div>
     <div class="scena">
       <div class="police" id="k-police"></div>
-      <div class="stitky"><span class="pilulka" id="k-pouziti"></span><span class="pilulka zlata" id="k-pocet"></span></div>
+      <div class="stitky"><span class="pilulka" id="k-pouziti"></span></div>
     </div>
     <div class="karta-telo">
       <h3>Složení směsi</h3>
       <ul class="oleje" id="k-oleje"></ul>
       <h3>Jak na to</h3>
-      <div class="postup">
-        <span class="ikona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-2.5 3.6-4 6.1-4 8a4 4 0 0 0 8 0c0-1.9-1.5-4.4-4-8z"/><path d="M5 21h14"/><path d="M8 17.5h8"/></svg></span>
-        <p class="text" id="k-postup"></p>
-      </div>
-      <div class="tip"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>Tip od nás</b><span id="k-tip"></span></div>
+      <p class="text" id="k-postup"></p>
+      <div class="tip"><b>Tip od nás</b><span id="k-tip"></span></div>
       <div class="tlacitka">
         <button class="btn btn-fial" id="k-sdilet">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
           Poslat do WhatsAppu
         </button>
-        <a class="btn btn-obrys" id="k-eshop" target="_blank" rel="noopener">Oleje v e-shopu Young Living ↗</a>
       </div>
     </div>
   </article>
@@ -388,10 +395,49 @@
         : `Ještě chvilku trpělivosti – okénko ${den} se otevře za ${za} ${dni(za)}`);
       return;
     }
+    if (suplik) return;
     const uzBylo = btn.classList.contains('otevrene');
-    btn.classList.add('otevrene');
     ulozOtevrene(den);
-    setTimeout(() => ukazKartu(den), uzBylo ? 0 : 700);
+    if (BEZ_POHYBU) {
+      btn.classList.add('otevrene');
+      setTimeout(() => ukazKartu(den), uzBylo ? 0 : 700);
+      return;
+    }
+    vysun(btn).then(() => ukazKartu(den));
+  }
+
+  // Šuplíček vyjede směrem k vám, z něj pak vyjede recept
+  const BEZ_POHYBU = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const POMALU = 'cubic-bezier(.3,.7,.2,1)';
+  let suplik = null, suplikBtn = null;
+  function vysun(btn) {
+    const r = btn.getBoundingClientRect();
+    const s = document.createElement('div');
+    s.className = 'suplik';
+    Object.assign(s.style, { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
+    const celo = btn.cloneNode(true);
+    celo.classList.remove('zatrest');
+    celo.removeAttribute('aria-label');
+    celo.setAttribute('aria-hidden', 'true');
+    celo.tabIndex = -1;
+    s.innerHTML = '<div class="sup-box"></div>';
+    s.appendChild(celo);
+    document.body.appendChild(s);
+    btn.classList.add('prazdne', 'otevrene');
+    suplik = s; suplikBtn = btn;
+    const k = Math.min(1.9, Math.max(1.25, 150 / r.width));
+    const moc = { duration: 700, easing: POMALU, fill: 'forwards' };
+    s.animate([
+      { transform: 'none', filter: 'drop-shadow(0 0 0 rgba(0,0,0,0))' },
+      { transform: `translateY(${r.height * .3}px) scale(${k})`, filter: 'drop-shadow(0 18px 22px rgba(0,0,0,.55))' }
+    ], moc);
+    return s.querySelector('.sup-box').animate([{ height: '0%' }, { height: '85%' }], moc).finished;
+  }
+  function doSupliku(karta) {
+    const cr = karta.getBoundingClientRect();
+    const br = suplik.querySelector('.sup-box').getBoundingClientRect();
+    const k = br.width * .74 / cr.width;
+    return `translate(${br.left + br.width / 2 - (cr.left + cr.width / 2)}px, ${br.top + br.height * .3 - cr.top}px) scale(${k})`;
   }
 
   const zavoj = document.getElementById('zavoj');
@@ -406,9 +452,6 @@
     document.getElementById('k-postup').textContent = t.postup;
     document.getElementById('k-tip').textContent = t.tip;
     document.getElementById('k-police').innerHTML = t.slozeni.map(([o]) => `<figure>${lahvicka(o)}<figcaption>${OLEJE[o].stitek}</figcaption></figure>`).join('');
-    const celkem = t.slozeni.reduce((a, [, n]) => a + n, 0);
-    document.getElementById('k-pocet').textContent = t.pouziti.toLowerCase().includes('difuz') ? `${celkem} ${kapek(celkem)} celkem` : `${t.slozeni.length} oleje`;
-    document.getElementById('k-eshop').href = 'https://www.youngliving.com/cs_CZ';
     const ul = document.getElementById('k-oleje');
     ul.innerHTML = '';
     t.slozeni.forEach(([klic, n]) => {
@@ -416,7 +459,7 @@
       const li = document.createElement('li');
       li.innerHTML = `<img class="mini" src="img/${klic}.jpg?v=4" alt="" width="48" height="64">
         <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Koupit v e-shopu ↗</small></span>
-        <span class="kapky"><b>${n}</b><span>${kapek(n)}</span><span class="kapicky">${`<svg viewBox="0 0 8 11"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="${o.barva}"/></svg>`.repeat(Math.min(n, 8))}</span></span>`;
+        <span class="kapicky" role="img" aria-label="${n} ${kapek(n)}">${`<svg viewBox="0 0 8 11" aria-hidden="true"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="${o.barva}"/></svg>`.repeat(n)}</span>`;
       li.querySelector('a').textContent = o.nazev;
       ul.appendChild(li);
     });
@@ -425,13 +468,51 @@
       const text = `🎄 Okénko ${den}: ${t.nazev}\n${t.pouziti}\n${slozeni}\n\n${location.origin + location.pathname}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
+    const karta = document.querySelector('.karta');
     zavoj.classList.add('ukaz');
-    document.querySelector('.karta').scrollTop = 0;
-    document.getElementById('zavrit').focus();
+    karta.scrollTop = 0;
+    if (suplik) {
+      karta.style.transition = 'none';
+      karta.style.transform = 'none';
+      karta.style.transformOrigin = '50% 0';
+      karta.animate([
+        { transform: doSupliku(karta), opacity: 0 },
+        { opacity: 1, offset: .2 },
+        { transform: 'none', opacity: 1 }
+      ], { duration: 650, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    }
+    document.getElementById('zavrit').focus({ preventScroll: true });
   }
-  function zavri() {
-    zavoj.classList.remove('ukaz');
-    if (posledniFokus) posledniFokus.focus();
+  let zaviram = false;
+  async function zavri() {
+    if (zaviram) return;
+    const karta = document.querySelector('.karta');
+    if (suplik) {
+      zaviram = true;
+      const s = suplik, btn = suplikBtn;
+      const zpet = karta.animate([
+        { transform: 'none', opacity: 1 },
+        { opacity: 1, offset: .6 },
+        { transform: doSupliku(karta), opacity: 0 }
+      ], { duration: 450, easing: 'cubic-bezier(.5,0,.75,.4)', fill: 'forwards' });
+      zavoj.classList.remove('ukaz');
+      await zpet.finished;
+      const r = btn.getBoundingClientRect();
+      Object.assign(s.style, { left: r.left + 'px', top: r.top + 'px' });
+      await Promise.all(s.getAnimations({ subtree: true }).map(a => { a.reverse(); return a.finished; }));
+      btn.classList.add('bezanim');
+      btn.classList.remove('prazdne');
+      s.remove();
+      void btn.offsetWidth;
+      btn.classList.remove('bezanim');
+      zpet.cancel();
+      karta.style.transition = karta.style.transform = karta.style.transformOrigin = '';
+      suplik = suplikBtn = null;
+      zaviram = false;
+    } else {
+      zavoj.classList.remove('ukaz');
+    }
+    if (posledniFokus) posledniFokus.focus({ preventScroll: true });
   }
   document.getElementById('zavrit').addEventListener('click', zavri);
   zavoj.addEventListener('click', e => { if (e.target === zavoj) zavri(); });
