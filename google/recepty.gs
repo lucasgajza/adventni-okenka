@@ -12,8 +12,9 @@ const KOD = 'ZMENTE-ME';
 
 const LIST = 'Recepty';
 const SLOZKA = 'Adventní kalendář – fotky';
-const SLOUPCE = ['Odesláno', 'Schváleno', 'Den', 'Jméno', 'Název směsi', 'Nálada', 'Použití',
-                 'Složení (olej – kapky)', 'Jak na to', 'Tip', 'Fotka autora (ID)', 'Fotka směsi (ID)'];
+const SLOUPCE = ['Odesláno', 'Schváleno', 'Den', 'Jméno', 'Název', 'Popis', 'Kategorie',
+                 'Složení (surovina – množství)', 'Jak na to', 'Tip', 'Fotka autora (ID)', 'Fotka výrobku (ID)'];
+const KATEGORIE = ['Kombinace do difuzéru', 'Péče o tělo', 'Doplňky stravy', 'Výrobek do domácnosti', 'Úklidový sprej'];
 const MAX_FOTO = 4 * 1024 * 1024;
 
 /** Spusťte jednou ručně: připraví list, zaškrtávátka a složku na fotky. */
@@ -66,9 +67,16 @@ function doPost(e) {
     if (!KOD || KOD === 'ZMENTE-ME') return vystup({ ok: false, chyba: 'server' });
     const d = JSON.parse(e.postData.contents);
     if (String(d.kod || '').trim().toLowerCase() !== KOD.toLowerCase()) return vystup({ ok: false, chyba: 'kod' });
-    const slozeni = Array.isArray(d.slozeni) ? d.slozeni.slice(0, 8)
-      .map(r => String(r && r.olej || '').replace(/[\r\n]/g, ' ').replace(/^[\s=+\-@'\t]+/, '').trim().slice(0, 80) + ' – ' + Math.max(1, Math.min(20, parseInt(r && r.kapky, 10) || 1)))
-      .filter(r => !/^ –/.test(r)) : [];
+    const kategorie = KATEGORIE.indexOf(d.kategorie) >= 0 ? d.kategorie : KATEGORIE[0];
+    const difuzer = kategorie === KATEGORIE[0];
+    // Řádek složení „Surovina – množství“. U difuzéru je množství počet kapek 1–20.
+    const cisti = (v, max) => String(v == null ? '' : v).replace(/[\r\n\t–]/g, ' ').replace(/^[\s=+\-@']+/, '').replace(/\s+/g, ' ').trim().slice(0, max);
+    const slozeni = Array.isArray(d.slozeni) ? d.slozeni.slice(0, 10).map(r => {
+      const nazev = cisti(r && r.nazev, 80);
+      let mnozstvi = cisti(r && r.mnozstvi, 30);
+      if (difuzer) mnozstvi = String(Math.max(1, Math.min(20, parseInt(mnozstvi, 10) || 1)));
+      return nazev ? nazev + (mnozstvi ? ' – ' + mnozstvi : '') : '';
+    }).filter(String) : [];
     if (!d.jmeno || !d.nazev || !slozeni.length) return vystup({ ok: false, chyba: 'pole' });
     let fotoAutor, fotoSmes;
     try {
@@ -80,7 +88,7 @@ function doPost(e) {
     // První volný řádek podle sloupce A (zaškrtávátka ve sloupci B se nepočítají)
     const radek = sh.getRange('A:A').getValues().findIndex((r, i) => i > 0 && r[0] === '') + 1 || sh.getMaxRows() + 1;
     sh.getRange(radek, 1, 1, SLOUPCE.length).setValues([[new Date(), false, den >= 1 && den <= 24 ? den : '',
-      text(d.jmeno, 60), text(d.nazev, 60), text(d.nalada, 120), text(d.pouziti, 40),
+      text(d.jmeno, 60), text(d.nazev, 60), text(d.nalada, 120), kategorie,
       slozeni.join('\n'), text(d.postup, 600), text(d.tip, 600), fotoAutor, fotoSmes]]);
     sh.getRange(radek, 2).insertCheckboxes();
     return vystup({ ok: true });
@@ -98,7 +106,7 @@ function doGet() {
   const recepty = radky
     .filter(r => r[1] === true && r[2] >= 1 && r[2] <= 24)
     .map(r => ({ den: Number(r[2]), jmeno: String(r[3]), nazev: String(r[4]), nalada: String(r[5]),
-                 pouziti: String(r[6]), slozeni: String(r[7]), postup: String(r[8]), tip: String(r[9]),
+                 kategorie: String(r[6]), slozeni: String(r[7]), postup: String(r[8]), tip: String(r[9]),
                  fotoAutor: String(r[10]), fotoSmes: String(r[11]) }));
   return vystup({ recepty });
 }

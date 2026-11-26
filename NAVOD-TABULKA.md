@@ -35,7 +35,11 @@ Každý odeslaný recept přibude jako nový řádek.
 
 - Zaškrtněte **Schváleno** a vyplňte **Den** (1–24). Bez obojího se recept v kalendáři neukáže.
 - Recept od členky na daný den nahradí výchozí recept z kalendáře.
-- Text můžete v tabulce rovnou opravit. Složení nechte ve tvaru `Název oleje – kapky`, každý olej na nový řádek.
+- Text můžete v tabulce rovnou opravit. Složení nechte ve tvaru `Surovina – množství`, každá surovina na nový řádek.
+  U kategorie **Kombinace do difuzéru** je množství počet kapek (`Levandule (Lavender) – 4`), u ostatních
+  volný text (`Kokosový olej – 10 ml`). Oleje pojmenované jako v e-shopu dostanou v kalendáři fotku lahvičky.
+- **Kategorie** je jedna z: Kombinace do difuzéru, Péče o tělo, Doplňky stravy, Výrobek do domácnosti, Úklidový sprej.
+  U difuzéru kalendář ukáže lahvičky olejů, u ostatních fotku výrobku.
 - Fotky jsou na Disku. V tabulce je jen jejich ID, nemažte ho.
 - Když recept nechcete, nechte ho nezaškrtnutý nebo řádek smažte.
 
