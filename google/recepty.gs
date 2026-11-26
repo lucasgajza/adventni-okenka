@@ -13,7 +13,9 @@ const KOD = 'ZMENTE-ME';
 const LIST = 'Recepty';
 const SLOZKA = 'Adventní kalendář – fotky';
 const SLOUPCE = ['Odesláno', 'Schváleno', 'Den', 'Jméno', 'Název', 'Popis', 'Kategorie',
-                 'Složení (surovina – množství)', 'Jak na to', 'Tip', 'Fotka autora (ID)', 'Fotka výrobku (ID)'];
+                 'Složení (surovina – množství)', 'Jak na to', 'Tip', 'Fotka autora (ID)', 'Fotka výrobku (ID)',
+                 'Klíč pro úpravy (neměnit)', 'Upraveno'];
+const S_KLIC = 13;   // sloupec M: tajný klíč, kterým autorka z telefonu recept upraví
 const KATEGORIE = ['Kombinace do difuzéru', 'Péče o tělo', 'Doplňky stravy', 'Výrobek do domácnosti', 'Úklidový sprej'];
 const MAX_FOTO = 4 * 1024 * 1024;
 
@@ -26,7 +28,7 @@ function nastavit() {
   sh.setFrozenRows(1);
   sh.getRange('B2:B1000').insertCheckboxes();
   // Text se nezalamuje a řádky mají stejnou výšku, celý obsah buňky je vidět v řádku vzorců
-  sh.getRange('A:L').setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+  sh.getRange('A:N').setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
   sh.setRowHeightsForced(2, sh.getMaxRows() - 1, 21);
   slozka();
 }
@@ -48,6 +50,21 @@ function vystup(o) {
 function text(v, max) {
   v = String(v == null ? '' : v).replace(/\r/g, '').trim().slice(0, max);
   return /^[=+\-@\t]/.test(v) ? "'" + v : v;
+}
+
+// Fotka při úpravě: „ponechat“ nechá starou, jinak se stará zapíše do koše až po uložení řádku
+function vymenFoto(data, nazev, stare, doKose) {
+  if (data === 'ponechat') return stare || '';
+  const id = ulozFoto(data, nazev);
+  if (stare) doKose.push(stare);
+  return id;
+}
+
+// Řádek receptu podle tajného klíče, 0 když není
+function radekPodleKlice(sh, klic) {
+  if (!/^[0-9a-f-]{36}$/.test(klic) || sh.getLastRow() < 2) return 0;
+  const i = sh.getRange(2, S_KLIC, sh.getLastRow() - 1, 1).getValues().findIndex(r => r[0] === klic);
+  return i < 0 ? 0 : i + 2;
 }
 
 function ulozFoto(data, nazev) {
@@ -80,20 +97,41 @@ function doPost(e) {
       return nazev ? nazev + (mnozstvi ? ' – ' + mnozstvi : '') : '';
     }).filter(String) : [];
     if (!d.jmeno || !d.nazev || !slozeni.length) return vystup({ ok: false, chyba: 'pole' });
-    let fotoAutor, fotoSmes;
-    try {
-      fotoAutor = ulozFoto(d.fotoAutor, 'autor ' + d.jmeno);
-      fotoSmes = ulozFoto(d.fotoSmes, 'smes ' + d.nazev);
-    } catch (err) { return vystup({ ok: false, chyba: 'foto' }); }
-    const den = parseInt(d.den, 10);
     const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(LIST);
-    // První volný řádek podle sloupce A (zaškrtávátka ve sloupci B se nepočítají)
-    const radek = sh.getRange('A:A').getValues().findIndex((r, i) => i > 0 && r[0] === '') + 1 || sh.getMaxRows() + 1;
-    sh.getRange(radek, 1, 1, SLOUPCE.length).setValues([[new Date(), false, den >= 1 && den <= 24 ? den : '',
+    // Starší tabulka nemá sloupce pro úpravy, hlavička se doplní sama
+    if (sh.getRange(1, SLOUPCE.length).getValue() !== SLOUPCE[SLOUPCE.length - 1]) {
+      sh.getRange(1, 1, 1, SLOUPCE.length).setValues([SLOUPCE]).setFontWeight('bold');
+    }
+    // Úprava: najít řádek podle klíče. Jinak první volný řádek podle sloupce A.
+    const upravit = String(d.klic || '');
+    let radek, stary = null;
+    if (upravit) {
+      radek = radekPodleKlice(sh, upravit);
+      if (!radek) return vystup({ ok: false, chyba: 'nenalezen' });
+      stary = sh.getRange(radek, 1, 1, SLOUPCE.length).getValues()[0];
+    } else {
+      radek = sh.getRange('A:A').getValues().findIndex((r, i) => i > 0 && r[0] === '') + 1 || sh.getMaxRows() + 1;
+    }
+    let fotoAutor, fotoSmes;
+    const doKose = [];
+    try {
+      fotoAutor = vymenFoto(d.fotoAutor, 'autor ' + d.jmeno, stary && String(stary[10]), doKose);
+      fotoSmes = vymenFoto(d.fotoSmes, 'smes ' + d.nazev, stary && String(stary[11]), doKose);
+    } catch (err) { return vystup({ ok: false, chyba: 'foto' }); }
+    const den = parseInt(d.den, 10), denOk = den >= 1 && den <= 24 ? den : '';
+    const klic = stary ? upravit : Utilities.getUuid();
+    // Během nahrávání fotek mohl správce řádky posunout, proto ověřit řádek znovu
+    if (stary && sh.getRange(radek, S_KLIC).getValue() !== upravit) {
+      radek = radekPodleKlice(sh, upravit);
+      if (!radek) return vystup({ ok: false, chyba: 'nenalezen' });
+    }
+    // Upravený recept přestane být schválený, správce ho zkontroluje znovu. Den, který správce už zadal, zůstane.
+    sh.getRange(radek, 1, 1, SLOUPCE.length).setValues([[stary ? stary[0] : new Date(), false, stary && stary[2] !== '' ? stary[2] : denOk,
       text(d.jmeno, 60), text(d.nazev, 60), text(d.nalada, 120), kategorie,
-      slozeni.join('\n'), text(d.postup, 600), text(d.tip, 600), fotoAutor, fotoSmes]]);
-    sh.getRange(radek, 2).insertCheckboxes();
-    return vystup({ ok: true });
+      slozeni.join('\n'), text(d.postup, 600), text(d.tip, 600), fotoAutor, fotoSmes, klic, stary ? new Date() : '']]);
+    if (!stary) sh.getRange(radek, 2).insertCheckboxes();
+    doKose.forEach(id => { try { DriveApp.getFileById(id).setTrashed(true); } catch (e) {} });
+    return vystup({ ok: true, klic });
   } catch (err) {
     return vystup({ ok: false, chyba: 'server' });
   } finally {
@@ -101,9 +139,19 @@ function doPost(e) {
   }
 }
 
-/** Kalendář si stahuje jen schválené recepty s vyplněným dnem. */
-function doGet() {
+/** Kalendář si stahuje jen schválené recepty s vyplněným dnem.
+ *  S ?klic=… vrátí jeden recept pro úpravu ve formuláři (i neschválený). */
+function doGet(e) {
   const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(LIST);
+  const klic = e && e.parameter && e.parameter.klic;
+  if (klic) {
+    const radek = radekPodleKlice(sh, String(klic));
+    if (!radek) return vystup({ chyba: 'nenalezen' });
+    const r = sh.getRange(radek, 1, 1, SLOUPCE.length).getValues()[0];
+    return vystup({ recept: { schvaleno: r[1] === true, den: r[2] === '' ? '' : Number(r[2]), jmeno: String(r[3]), nazev: String(r[4]),
+      nalada: String(r[5]), kategorie: String(r[6]), slozeni: String(r[7]), postup: String(r[8]), tip: String(r[9]),
+      fotoAutor: String(r[10]), fotoSmes: String(r[11]) } });
+  }
   const radky = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, SLOUPCE.length).getValues() : [];
   const recepty = radky
     .filter(r => r[1] === true && r[2] >= 1 && r[2] <= 24)

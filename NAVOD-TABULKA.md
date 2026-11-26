@@ -44,6 +44,10 @@ Každý odeslaný recept přibude jako nový řádek.
 - Text v buňkách se nezalamuje, aby řádky byly nízké. Celý obsah buňky uvidíte nahoře v řádku vzorců, když na ni kliknete.
 - Fotky jsou na Disku. V tabulce je jen jejich ID, nemažte ho.
 - Když recept nechcete, nechte ho nezaškrtnutý nebo řádek smažte.
+- Sloupec **Klíč pro úpravy (neměnit)** je tajný kód, kterým autorka svůj recept upraví z telefonu, ze kterého ho poslala.
+  Neměňte ho a nikomu ho neposílejte. Starší recepty bez klíče upravíte jen vy v tabulce.
+- Když autorka recept upraví, zaškrtnutí **Schváleno** zmizí a ve sloupci **Upraveno** bude datum.
+  Recept zkontrolujte a znovu zaškrtněte. Den, který jste už vyplnili, zůstane.
 
 Změny v tabulce se v kalendáři projeví hned po obnovení stránky.
 

@@ -151,6 +151,17 @@
   .hlaska { margin: 12px 0 0; font-size: 14px; color: var(--chyba); text-align: center; min-height: 1em; }
   .pozn { margin: 14px 0 0; font-size: 12px; color: var(--sedy); text-align: center; line-height: 1.5; }
 
+  /* Odeslané recepty z tohoto telefonu a režim úpravy */
+  .moje { background: #fff; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,.35); padding: 18px 20px; margin: 0 0 18px; }
+  .moje[hidden], .uprava[hidden] { display: none; }
+  .moje h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 21px; color: var(--vino); margin: 0 0 4px; }
+  .moje > p { font-size: 13px; color: var(--sedy); margin: 0 0 10px; line-height: 1.5; }
+  .moje ul { list-style: none; margin: 0; padding: 0; }
+  .moje li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid #efe6d8; }
+  .moje li span { flex: 1; min-width: 0; font-weight: 600; color: var(--text); overflow-wrap: anywhere; }
+  .moje li small { display: block; font-weight: 400; font-size: 12px; color: var(--sedy); }
+  .uprava { margin: 22px 0 0; padding: 12px 14px; border-radius: 6px; background: #f6f0fb; border: 1px solid #d9cdea; font-size: 13.5px; line-height: 1.5; color: #3d2a55; }
+  .uprava .zrusit-foto { padding: 0; margin-left: 4px; }
   .diky .karta-telo { text-align: center; padding: 26px 24px 28px; }
   .diky p { color: #4a4a4a; line-height: 1.6; margin: 0 0 8px; font-size: 14.5px; }
 
@@ -175,8 +186,16 @@
     <p class="podtitul">Máte oblíbenou vánoční kombinaci do difuzéru, roll-on nebo domácí čisticí sprej? Podělte se o ni s ostatními z Oily Crew.</p>
   </header>
 
+  <section class="moje" id="moje" hidden aria-labelledby="moje-nadpis">
+    <h2 id="moje-nadpis">Vaše odeslané recepty</h2>
+    <p>Recept můžete upravit z tohoto telefonu. Po uložení změn ho znovu zkontrolujeme a schválíme.</p>
+    <ul id="moje-seznam"></ul>
+  </section>
+
   <form id="formular" class="karta" novalidate>
     <div class="karta-telo">
+      <p class="uprava" id="uprava" hidden>Upravujete recept <b id="uprava-nazev"></b>. Po uložení ho znovu zkontrolujeme a schválíme.
+        <button type="button" class="zrusit-foto" id="uprava-zrusit">Zrušit úpravy</button></p>
 
       <h3>O vás</h3>
       <div class="pole">
@@ -251,17 +270,17 @@
 
       <button type="submit" class="btn btn-fial" id="odeslat">Odeslat recept</button>
       <p class="hlaska" id="hlaska" role="alert"></p>
-      <p class="pozn">Rozepsaný recept si stránka pamatuje, kdybyste ji zavřeli. Fotky je potřeba vybrat znovu.</p>
+      <p class="pozn" id="pozn">Rozepsaný recept si stránka pamatuje, kdybyste ji zavřeli. Fotky je potřeba vybrat znovu.</p>
     </div>
   </form>
 
   <section class="karta diky" id="diky" hidden>
     <div class="karta-hlava">
       <div class="den">Odesláno</div>
-      <h2>Moc děkujeme!</h2>
+      <h2 id="diky-nadpis">Moc děkujeme!</h2>
     </div>
     <div class="karta-telo">
-      <p>Recept je u nás. Jakmile ho zkontrolujeme, objeví se v kalendáři ve svém okénku.</p>
+      <p id="diky-text">Recept je u nás. Jakmile ho zkontrolujeme, objeví se v kalendáři ve svém okénku.</p>
       <button type="button" class="btn btn-fial" id="dalsi">Přidat další recept</button>
       <a class="btn btn-bila" href="./">Zpět do kalendáře</a>
     </div>
@@ -417,6 +436,8 @@
 
   // Fotky: zmenšit v telefonu, ať se odesílají rychle
   const fotky = { autor: '', smes: '' };
+  // Při úpravě se stará fotka nepošle znovu: fotky[co] = 'ponechat', náhled ukazuje fotku z Disku
+  const ulozene = { autor: '', smes: '' };
   function zmensi(soubor, max) {
     return new Promise((ok, chyba) => {
       const img = new Image(), url = URL.createObjectURL(soubor);
@@ -439,11 +460,12 @@
   function nastavFoto(co, data) {
     fotky[co] = data;
     const n = $('nahled-' + co);
-    n.style.backgroundImage = data ? `url("${data}")` : '';
+    const url = data === 'ponechat' ? ulozene[co] : data;
+    n.style.backgroundImage = url ? `url("${url}")` : '';
     n.classList.toggle('ma-foto', !!data);
     if (co === 'autor') { n.textContent = ''; inicial(); } else n.textContent = data ? '' : 'Fotka';
     form.querySelector(`[data-zrusit="${co}"]`).hidden = !data;
-    $('upravit-' + co).hidden = !data; if (!data) delete orez.zdroje[co];
+    $('upravit-' + co).hidden = !data || data === 'ponechat'; if (data === 'ponechat' || !data) delete orez.zdroje[co];
     form.querySelector(`[data-pro="foto-${co}"]`).textContent = data ? 'Vybrat jinou' : 'Vybrat fotku';
   }
   $('jmeno').addEventListener('input', inicial);
@@ -570,7 +592,7 @@
     d.radky = [...$('suroviny').children].map(r => ({ n: r.querySelector('.nazev').value.trim(), m: r.querySelector('.mnozstvi').value.trim() }));
     return d;
   }
-  function uloz() { try { localStorage.setItem(ULOZENO, JSON.stringify(data())); } catch (e) {} }
+  function uloz() { if (upravuji) return; try { localStorage.setItem(ULOZENO, JSON.stringify(data())); } catch (e) {} }
   function nacti() {
     let d = null;
     try { d = JSON.parse(localStorage.getItem(ULOZENO)) || JSON.parse(localStorage.getItem('advent-formular')); } catch (e) {}
@@ -628,32 +650,111 @@
     if (!window.RECEPTY_URL) { hlaska('Formulář ještě není propojený s tabulkou. Dejte prosím vědět správci kalendáře.'); return; }
     const d = data(), k = kat();
     const btn = $('odeslat');
-    btn.disabled = true; btn.textContent = 'Odesílám…';
+    btn.disabled = true; btn.textContent = upravuji ? 'Ukládám…' : 'Odesílám…';
     try {
       const odpoved = await fetch(window.RECEPTY_URL, {
         method: 'POST',
         body: JSON.stringify({ jmeno: d.jmeno, kod: d.kod, nazev: d.nazev, nalada: d.nalada, kategorie: k.v, slozeni,
-                               postup: d.postup, tip: d.tip, den: d.den, fotoAutor: fotky.autor, fotoSmes: fotky.smes })
+                               postup: d.postup, tip: d.tip, den: d.den, fotoAutor: fotky.autor, fotoSmes: fotky.smes,
+                               ...(upravuji ? { klic: upravuji } : {}) })
       });
       const v = await odpoved.json();
       if (v.ok) {
-        try { localStorage.setItem(ULOZENO, JSON.stringify({ jmeno: d.jmeno, kod: d.kod })); } catch (err) {}
-        form.hidden = true; $('diky').hidden = false; window.scrollTo(0, 0);
-      } else if (v.chyba === 'kod') { oznac($('kod'), true); $('kod').focus(); hlaska('Kód skupiny nesedí. Zkontrolujte ho prosím ve zprávě ve skupině.'); }
+        const upraveno = !!upravuji;
+        if (upraveno) ulozMoje(upravuji, d.nazev);
+        else {
+          try { localStorage.setItem(ULOZENO, JSON.stringify({ jmeno: d.jmeno, kod: d.kod })); } catch (err) {}
+          if (v.klic) ulozMoje(v.klic, d.nazev);
+        }
+        $('diky-nadpis').textContent = upraveno ? 'Změny jsou uložené' : 'Moc děkujeme!';
+        $('diky-text').textContent = upraveno
+          ? 'Upravený recept znovu zkontrolujeme. Do kalendáře se vrátí, jakmile ho schválíme.'
+          : 'Recept je u nás. Jakmile ho zkontrolujeme, objeví se v kalendáři ve svém okénku.';
+        form.hidden = true; $('moje').hidden = true; $('diky').hidden = false; window.scrollTo(0, 0);
+      } else if (v.chyba === 'nenalezen') hlaska('Tenhle recept už v tabulce není, správce ho asi smazal. Zrušte úpravy a pošlete ho jako nový.');
+      else if (v.chyba === 'kod') { oznac($('kod'), true); $('kod').focus(); hlaska('Kód skupiny nesedí. Zkontrolujte ho prosím ve zprávě ve skupině.'); }
       else if (v.chyba === 'foto') hlaska('Fotku se nepodařilo uložit. Zkuste prosím jinou.');
       else hlaska('Něco se pokazilo. Zkuste to prosím za chvíli znovu.');
     } catch (err) {
       hlaska('Recept se nepodařilo odeslat. Zkontrolujte připojení k internetu a zkuste to znovu.');
     }
-    btn.disabled = false; btn.textContent = 'Odeslat recept';
+    btn.disabled = false; btn.textContent = upravuji ? 'Uložit změny' : 'Odeslat recept';
   });
 
+  function novyFormular() {
+    upravuji = null;
+    $('uprava').hidden = true; $('pozn').hidden = false; $('odeslat').textContent = 'Odeslat recept';
+    form.reset(); $('suroviny').innerHTML = ''; nastavFoto('autor', ''); nastavFoto('smes', ''); hlaska('');
+    form.querySelectorAll('.chyba-pole').forEach(el => oznac(el, false));
+    nacti(); vypisMoje();
+  }
   $('dalsi').addEventListener('click', () => {
-    form.reset(); $('suroviny').innerHTML = ''; nastavFoto('autor', ''); nastavFoto('smes', '');
-    nacti(); form.hidden = false; $('diky').hidden = true; window.scrollTo(0, 0);
+    novyFormular(); form.hidden = false; $('diky').hidden = true; window.scrollTo(0, 0);
   });
+
+  // Recepty odeslané z tohoto telefonu: klíč pro úpravu si pamatuje prohlížeč
+  const MOJE = 'advent-moje-recepty';
+  function moje() {
+    try { const m = JSON.parse(localStorage.getItem(MOJE)); return Array.isArray(m) ? m.filter(x => x && /^[0-9a-f-]{36}$/.test(x.klic)) : []; }
+    catch (e) { return []; }
+  }
+  function ulozMoje(klic, nazev) {
+    const m = moje(), x = m.find(y => y.klic === klic);
+    if (x) x.nazev = nazev; else m.push({ klic, nazev, kdy: Date.now() });
+    try { localStorage.setItem(MOJE, JSON.stringify(m)); } catch (e) {}
+  }
+  function vypisMoje() {
+    const m = moje();
+    $('moje').hidden = !m.length;
+    $('moje-seznam').innerHTML = '';
+    m.forEach(x => {
+      const li = document.createElement('li');
+      li.innerHTML = '<span><small></small></span><button type="button" class="foto-btn">Upravit</button>';
+      li.querySelector('span').prepend(x.nazev);
+      li.querySelector('small').textContent = 'odesláno ' + new Date(x.kdy).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long' });
+      li.querySelector('button').addEventListener('click', e => upravRecept(x.klic, e.currentTarget));
+      $('moje-seznam').appendChild(li);
+    });
+  }
+  let upravuji = null;
+  async function upravRecept(klic, btn) {
+    if (!window.RECEPTY_URL) return;
+    btn.disabled = true; btn.textContent = 'Načítám…';
+    let r = null;
+    try { r = (await (await fetch(window.RECEPTY_URL + '?klic=' + encodeURIComponent(klic))).json()).recept; } catch (e) {}
+    btn.disabled = false; btn.textContent = 'Upravit';
+    if (!r) { zprava(btn, 'Recept se nepodařilo načíst. Zkuste to prosím za chvíli.'); return; }
+    upravuji = klic;
+    form.reset(); $('suroviny').innerHTML = ''; hlaska('');
+    form.querySelectorAll('.chyba-pole').forEach(el => oznac(el, false));
+    try { const d = JSON.parse(localStorage.getItem(ULOZENO)); if (d && d.kod) $('kod').value = d.kod; } catch (e) {}
+    ['jmeno', 'nazev', 'nalada', 'postup', 'tip'].forEach(k => $(k).value = r[k] || '');
+    $('den').value = r.den ? String(r.den) : '';
+    const kr = [...form.kategorie].find(x => x.value === r.kategorie);
+    if (kr) kr.checked = true;
+    const radky = String(r.slozeni || '').split('\n').filter(t => t.trim()).slice(0, MAX_RADKU)
+      .map(t => { const i = t.lastIndexOf(' – '); return i < 0 ? [t.trim(), ''] : [t.slice(0, i).trim(), t.slice(i + 3).trim()]; });
+    (radky.length ? radky : [['', '']]).forEach(([n, m]) => radek(n, m));
+    prepniKategorii();
+    ['autor', 'smes'].forEach(co => {
+      const id = r[co === 'autor' ? 'fotoAutor' : 'fotoSmes'];
+      ulozene[co] = id ? `https://lh3.googleusercontent.com/d/${encodeURIComponent(id)}=w600` : '';
+      nastavFoto(co, id ? 'ponechat' : '');
+    });
+    inicial();
+    $('uprava-nazev').textContent = r.nazev;
+    $('uprava').hidden = false; $('pozn').hidden = true; $('odeslat').textContent = 'Uložit změny';
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function zprava(btn, t) {
+    let p = btn.closest('li').querySelector('.chyba-nacteni');
+    if (!p) { p = document.createElement('small'); p.className = 'chyba-nacteni'; p.style.color = 'var(--chyba)'; btn.closest('li').querySelector('span').appendChild(p); }
+    p.textContent = t;
+  }
+  $('uprava-zrusit').addEventListener('click', () => { novyFormular(); $('moje').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
   nacti();
+  vypisMoje();
 })();
 </script>
 </body>

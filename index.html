@@ -734,6 +734,9 @@ window.RECEPTY = (async () => {
         const k = doc.querySelector('.karta');
         k.style.cssText += ';max-height:none;overflow:visible;transform:none;box-shadow:none;border-radius:0;margin:0 auto;transition:none';
         doc.querySelectorAll('.karta .tlacitka, .karta .zavrit').forEach(el => el.remove());
+        // html2canvas u inline-flex kreslí poloprůhledné pozadí přes obsah, fotka a jméno autora by byly zašedlé
+        const autor = doc.querySelector('.karta .autor');
+        if (autor) autor.style.cssText += ';display:flex;width:max-content;margin-left:auto;margin-right:auto';
         // Bez mix-blend-mode by bílé pozadí fotek lahviček bylo vidět na krémovém pozadí
         doc.querySelector('.karta .scena').style.background = '#fff';
         // html2canvas neumí object-fit, fotky s ořezem nahradí pozadí se stejným ořezem
