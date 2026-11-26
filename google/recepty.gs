@@ -77,9 +77,12 @@ function doPost(e) {
     } catch (err) { return vystup({ ok: false, chyba: 'foto' }); }
     const den = parseInt(d.den, 10);
     const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(LIST);
-    sh.appendRow([new Date(), false, den >= 1 && den <= 24 ? den : '',
+    // První volný řádek podle sloupce A (zaškrtávátka ve sloupci B se nepočítají)
+    const radek = sh.getRange('A:A').getValues().findIndex((r, i) => i > 0 && r[0] === '') + 1 || sh.getMaxRows() + 1;
+    sh.getRange(radek, 1, 1, SLOUPCE.length).setValues([[new Date(), false, den >= 1 && den <= 24 ? den : '',
       text(d.jmeno, 60), text(d.nazev, 60), text(d.nalada, 120), text(d.pouziti, 40),
-      slozeni.join('\n'), text(d.postup, 600), text(d.tip, 600), fotoAutor, fotoSmes]);
+      slozeni.join('\n'), text(d.postup, 600), text(d.tip, 600), fotoAutor, fotoSmes]]);
+    sh.getRange(radek, 2).insertCheckboxes();
     return vystup({ ok: true });
   } catch (err) {
     return vystup({ ok: false, chyba: 'server' });
