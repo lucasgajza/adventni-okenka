@@ -1,6 +1,6 @@
 // Adresa webové aplikace z Google tabulky s recepty (viz NAVOD-TABULKA.md).
 // Prázdná = kalendář ukazuje jen recepty z tohoto souboru.
-window.RECEPTY_URL = '';
+window.RECEPTY_URL = 'https://script.google.com/macros/s/AKfycbxByOodcEMFSnNx1W9IGX1Nokyjuu8W9YfcHKbPsC-dWoS590pVZ4uXlQMyd5dgho6OxA/exec';
 
 // Oleje: český název podle e-shopu Young Living CZ, číslo produktu (odkaz na youngliving.com/cs_CZ/products/id/…),
 // text na štítku lahvičky a barva štítku.
