@@ -481,8 +481,7 @@
       ul.appendChild(li);
     });
     document.getElementById('k-sdilet').onclick = () => {
-      const slozeni = t.slozeni.map(([o, n]) => `• ${OLEJE[o].nazev} – ${n} ${kapek(n)}`).join('\n');
-      const text = `🎄 Okénko ${den}: ${t.nazev}\n${t.pouziti}\n${slozeni}\n\n${location.origin + location.pathname}`;
+      const text = `🎄 Okénko ${den} je otevřené: *${t.nazev}*\n_${t.nalada}_\n\nJaká směs se skrývá uvnitř? Otevřete si okénko v kalendáři 👉 ${location.origin + location.pathname}`;
       window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
     const karta = document.querySelector('.karta');
