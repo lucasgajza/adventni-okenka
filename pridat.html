@@ -46,12 +46,6 @@
   h1 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: clamp(36px, 8vw, 56px); line-height: 1.02; margin: 14px 0 14px; }
   h1 em { font-style: italic; color: var(--zlato); }
   .podtitul { color: #e9d9cf; font-size: 15px; font-weight: 300; max-width: 480px; margin: 0 auto; line-height: 1.65; }
-  .kroky { list-style: none; padding: 0; margin: 24px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 520px; }
-  .kroky li {
-    background: rgba(53,10,18,.5); border: 1px solid rgba(226,194,125,.28); border-radius: 4px; padding: 14px 10px;
-    font-size: 12.5px; line-height: 1.45; color: #e6d6cc;
-  }
-  .kroky b { display: block; font-family: "DM Serif Display", Georgia, serif; font-weight: 400; color: var(--zlato); font-size: 22px; line-height: 1; margin-bottom: 6px; }
 
   /* Karta formuláře jako detail okénka */
   .karta { background: #fff; border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.45); overflow: hidden; }
@@ -152,9 +146,6 @@
   [hidden] { display: none !important; }
 
   @media (max-width: 520px) {
-    .kroky { grid-template-columns: 1fr; }
-    .kroky li { display: flex; align-items: center; gap: 12px; text-align: left; padding: 11px 14px; }
-    .kroky b { margin: 0; font-size: 20px; }
     .karta-telo { padding: 4px 16px 24px; }
     .radek, .hlavicka-radku { grid-template-columns: 30px 1fr 74px 40px; gap: 6px; }
     .radek.text-mnozstvi, .hlavicka-radku.text-mnozstvi { grid-template-columns: 30px 1fr 96px 40px; }
@@ -169,11 +160,6 @@
     <div class="nadpis-mala">Adventní kalendář</div>
     <h1>Přidejte svou <em>směs</em></h1>
     <p class="podtitul">Máte oblíbenou vánoční kombinaci do difuzéru, roll-on nebo domácí čisticí sprej? Podělte se o ni s ostatními z Oil Crew.</p>
-    <ol class="kroky">
-      <li><b>1</b>Vyplníte recept a&nbsp;odešlete ho</li>
-      <li><b>2</b>My ho zkontrolujeme a&nbsp;přidělíme mu den</li>
-      <li><b>3</b>Objeví se v&nbsp;okénku i&nbsp;s&nbsp;vaším jménem</li>
-    </ol>
   </header>
 
   <form id="formular" class="karta" novalidate>
