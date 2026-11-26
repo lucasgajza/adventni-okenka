@@ -290,8 +290,9 @@
   @keyframes uvodCara { from { transform: scaleX(0); opacity: 0; } }
   @keyframes uvodHv { from { opacity: 0; transform: rotate(-90deg) scale(.5); } }
   @keyframes uvodPuls { 50% { transform: scale(1.08); } }
-  html.uvod-bezi, html.uvod-bezi body { overflow: hidden; overscroll-behavior: none; scrollbar-width: none; }
-  html.uvod-bezi::-webkit-scrollbar { display: none; }
+  html, body { scrollbar-width: none; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+  html.uvod-bezi, html.uvod-bezi body { overflow: hidden; overscroll-behavior: none; }
   #uvod { touch-action: none; overscroll-behavior: none; }
   @media (prefers-reduced-motion: reduce) {
     #uvod *, #uvod { animation: none !important; }
