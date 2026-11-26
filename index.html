@@ -359,12 +359,13 @@
     return Math.min(24, d.getDate());
   }
   const dnes = dnesniDen();
+  const KLIC = new URLSearchParams(location.search).has('nahled') ? 'advent-nahled' : 'advent-' + ROK;
 
   let otevrena = [];
-  try { otevrena = JSON.parse(localStorage.getItem('advent-otevrena') || '[]'); } catch (e) {}
+  try { otevrena = JSON.parse(localStorage.getItem(KLIC) || '[]'); } catch (e) {}
   function ulozOtevrene(den) {
     if (!otevrena.includes(den)) otevrena.push(den);
-    try { localStorage.setItem('advent-otevrena', JSON.stringify(otevrena)); } catch (e) {}
+    try { localStorage.setItem(KLIC, JSON.stringify(otevrena)); } catch (e) {}
   }
 
   const stav = document.getElementById('stav');
