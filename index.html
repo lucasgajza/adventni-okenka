@@ -254,6 +254,7 @@
   .toast.ukaz { opacity: 1; transform: translate(-50%, 0); }
 
   @media (max-width: 720px) {
+    .olej .sipka { display: none; }
     .mrizka { grid-template-columns: repeat(4, 1fr); }
     .vnitrek .jm { display: none; }
     .info { grid-template-columns: 1fr; }
@@ -475,7 +476,7 @@
       const o = OLEJE[klic];
       const li = document.createElement('li');
       li.innerHTML = `<img class="mini" src="img/${klic}.jpg?v=4" alt="" width="48" height="64">
-        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Koupit v e-shopu ↗</small></span>
+        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Koupit v e-shopu<span class="sipka"> ↗</span></small></span>
         <span class="kapicky" role="img" aria-label="${n} ${kapek(n)}">${`<svg viewBox="0 0 8 11" aria-hidden="true"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="${o.barva}"/></svg>`.repeat(n)}</span>`;
       li.querySelector('a').textContent = o.nazev;
       ul.appendChild(li);
