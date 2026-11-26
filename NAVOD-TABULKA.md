@@ -33,7 +33,8 @@ až po vašem schválení. Nastavení je jednorázové, asi na 10 minut.
 
 Každý odeslaný recept přibude jako nový řádek.
 
-- Zaškrtněte **Schváleno** a vyplňte **Den** (1–24). Bez obojího se recept v kalendáři neukáže.
+- Zaškrtněte **Schváleno** a do **Den** napište jen číslo dne (1–24), ne datum. Bez obojího se recept v kalendáři neukáže.
+  Sloupec Den má formát Prostý text, aby z čísla Tabulky neudělaly datum.
 - Recept od členky na daný den nahradí výchozí recept z kalendáře.
 - Text můžete v tabulce rovnou opravit. Složení nechte ve tvaru `Surovina – množství`, každá surovina na nový řádek.
   U kategorie **Kombinace do difuzéru** je množství počet kapek (`Levandule (Lavender) – 4`), u ostatních
