@@ -277,7 +277,7 @@
 </main>
 
 <script src="tipy.js?v=7"></script>
-<script src="oleje.js?v=1"></script>
+<script src="oleje.js?v=2"></script>
 <script>
 (() => {
   const $ = id => document.getElementById(id);
@@ -318,6 +318,7 @@
   $('kategorie').innerHTML = KATEGORIE.map((k, i) => `<label><input type="radio" name="kategorie" value="${k.v}"${i ? '' : ' checked'}><span class="volba"><span class="kolecko"></span><b>${k.v}</b><small>${k.popis}</small></span></label>`).join('');
 
   // Oleje z e-shopu: název → číslo produktu. Najde i český nebo anglický název samotný.
+  const klicJmena = t => t.toLowerCase().replace(/[®™]/g, '').replace(/\s+/g, ' ').trim();
   const oleje = new Map(), aliasy = new Map();
   for (const [skupina, seznam] of Object.entries(window.PRODUKTY)) {
     const serazene = [...seznam].sort((a, b) => a[1].localeCompare(b[1], 'cs'));
@@ -325,10 +326,11 @@
     for (const [id, n] of seznam) {
       oleje.set(n, id);
       const m = /^(.+?) \((.+)\)$/.exec(n);
-      [n, ...(m ? [m[1], m[2]] : [])].forEach(a => { const k = a.toLowerCase(); if (!aliasy.has(k)) aliasy.set(k, n); });
+      // i „Thieves“ pro „Thieves® Wellness“ a „Valor“ pro „Original Valor®“
+      [n, ...(m ? [m[1], m[2]] : []), ...(/[®™]/.test(n) ? [n.split(/[®™]/)[0]] : []), n.replace(/^Original /, '')].forEach(a => { const k = klicJmena(a); if (!aliasy.has(k)) aliasy.set(k, n); });
     }
   }
-  const najdi = t => aliasy.get(t.trim().toLowerCase().replace(/\s+/g, ' ')) || null;
+  const najdi = t => aliasy.get(klicJmena(t)) || null;
 
   // Řádek suroviny: lahvička (když je to známý olej), název, množství, odebrat
   function radek(nazev = '', mnozstvi = '') {
