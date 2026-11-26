@@ -93,7 +93,11 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
     box-shadow: inset 0 6px 14px rgba(0,0,0,.25); overflow: hidden; padding: 6px 4px;
   }
-  .vnitrek .foto { height: 72%; width: auto; mix-blend-mode: multiply; }
+  .lahve { height: 74%; width: 100%; display: flex; justify-content: center; align-items: flex-end; }
+  .lahve .foto { height: 100%; width: auto; mix-blend-mode: multiply; margin-left: -14%; }
+  .lahve.n3 .foto { height: 82%; margin-left: -12%; }
+  .lahve.n4 .foto { height: 64%; margin-left: -9%; }
+  .lahve .foto:first-child { margin-left: 0; }
   .vnitrek .jm { font-size: 10px; font-weight: 600; text-align: center; line-height: 1.15; color: var(--vino); letter-spacing: .02em; }
   .dvirka {
     position: absolute; inset: 0; border-radius: 3px; transform-origin: left center;
@@ -149,52 +153,75 @@
   }
   .zavoj.ukaz { opacity: 1; pointer-events: auto; }
   .karta {
-    width: 100%; max-width: 480px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto;
-    background: #fff; color: var(--text); border-radius: 6px;
+    width: 100%; max-width: 500px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto;
+    background: #fff; color: var(--text); border-radius: 8px;
     box-shadow: 0 30px 80px rgba(0,0,0,.55); transform: translateY(24px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1);
   }
   .zavoj.ukaz .karta { transform: none; }
   .karta-hlava {
-    position: relative; padding: 24px 24px 0; text-align: center; color: #fff;
+    position: relative; padding: 22px 24px 26px; text-align: center; color: #fff;
     background: var(--vzor) center / 200px 200px, linear-gradient(170deg, #8a2333, #4f0f1a);
-    border-radius: 6px 6px 0 0; overflow: hidden;
+    border-radius: 8px 8px 0 0;
   }
-  .karta-hlava .den { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--zlato); font-weight: 600; }
-  .karta-hlava h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 34px; margin: 8px 0 4px; line-height: 1.05; }
-  .karta-hlava p { margin: 0; color: #f0dcd6; font-size: 14px; font-weight: 300; }
-  .police {
-    display: flex; justify-content: center; align-items: flex-end; gap: 4px; margin: 20px -24px 0; padding: 14px 16px 6px;
-    position: relative; background: linear-gradient(#fff 70%, #f6f1ea); border-top: 3px solid var(--zlato-syte);
-  }
-  .police .foto { height: 150px; width: auto; mix-blend-mode: multiply; }
+  .karta-hlava .k-logo { width: 112px; height: auto; display: block; margin: 0 auto 14px; }
+  .karta-hlava .den { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--zlato); font-weight: 600; display: inline-flex; align-items: center; gap: 10px; }
+  .karta-hlava .den::before, .karta-hlava .den::after { content: ""; width: 22px; height: 1px; background: var(--zlato); opacity: .6; }
+  .karta-hlava h2 { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 36px; margin: 8px 0 4px; line-height: 1.05; }
+  .karta-hlava p { margin: 0; color: #f0dcd6; font-size: 14px; font-weight: 300; font-style: italic; }
   .zavrit {
     position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%; z-index: 2;
     border: 1px solid rgba(226,194,125,.5); background: rgba(53,10,18,.5); color: #fff; font-size: 20px; cursor: pointer; line-height: 1;
   }
-  .karta-telo { padding: 22px 24px 26px; }
-  .pilulka { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 6px 12px; border-radius: 2px; background: #f1ecf7; color: var(--fialova); }
-  .karta h3 { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--sedy); margin: 22px 0 10px; font-weight: 600; }
-  .oleje { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--linka); }
-  .oleje li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--linka); }
-  .mini { width: 44px; height: 44px; flex: none; object-fit: contain; }
-  .olej { flex: 1; min-width: 0; }
-  .olej a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; line-height: 1.35; }
-  .olej a:hover { color: var(--fialova); text-decoration: underline; }
-  .olej small { display: block; font-size: 11px; color: var(--fialova); font-weight: 600; margin-top: 2px; letter-spacing: .02em; }
-  .kapky { font-family: "DM Serif Display", Georgia, serif; color: var(--vino); font-size: 18px; white-space: nowrap; }
-  .kapky span { font-family: Montserrat, sans-serif; font-size: 11px; color: var(--sedy); margin-left: 3px; }
-  .karta p.text { margin: 0; line-height: 1.65; font-size: 14.5px; }
-  .tip {
-    margin-top: 20px; padding: 16px 18px; border-left: 3px solid var(--zlato-syte); background: #fbf6ec;
-    line-height: 1.6; font-size: 14.5px; font-style: italic; color: #4a3b2a;
+  .scena {
+    position: relative; background: radial-gradient(120% 90% at 50% 100%, #f3ebdf 0%, #fbf8f3 55%, #fff 100%);
+    border-bottom: 1px solid var(--linka); padding: 22px 16px 14px;
   }
+  .scena::before { content: ""; position: absolute; left: 50%; top: 0; width: 64px; height: 3px; transform: translateX(-50%); background: var(--zlato-syte); }
+  .police { display: flex; justify-content: center; align-items: flex-end; gap: 6px; }
+  .police figure { margin: 0; flex: 0 1 112px; text-align: center; }
+  .police .foto { width: 100%; height: auto; display: block; mix-blend-mode: multiply; }
+  .police figcaption { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--sedy); margin-top: 4px; line-height: 1.25; }
+  .stitky { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
+  .pilulka { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; background: #f1ecf7; color: var(--fialova); }
+  .pilulka.zlata { background: #f8f0de; color: #8a6a26; }
+  .karta-telo { padding: 6px 24px 26px; }
+  .karta h3 {
+    font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 21px; color: var(--vino);
+    margin: 22px 0 12px; display: flex; align-items: center; gap: 12px;
+  }
+  .karta h3::after { content: ""; flex: 1; height: 1px; background: var(--linka); }
+  .oleje { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .oleje li { display: flex; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border: 1px solid var(--linka); border-radius: 6px; background: #fff; }
+  .mini { width: 48px; height: 64px; flex: none; object-fit: contain; mix-blend-mode: multiply; background: #fbf8f3; border-radius: 4px; padding: 4px 8px; box-sizing: content-box; }
+  .olej { flex: 1; min-width: 0; }
+  .olej a { color: var(--text); font-weight: 600; font-size: 14px; text-decoration: none; line-height: 1.35; display: block; }
+  .olej a:hover { color: var(--fialova); }
+  .olej small { display: inline-block; font-size: 11px; color: var(--fialova); font-weight: 600; margin-top: 3px; letter-spacing: .02em; }
+  .kapky { text-align: right; flex: none; }
+  .kapky b { font-family: "DM Serif Display", Georgia, serif; font-weight: 400; color: var(--vino); font-size: 22px; line-height: 1; }
+  .kapky span { display: block; font-size: 10px; color: var(--sedy); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+  .kapky .kapicky { display: flex; gap: 2px; justify-content: flex-end; margin-top: 4px; }
+  .kapicky svg { width: 8px; height: 11px; }
+  .postup { display: flex; gap: 14px; align-items: flex-start; }
+  .postup .ikona { flex: none; width: 40px; height: 40px; border-radius: 50%; background: #f1ecf7; color: var(--fialova); display: grid; place-items: center; }
+  .postup .ikona svg { width: 20px; height: 20px; }
+  .karta p.text { margin: 0; line-height: 1.65; font-size: 14.5px; padding-top: 2px; }
+  .tip {
+    margin-top: 22px; padding: 18px 20px 18px; border-radius: 6px; background: #fbf6ec; border: 1px solid #efe2c4;
+    line-height: 1.6; font-size: 14.5px; color: #4a3b2a; position: relative;
+  }
+  .tip b { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #8a6a26; margin-bottom: 6px; }
+  .tip b svg { width: 14px; height: 14px; }
+  .tip span { font-style: italic; }
   .tlacitka { margin-top: 22px; display: grid; gap: 10px; }
   .btn {
-    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border: 0; border-radius: 2px;
-    cursor: pointer; font: 600 14px Montserrat, sans-serif; letter-spacing: .02em; text-decoration: none;
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 14px; border: 0; border-radius: 999px;
+    cursor: pointer; font: 600 14px Montserrat, sans-serif; letter-spacing: .02em; text-decoration: none; box-sizing: border-box;
   }
   .btn-fial { background: var(--fialova); color: #fff; }
   .btn-fial:hover { background: var(--fialova-tmave); }
+  .btn-obrys { background: #fff; color: var(--fialova); border: 1.5px solid var(--fialova); }
+  .btn-obrys:hover { background: #f6f2fb; }
   .btn svg { width: 18px; height: 18px; }
 
   .toast {
@@ -208,11 +235,11 @@
   @media (max-width: 720px) {
     .mrizka { grid-template-columns: repeat(4, 1fr); }
     .vnitrek .jm { display: none; }
-    .vnitrek .foto { height: 80%; }
     .info { grid-template-columns: 1fr; }
     main { padding-top: 32px; }
     .zamek { width: 11px; height: 11px; }
-    .police .foto { height: 118px; }
+    .karta-hlava h2 { font-size: 30px; }
+    .karta-telo { padding: 6px 18px 22px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .dvirka, .karta, .zavoj { transition: none; }
@@ -251,23 +278,30 @@
   <article class="karta">
     <div class="karta-hlava">
       <button class="zavrit" id="zavrit" aria-label="Zavřít">×</button>
+      <img class="k-logo" src="img/yl-logo-svetle.svg" alt="Young Living" width="112" height="34">
       <div class="den" id="k-den"></div>
       <h2 id="k-nazev"></h2>
       <p id="k-nalada"></p>
+    </div>
+    <div class="scena">
       <div class="police" id="k-police"></div>
+      <div class="stitky"><span class="pilulka" id="k-pouziti"></span><span class="pilulka zlata" id="k-pocet"></span></div>
     </div>
     <div class="karta-telo">
-      <span class="pilulka" id="k-pouziti"></span>
-      <h3>Složení</h3>
+      <h3>Složení směsi</h3>
       <ul class="oleje" id="k-oleje"></ul>
       <h3>Jak na to</h3>
-      <p class="text" id="k-postup"></p>
-      <div class="tip" id="k-tip"></div>
+      <div class="postup">
+        <span class="ikona"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c-2.5 3.6-4 6.1-4 8a4 4 0 0 0 8 0c0-1.9-1.5-4.4-4-8z"/><path d="M5 21h14"/><path d="M8 17.5h8"/></svg></span>
+        <p class="text" id="k-postup"></p>
+      </div>
+      <div class="tip"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>Tip od nás</b><span id="k-tip"></span></div>
       <div class="tlacitka">
         <button class="btn btn-fial" id="k-sdilet">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
           Poslat do WhatsAppu
         </button>
+        <a class="btn btn-obrys" id="k-eshop" target="_blank" rel="noopener">Oleje v e-shopu Young Living ↗</a>
       </div>
     </div>
   </article>
@@ -288,7 +322,7 @@
   // Oficiální fotka lahvičky z e-shopu Young Living
   function lahvicka(olej) {
     const o = OLEJE[olej];
-    return `<img class="foto" src="img/${olej}.jpg" alt="${o.nazev}" width="300" height="300" loading="lazy">`;
+    return `<img class="foto" src="img/${olej}.jpg?v=4" alt="${o.nazev}" width="240" height="400" loading="lazy">`;
   }
 
   // Nebeské motivy na dvířka
@@ -339,7 +373,7 @@
     if (!zamceno && otevrena.includes(den)) btn.classList.add('otevrene');
     btn.setAttribute('aria-label', zamceno ? `Okénko ${den}, otevře se ${den}. prosince` : `Okénko ${den}: ${t.nazev}`);
     btn.innerHTML = `
-      <span class="vnitrek">${zamceno ? '' : lahvicka(t.slozeni[0][0]) + `<span class="jm">${t.nazev}</span>`}</span>
+      <span class="vnitrek">${zamceno ? '' : `<span class="lahve n${t.slozeni.length}">${t.slozeni.map(([o]) => lahvicka(o)).join('')}</span><span class="jm">${t.nazev}</span>`}</span>
       <span class="dvirka"><span class="cislo">${den}</span><span class="motiv">${MOTIVY[i % 3]}</span><span class="knofl"></span>${zamceno ? ZAMEK : ''}</span>`;
     btn.addEventListener('click', () => klik(btn, den));
     mrizka.appendChild(btn);
@@ -371,15 +405,18 @@
     document.getElementById('k-pouziti').textContent = t.pouziti;
     document.getElementById('k-postup').textContent = t.postup;
     document.getElementById('k-tip').textContent = t.tip;
-    document.getElementById('k-police').innerHTML = t.slozeni.map(([o]) => lahvicka(o)).join('');
+    document.getElementById('k-police').innerHTML = t.slozeni.map(([o]) => `<figure>${lahvicka(o)}<figcaption>${OLEJE[o].stitek}</figcaption></figure>`).join('');
+    const celkem = t.slozeni.reduce((a, [, n]) => a + n, 0);
+    document.getElementById('k-pocet').textContent = t.pouziti.toLowerCase().includes('difuz') ? `${celkem} ${kapek(celkem)} celkem` : `${t.slozeni.length} oleje`;
+    document.getElementById('k-eshop').href = 'https://www.youngliving.com/cs_CZ';
     const ul = document.getElementById('k-oleje');
     ul.innerHTML = '';
     t.slozeni.forEach(([klic, n]) => {
       const o = OLEJE[klic];
       const li = document.createElement('li');
-      li.innerHTML = `<img class="mini" src="img/${klic}.jpg" alt="" width="44" height="44">
-        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Zobrazit v e-shopu ↗</small></span>
-        <span class="kapky">${n}<span>${kapek(n)}</span></span>`;
+      li.innerHTML = `<img class="mini" src="img/${klic}.jpg?v=4" alt="" width="48" height="64">
+        <span class="olej"><a href="${eshop(o.id)}" target="_blank" rel="noopener"></a><small>Koupit v e-shopu ↗</small></span>
+        <span class="kapky"><b>${n}</b><span>${kapek(n)}</span><span class="kapicky">${`<svg viewBox="0 0 8 11"><path d="M4 0C2.4 2.6 0 5 0 7a4 4 0 0 0 8 0C8 5 5.6 2.6 4 0z" fill="${o.barva}"/></svg>`.repeat(Math.min(n, 8))}</span></span>`;
       li.querySelector('a').textContent = o.nazev;
       ul.appendChild(li);
     });
