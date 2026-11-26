@@ -57,7 +57,7 @@
   main { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 44px 16px 56px; }
 
   header { text-align: center; }
-  .logo { display: block; width: 190px; height: auto; margin: 22px auto 0; }
+  .logo { display: block; width: 190px; height: auto; margin: 0 auto 26px; }
   .nadpis-mala {
     font-size: 12px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--zlato);
     display: inline-flex; align-items: center; gap: 14px;
@@ -154,10 +154,12 @@
   .zavoj.ukaz { opacity: 1; pointer-events: auto; }
   .karta {
     width: 100%; max-width: 500px; max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto;
-    background: #fff; color: var(--text); border-radius: 8px;
+    background: linear-gradient(#8a2333, #8a2333) top / 100% 50% no-repeat, #fff; color: var(--text); border-radius: 8px;
+    overscroll-behavior: none; scrollbar-width: none;
     box-shadow: 0 30px 80px rgba(0,0,0,.55); transform: translateY(24px) scale(.97); transition: transform .4s cubic-bezier(.2,.8,.2,1);
   }
   .zavoj.ukaz .karta { transform: none; }
+  .karta::-webkit-scrollbar { display: none; }
   .karta-hlava {
     position: relative; padding: 30px 24px 28px; text-align: center; color: #fff;
     background: var(--vzor) center / 200px 200px, linear-gradient(170deg, #8a2333, #4f0f1a);
@@ -183,7 +185,7 @@
   .stitky { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 14px; }
   .pilulka { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 7px 12px; border-radius: 999px; background: #f1ecf7; color: var(--fialova); }
   .pilulka.zlata { background: #f8f0de; color: #8a6a26; }
-  .karta-telo { padding: 6px 24px 26px; }
+  .karta-telo { padding: 6px 24px 26px; background: #fff; }
   .karta h3 {
     font-family: "DM Serif Display", Georgia, serif; font-weight: 400; font-size: 21px; color: var(--vino);
     margin: 22px 0 12px; display: flex; align-items: center; gap: 12px;
@@ -222,19 +224,23 @@
   .okenko.prazdne .vnitrek, .okenko.prazdne .dvirka { visibility: hidden; }
   .okenko.prazdne { background: #2a070e; box-shadow: inset 0 10px 18px rgba(0,0,0,.7); }
   .okenko.bezanim .dvirka { transition: none; }
-  .suplik { position: fixed; z-index: 9; pointer-events: none; transform-origin: 50% 70%; }
-  .suplik .okenko { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; pointer-events: none; }
+  .suplik { position: fixed; z-index: 9; pointer-events: none; perspective: var(--p); perspective-origin: 50% -150%; --z: 0px; }
+  .sup-telo { position: absolute; inset: 0; transform-style: preserve-3d; transform: translateZ(var(--z)); }
+  .sup-telo > * { position: absolute; box-sizing: border-box; }
+  .suplik .okenko {
+    inset: 0; width: 100%; height: 100%; aspect-ratio: auto; pointer-events: none;
+    box-shadow: 0 calc(var(--z) * .12) calc(var(--z) * .2) rgba(0,0,0,.45); border-radius: 3px;
+  }
   .suplik .okenko .dvirka { transition: none; }
-  .sup-box {
-    position: absolute; left: 3%; right: 3%; bottom: 100%; height: 0; overflow: hidden;
-    transform-origin: 50% 100%; transform: perspective(260px) rotateX(36deg);
-    background: linear-gradient(#e9dcc6, var(--krem) 60%);
-    border: solid #5c1422; border-width: 0 6px; box-shadow: inset 0 12px 16px rgba(0,0,0,.35);
+  .sup-dno {
+    left: 4%; right: 4%; top: 16%; height: var(--z); transform-origin: 50% 0; transform: rotateX(-90deg);
+    background: linear-gradient(90deg, #f3e8d6 10%, #fff 10% 90%, #f3e8d6 90%);
+    border-top: 3px solid var(--zlato-syte);
   }
-  .sup-box::after {
-    content: ""; position: absolute; left: 13%; right: 13%; top: 24%; bottom: -10%; background: #fff;
-    border-top: 2px solid var(--zlato-syte); box-shadow: 0 -3px 8px rgba(0,0,0,.18);
-  }
+  .sup-bok { top: 6%; bottom: 4%; width: var(--z); background: linear-gradient(90deg, #4f0f1a, #7a1d2e); }
+  .sup-bok.l { left: 4%; transform-origin: 0 50%; transform: rotateY(90deg); }
+  .sup-bok.p { right: 4%; transform-origin: 100% 50%; transform: rotateY(-90deg); }
+  .sup-zada { left: 4%; right: 4%; top: 6%; bottom: 4%; background: #4f0f1a; transform: translateZ(calc(var(--z) * -1)); }
 
   .toast {
     position: fixed; left: 50%; bottom: 24px; z-index: 20; transform: translate(-50%, 20px);
@@ -263,10 +269,10 @@
 <canvas id="trpyt" aria-hidden="true"></canvas>
 <main>
   <header>
-    <div class="nadpis-mala">Adventní kalendář</div>
     <img class="logo" src="img/yl-logo-svetle.svg" alt="Young Living" width="190" height="57">
+    <div class="nadpis-mala">Adventní kalendář</div>
     <h1>Voňavé <em>Vánoce</em><br>po kapkách</h1>
-    <p class="podtitul">Každý den jeden šuplíček a v něm jedna vánoční směs z olejů Young Living. Otevřít jde vždy jen dnešní okénko a ta předchozí.</p>
+    <p class="podtitul">Každý den jeden šuplíček a v něm jedna vánoční směs z olejů Young Living.</p>
     <div class="stav" id="stav"></div>
   </header>
 
@@ -410,34 +416,42 @@
   const BEZ_POHYBU = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const POMALU = 'cubic-bezier(.3,.7,.2,1)';
   let suplik = null, suplikBtn = null;
+  function jed(s, od, kam, ms) {
+    return new Promise(hotovo => {
+      const start = performance.now();
+      (function krok(t) {
+        const x = Math.min(1, (t - start) / ms);
+        const e = od < kam ? 1 - Math.pow(1 - x, 3) : x * x * x;
+        s.style.setProperty('--z', (od + (kam - od) * e) + 'px');
+        x < 1 ? requestAnimationFrame(krok) : hotovo();
+      })(start);
+    });
+  }
   function vysun(btn) {
     const r = btn.getBoundingClientRect();
     const s = document.createElement('div');
     s.className = 'suplik';
+    const p = Math.max(420, r.width * 4);
+    s.dataset.z = p * .3;
     Object.assign(s.style, { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
+    s.style.setProperty('--p', p + 'px');
     const celo = btn.cloneNode(true);
-    celo.classList.remove('zatrest');
+    celo.classList.remove('zatrest', 'otevrene');
     celo.removeAttribute('aria-label');
     celo.setAttribute('aria-hidden', 'true');
     celo.tabIndex = -1;
-    s.innerHTML = '<div class="sup-box"></div>';
-    s.appendChild(celo);
+    s.innerHTML = '<div class="sup-telo"><div class="sup-zada"></div><div class="sup-bok l"></div><div class="sup-bok p"></div><div class="sup-dno"></div></div>';
+    s.firstChild.appendChild(celo);
     document.body.appendChild(s);
     btn.classList.add('prazdne', 'otevrene');
     suplik = s; suplikBtn = btn;
-    const k = Math.min(1.9, Math.max(1.25, 150 / r.width));
-    const moc = { duration: 700, easing: POMALU, fill: 'forwards' };
-    s.animate([
-      { transform: 'none', filter: 'drop-shadow(0 0 0 rgba(0,0,0,0))' },
-      { transform: `translateY(${r.height * .3}px) scale(${k})`, filter: 'drop-shadow(0 18px 22px rgba(0,0,0,.55))' }
-    ], moc);
-    return s.querySelector('.sup-box').animate([{ height: '0%' }, { height: '85%' }], moc).finished;
+    return jed(s, 0, +s.dataset.z, 750);
   }
   function doSupliku(karta) {
     const cr = karta.getBoundingClientRect();
-    const br = suplik.querySelector('.sup-box').getBoundingClientRect();
-    const k = br.width * .74 / cr.width;
-    return `translate(${br.left + br.width / 2 - (cr.left + cr.width / 2)}px, ${br.top + br.height * .3 - cr.top}px) scale(${k})`;
+    const br = suplik.querySelector('.sup-dno').getBoundingClientRect();
+    const k = br.width * .8 / cr.width;
+    return `translate(${br.left + br.width / 2 - (cr.left + cr.width / 2)}px, ${br.top - cr.top}px) scale(${k})`;
   }
 
   const zavoj = document.getElementById('zavoj');
@@ -499,9 +513,10 @@
       await zpet.finished;
       const r = btn.getBoundingClientRect();
       Object.assign(s.style, { left: r.left + 'px', top: r.top + 'px' });
-      await Promise.all(s.getAnimations({ subtree: true }).map(a => { a.reverse(); return a.finished; }));
+      await jed(s, +s.dataset.z, 0, 550);
       btn.classList.add('bezanim');
       btn.classList.remove('prazdne');
+      await s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250 }).finished;
       s.remove();
       void btn.offsetWidth;
       btn.classList.remove('bezanim');
