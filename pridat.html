@@ -19,6 +19,9 @@
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; scrollbar-width: none; }
+  /* Mobilní aplikace: stránka nejde přetáhnout přes okraj a za okrajem je vínová */
+  html { background: #350a12; overscroll-behavior: none; }
+  body { overscroll-behavior: none; }
   html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
   body {
     min-height: 100vh; font-family: Montserrat, "Helvetica Neue", Arial, sans-serif; color: var(--text);
@@ -32,7 +35,7 @@
     background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
   }
-  main { max-width: 600px; margin: 0 auto; padding: 40px 16px 56px; }
+  main { max-width: 600px; margin: 0 auto; padding: calc(40px + env(safe-area-inset-top)) 16px calc(56px + env(safe-area-inset-bottom)); }
 
   /* Hlavička jako v kalendáři */
   header { text-align: center; color: var(--krem); margin-bottom: 30px; }
@@ -125,7 +128,7 @@
   .ava.ma-foto, .nahled-foto.ma-foto { cursor: pointer; }
 
   /* Výřez fotky do kolečka */
-  .orez { position: fixed; inset: 0; z-index: 50; background: rgba(30,6,11,.78); display: grid; place-items: center; padding: 16px; }
+  .orez { position: fixed; inset: 0; z-index: 50; background: rgba(30,6,11,.78); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
   .orez-okno { background: #fff; border-radius: 8px; width: 100%; max-width: 360px; padding: 22px 20px 20px; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.5); }
   .orez-nadpis { font-family: "DM Serif Display", Georgia, serif; font-size: 24px; color: var(--vino); margin: 0 0 4px; }
   .orez-rada { font-size: 13px; color: var(--sedy); margin: 0 0 16px; line-height: 1.5; }
