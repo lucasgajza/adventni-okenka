@@ -388,7 +388,12 @@
     #finale { transition: opacity .3s; }
     .okenko.vlna .dvirka, .okenko.posledni .dvirka, .okenko.posledni .knofl { animation: none; }
   }
+  html.uvod-videne #uvod { display: none; }
 </style>
+<script>
+  // Úvodní přání se na jednom zařízení ukáže jen poprvé
+  try { if (localStorage.getItem('advent-uvod') === '1') document.documentElement.classList.add('uvod-videne'); } catch (e) {}
+</script>
 </head>
 <body>
 <div id="uvod" role="dialog" aria-label="Přejeme vám šťastné a veselé Vánoce">
@@ -1081,6 +1086,8 @@ window.RECEPTY = (async () => {
 <script>
 (() => {
   const uvod = document.getElementById('uvod');
+  if (document.documentElement.classList.contains('uvod-videne')) { uvod.remove(); return; }
+  try { localStorage.setItem('advent-uvod', '1'); } catch (e) {}
   const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.add('uvod-bezi');
   const stop = e => e.preventDefault();
