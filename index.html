@@ -414,7 +414,7 @@
     <div class="nadpis-mala">Adventní kalendář</div>
     <h1>Voňavé <em>Vánoce</em><br>po kapkách</h1>
     <p class="podtitul">Každý den otevřete jeden šuplíček a v něm na vás čeká překvapení, které pro vás nachystala Oily Crew.</p>
-    <div class="stav" id="stav"></div>
+    <div class="stav" id="stav">Načítám okénka…</div>
   </header>
 
   <div class="krabice">
@@ -490,10 +490,9 @@ window.RECEPTY = (async () => {
       [n, ...(m ? [m[1], m[2]] : [])].forEach(a => { const k = klicJmena(a); if (!produkty[k]) produkty[k] = [id, n]; });
     }
   const foto = id => /^[\w-]{20,80}$/.test(id) ? `https://lh3.googleusercontent.com/d/${id}=w1000` : '';
-  try {
-    const c = new AbortController(), cas = setTimeout(() => c.abort(), 4000);
-    const data = await (await fetch(url, { signal: c.signal })).json();
-    clearTimeout(cas);
+  const VYCHOZI = window.TIPY.slice();
+  function zpracuj(data) {
+    window.TIPY = VYCHOZI.slice();
     for (const r of data.recepty || []) {
       // Řádek „Název – množství“. Množství je počet kapek, nebo volný text (2 lžíce, 50 ml).
       const slozeni = String(r.slozeni).split('\n').map(l => l.trim()).filter(Boolean).map(l => {
@@ -512,7 +511,26 @@ window.RECEPTY = (async () => {
       const i = window.TIPY.findIndex(x => x.den === r.den);
       if (i >= 0) window.TIPY[i] = tip; else window.TIPY.push(tip);
     }
-  } catch (e) {}
+  }
+  // Recepty z minulé návštěvy se ukážou hned, čerstvé se stáhnou na pozadí a okénka se pak překreslí
+  const ULOZENE = 'advent-recepty';
+  let ulozene = null;
+  try { ulozene = localStorage.getItem(ULOZENE); if (ulozene) zpracuj(JSON.parse(ulozene)); } catch (e) { ulozene = null; }
+  const stahni = (async () => {
+    try {
+      const c = new AbortController(), cas = setTimeout(() => c.abort(), 15000);
+      const text = await (await fetch(url, { signal: c.signal })).text();
+      clearTimeout(cas);
+      const data = JSON.parse(text);
+      if (!Array.isArray(data.recepty)) return;
+      try { localStorage.setItem(ULOZENE, text); } catch (e) {}
+      if (text === ulozene) return;
+      zpracuj(data);
+      dispatchEvent(new Event('recepty-nove'));
+    } catch (e) {}
+  })();
+  // Při první návštěvě bez uložených receptů počkat na stažení, nejvýš 6 sekund
+  if (!ulozene) await Promise.race([stahni, new Promise(r => setTimeout(r, 6000))]);
 })();
 </script>
 <script>
@@ -521,7 +539,7 @@ window.RECEPTY = (async () => {
   const ROK = 2026;
   const PORADI = [7, 15, 1, 22, 11, 4, 19, 9, 24, 13, 2, 17, 6, 20, 12, 3, 23, 10, 16, 5, 21, 8, 14, 18];
   const OLEJE = window.OLEJE;
-  const tipy = Object.fromEntries(window.TIPY.map(t => [t.den, t]));
+  let tipy = Object.fromEntries(window.TIPY.map(t => [t.den, t]));
   const eshop = id => `https://www.youngliving.com/cs_CZ/products/id/${id}`;
   const kapek = n => n === 1 ? 'kapka' : n < 5 ? 'kapky' : 'kapek';
   const dni = n => n === 1 ? 'den' : n < 5 ? 'dny' : 'dní';
@@ -577,6 +595,22 @@ window.RECEPTY = (async () => {
     stav.innerHTML = `Dnes je <strong>${dnes}. prosince</strong> · otevřete si dnešní okénko`;
   }
 
+  function vnitrek(t, zamceno) {
+    return `<span class="vnitrek${!zamceno && t.foto ? ' s-fotkou' : ''}">${zamceno ? '' : t.foto
+        ? `<img class="vlastni" src="${esc(t.foto)}" alt="" loading="lazy">`
+        : `<span class="lahve n${znamy(t).length}">${znamy(t).map(lahvicka).join('')}</span><span class="jm">${esc(t.nazev)}</span>`}</span>`;
+  }
+  // Čerstvé recepty z tabulky dorazily po vykreslení: vyměnit obsah za dvířky
+  addEventListener('recepty-nove', () => {
+    tipy = Object.fromEntries(window.TIPY.map(t => [t.den, t]));
+    mrizka.querySelectorAll('.okenko').forEach(btn => {
+      const den = +btn.querySelector('.cislo').textContent, t = tipy[den], zamceno = den > dnes;
+      if (!t || btn.classList.contains('prazdne')) return;
+      btn.querySelector('.vnitrek').outerHTML = vnitrek(t, zamceno);
+      if (!zamceno) btn.setAttribute('aria-label', `Okénko ${den}: ${t.nazev}${otevrena.includes(den) ? ' (už otevřené)' : ''}`);
+    });
+  });
+
   const mrizka = document.getElementById('mrizka');
   PORADI.forEach((den, i) => {
     const t = tipy[den];
@@ -588,9 +622,7 @@ window.RECEPTY = (async () => {
     if (!zamceno && otevrena.includes(den)) btn.classList.add('videne');
     btn.setAttribute('aria-label', zamceno ? `Okénko ${den}, otevře se ${den}. prosince` : `Okénko ${den}: ${t.nazev}${otevrena.includes(den) ? ' (už otevřené)' : ''}`);
     btn.innerHTML = `
-      <span class="vnitrek${!zamceno && t.foto ? ' s-fotkou' : ''}">${zamceno ? '' : t.foto
-        ? `<img class="vlastni" src="${esc(t.foto)}" alt="" loading="lazy">`
-        : `<span class="lahve n${znamy(t).length}">${znamy(t).map(lahvicka).join('')}</span><span class="jm">${esc(t.nazev)}</span>`}</span>
+      ${vnitrek(t, zamceno)}
       <span class="dvirka"><span class="cislo">${den}</span><span class="motiv">${MOTIVY[i % 3]}</span><span class="knofl"></span>${zamceno ? ZAMEK : ''}</span>`;
     btn.addEventListener('click', () => klik(btn, den));
     mrizka.appendChild(btn);
