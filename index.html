@@ -300,7 +300,7 @@
   }
 
   /* Úvodní obrazovka */
-  #uvod { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; cursor: pointer;
+  #uvod { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff;
     background: radial-gradient(60% 34% at 50% 47%, rgba(226,194,125,.18), transparent 70%), linear-gradient(170deg, #8a2333, #5a1220 60%, #3a0a14);
     transition: opacity .9s ease, visibility .9s; }
   #uvod.pryc { opacity: 0; visibility: hidden; }
@@ -388,12 +388,7 @@
     #finale { transition: opacity .3s; }
     .okenko.vlna .dvirka, .okenko.posledni .dvirka, .okenko.posledni .knofl { animation: none; }
   }
-  html.uvod-videne #uvod { display: none; }
 </style>
-<script>
-  // Úvodní přání se na jednom zařízení ukáže jen poprvé
-  try { if (localStorage.getItem('advent-uvod') === '1') document.documentElement.classList.add('uvod-videne'); } catch (e) {}
-</script>
 </head>
 <body>
 <div id="uvod" role="dialog" aria-label="Přejeme vám šťastné a veselé Vánoce">
@@ -1118,8 +1113,6 @@ window.RECEPTY = (async () => {
 <script>
 (() => {
   const uvod = document.getElementById('uvod');
-  if (document.documentElement.classList.contains('uvod-videne')) { uvod.remove(); return; }
-  try { localStorage.setItem('advent-uvod', '1'); } catch (e) {}
   const klid = matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.documentElement.classList.add('uvod-bezi');
   const stop = e => e.preventDefault();
@@ -1150,9 +1143,8 @@ window.RECEPTY = (async () => {
     removeEventListener('touchmove', stop); removeEventListener('wheel', stop);
     setTimeout(() => { bezi = false; uvod.remove(); }, 1000);
   }
-  uvod.addEventListener('click', zavri);
-  addEventListener('keydown', e => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') zavri(); }, { once: true });
-  setTimeout(zavri, klid ? 2500 : 3800);
+  // Úvod nejde přeskočit. Zavře se, až doběhne animace a kalendář má načtené recepty.
+  Promise.all([new Promise(r => setTimeout(r, klid ? 2500 : 3800)), window.RECEPTY]).then(zavri, zavri);
 })();
 </script>
 <template id="finale-sablona">
