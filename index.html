@@ -330,6 +330,49 @@
   @media (prefers-reduced-motion: reduce) {
     #uvod *, #uvod { animation: none !important; }
   }
+
+  /* Vánoční finále po otevření posledního okénka */
+  .stav .prani { font: inherit; font-weight: 600; color: var(--zlato); background: none; border: 0; border-left: 1px solid rgba(226,194,125,.4);
+    padding: 2px 0 2px 12px; margin-left: 2px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .stav .prani svg { width: 13px; height: 13px; }
+  .stav:has(.prani) { flex-wrap: wrap; justify-content: center; text-align: center; row-gap: 8px; }
+  @media (max-width: 560px) { .stav .prani { flex-basis: 100%; justify-content: center; border-left: 0; border-top: 1px solid rgba(226,194,125,.3); padding: 8px 0 0; margin: 0; } }
+  .okenko.vlna .dvirka { animation: vlna 1.1s var(--zpozdeni) ease-out both; }
+  @keyframes vlna { 35% { box-shadow: inset 0 0 0 2px var(--zlato), 0 0 26px 6px rgba(226,194,125,.75); filter: brightness(1.35); } }
+  #finale { position: fixed; inset: 0; z-index: 90; display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; cursor: pointer;
+    background: radial-gradient(60% 38% at 50% 46%, rgba(226,194,125,.2), transparent 70%), linear-gradient(170deg, #8a2333, #5a1220 60%, #3a0a14);
+    opacity: 0; transition: opacity 1.2s ease; touch-action: none; overscroll-behavior: none;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+  #finale.ukaz { opacity: 1; }
+  #finale canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .fin-stred { position: relative; display: flex; flex-direction: column; align-items: center; padding: 0 20px; max-width: 640px; }
+  .fin-hv { width: min(46px, 5.5vh); height: min(46px, 5.5vh); margin-bottom: min(30px, 3.5vh); }
+  .fin-pre { font-size: min(17px, 4.3vw); color: #f0dcd6; letter-spacing: .04em; margin: 0 0 min(16px, 2vh); line-height: 1.5; }
+  .fin-h { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: min(17vw, 11vh, 120px); line-height: 1; margin: 0; }
+  .fin-h span { display: block; } .fin-h em { color: var(--zlato); }
+  .fin-cara { width: 90px; height: 1px; background: var(--zlato); opacity: .7; margin: min(34px, 4vh) 0 min(22px, 2.6vh); }
+  .fin-prani { font-family: 'DM Serif Display', serif; font-style: italic; font-size: min(28px, 7vw, 4vh); line-height: 1.3; color: #fbf1e4; margin: 0; }
+  .fin-prani span { display: block; }
+  .fin-rok { color: var(--zlato); }
+  .fin-crew { color: var(--zlato); letter-spacing: .46em; padding-left: .46em; font-size: min(15px, 3.8vw); font-weight: 600; margin-top: min(34px, 4vh); }
+  .fin-logo { width: min(130px, 34vw); opacity: .85; margin-top: min(26px, 3vh); }
+  .fin-zavrit { position: absolute; left: 0; right: 0; bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px)); font-size: 11px; letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(240,220,214,.55); }
+  #finale.hraje .fin-stred > *, #finale.hraje .fin-prani span, #finale.hraje .fin-h span, #finale.hraje .fin-zavrit { animation: finIn 1.3s cubic-bezier(.2,.8,.2,1) both; }
+  #finale.hraje .fin-hv { animation: uvodHv 1.2s .3s cubic-bezier(.2,.8,.2,1) both, uvodPuls 2.6s 1.5s ease-in-out infinite; }
+  #finale.hraje .fin-h, #finale.hraje .fin-prani { animation: none; }
+  #finale.hraje .fin-pre { animation-delay: .9s; }
+  #finale.hraje .fin-h span:nth-child(1) { animation-delay: 1.5s; } #finale.hraje .fin-h span:nth-child(2) { animation-delay: 1.9s; }
+  #finale.hraje .fin-cara { animation: uvodCara .9s 2.9s cubic-bezier(.2,.8,.2,1) both; }
+  #finale.hraje .fin-prani span:nth-child(1) { animation-delay: 3.3s; } #finale.hraje .fin-prani span:nth-child(2) { animation-delay: 3.8s; }
+  #finale.hraje .fin-crew { animation-delay: 4.7s; } #finale.hraje .fin-logo { animation-delay: 5.2s; } #finale.hraje .fin-zavrit { animation-delay: 6.5s; }
+  @keyframes finIn { from { opacity: 0; transform: translateY(18px); filter: blur(6px); } }
+  #finale.hraje .fin-logo { animation-name: finLogo; }
+  @keyframes finLogo { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    #finale *, #finale.hraje * { animation: none !important; }
+    .okenko.vlna .dvirka { animation: none; }
+  }
 </style>
 </head>
 <body>
@@ -508,7 +551,8 @@ window.RECEPTY = (async () => {
       ? 'První okénko se otevře <strong>už zítra</strong>'
       : `Do prvního okénka zbývá <strong>${zbyva} ${dni(zbyva)}</strong>`;
   } else if (dnes >= 24) {
-    stav.innerHTML = '<strong>Všechna okénka jsou otevřená.</strong> Krásné Vánoce!';
+    stav.innerHTML = '<span><strong>Všechna okénka jsou otevřená.</strong> Krásné Vánoce!</span>';
+    if (otevrena.includes(24)) pridejPrani();
   } else {
     stav.innerHTML = `Dnes je <strong>${dnes}. prosince</strong> · otevřete si dnešní okénko`;
   }
@@ -596,7 +640,9 @@ window.RECEPTY = (async () => {
 
   const zavoj = document.getElementById('zavoj');
   let posledniFokus = null;
+  let kartaDen = 0;
   function ukazKartu(den) {
+    kartaDen = den;
     const t = tipy[den];
     posledniFokus = document.activeElement;
     document.getElementById('k-den').textContent = `${den}. prosince`;
@@ -716,8 +762,109 @@ window.RECEPTY = (async () => {
       document.querySelectorAll('.mrizka .okenko.otevrene').forEach(oznacVidene);
     }
     if (posledniFokus) posledniFokus.focus({ preventScroll: true });
+    // Po zavření receptu z 24. okénka poprvé přijde vánoční přání
+    if (kartaDen === 24 && dnes >= 24 && !finaleVidene()) {
+      try { localStorage.setItem(KLIC + '-finale', '1'); } catch (e) {}
+      pridejPrani();
+      finale(true);
+    }
   }
   document.getElementById('zavrit').addEventListener('click', zavri);
+
+  // Vánoční finále: zlatá vlna přes všechna okénka, pak přání s ohňostrojem
+  function finaleVidene() { try { return localStorage.getItem(KLIC + '-finale') === '1'; } catch (e) { return false; } }
+  function pridejPrani() {
+    if (stav.querySelector('.prani')) return;
+    const b = document.createElement('button');
+    b.className = 'prani'; b.type = 'button';
+    b.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>Přání od Oily Crew';
+    b.addEventListener('click', () => finale(false));
+    stav.appendChild(b);
+  }
+  function vlna() {
+    const o = [...document.querySelectorAll('.mrizka .okenko')];
+    const c = document.querySelector('.mrizka .okenko.dnes') || o[0];
+    const r0 = c.getBoundingClientRect();
+    let max = 0;
+    o.forEach(b => {
+      const r = b.getBoundingClientRect(), d = Math.hypot(r.left - r0.left, r.top - r0.top);
+      max = Math.max(max, d);
+      b.style.setProperty('--zpozdeni', (d * 1.1) + 'ms'); b.classList.remove('vlna'); void b.offsetWidth; b.classList.add('vlna');
+    });
+    setTimeout(() => o.forEach(b => b.classList.remove('vlna')), max * 1.1 + 1300);
+    return max * 1.1 + 700;
+  }
+  async function finale(sVlnou) {
+    if (document.getElementById('finale')) return;
+    if (sVlnou && !BEZ_POHYBU) {
+      document.querySelector('.mrizka').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, vlna()));
+    }
+    const el = document.getElementById('finale-sablona').content.firstElementChild.cloneNode(true);
+    el.querySelector('.fin-rok').textContent = ROK + 1;
+    document.body.appendChild(el);
+    document.documentElement.classList.add('uvod-bezi');
+    const stop = e => e.preventDefault();
+    addEventListener('touchmove', stop, { passive: false }); addEventListener('wheel', stop, { passive: false });
+    const cv = el.querySelector('canvas'), ctx = cv.getContext('2d');
+    let w, h, bezi = true, castice = [], vlocky = [], dalsi = 0;
+    function rozmer() {
+      const d = Math.min(devicePixelRatio || 1, 2);
+      w = innerWidth; h = innerHeight; cv.width = w * d; cv.height = h * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      vlocky = Array.from({ length: Math.round(w * h / 11000) }, () => { const z = Math.random();
+        return { x: Math.random() * w, y: Math.random() * h, r: .8 + z * 2.2, v: 14 + z * 36, a: .2 + z * .45, sw: 8 + Math.random() * 16, f: .3 + Math.random() * .6, ph: Math.random() * 6.3 }; });
+    }
+    const BARVY = ['#e2c27d', '#f3dca3', '#fff4dc', '#d9a54a', '#ffd9de'];
+    function ohnostroj(t) {
+      const x = w * (.15 + Math.random() * .7), y = h * (.12 + Math.random() * .38);
+      const n = 46 + Math.random() * 30 | 0, barva = BARVY[Math.random() * BARVY.length | 0], sila = Math.min(w, h) * (.0032 + Math.random() * .0018);
+      for (let i = 0; i < n; i++) {
+        const u = i / n * Math.PI * 2 + Math.random() * .1, v = sila * (60 + Math.random() * 30);
+        castice.push({ x, y, vx: Math.cos(u) * v, vy: Math.sin(u) * v, t0: t, zivot: 1.6 + Math.random() * .9, barva, r: 1.2 + Math.random() * 1.4 });
+      }
+    }
+    function kresli(t, dt) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'source-over';
+      for (const s of vlocky) {
+        const y = ((s.y + s.v * t) % (h + 20)) - 10, x = s.x + Math.sin(t * s.f + s.ph) * s.sw;
+        ctx.globalAlpha = s.a; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.29); ctx.fill();
+      }
+      if (t > .8 && t >= dalsi) { ohnostroj(t); dalsi = t + (t < 9 ? .55 + Math.random() * .7 : 1.4 + Math.random() * 1.6); }
+      ctx.globalCompositeOperation = 'lighter';
+      castice = castice.filter(c => t - c.t0 < c.zivot);
+      for (const c of castice) {
+        c.vx *= Math.pow(.25, dt); c.vy = c.vy * Math.pow(.25, dt) + 70 * dt; c.x += c.vx * dt; c.y += c.vy * dt;
+        const k = 1 - (t - c.t0) / c.zivot;
+        ctx.globalAlpha = k * (.75 + .25 * Math.sin((t - c.t0) * 30 + c.r * 9));
+        ctx.fillStyle = c.barva; ctx.beginPath(); ctx.arc(c.x, c.y, c.r * (.6 + .4 * k), 0, 6.29); ctx.fill();
+        ctx.globalAlpha = k * .18; ctx.beginPath(); ctx.arc(c.x, c.y, c.r * 3.2, 0, 6.29); ctx.fill();
+      }
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
+    }
+    rozmer(); addEventListener('resize', rozmer);
+    const t0 = performance.now(); let pred = t0;
+    (function smycka(now) {
+      if (!bezi) return;
+      kresli(BEZ_POHYBU ? 0 : (now - t0) / 1000, Math.min(.05, (now - pred) / 1000)); pred = now;
+      if (!BEZ_POHYBU) requestAnimationFrame(smycka);
+    })(t0);
+    requestAnimationFrame(() => el.classList.add('ukaz', 'hraje'));
+    const otevreno = performance.now();
+    const fokus = document.activeElement;
+    el.tabIndex = -1; el.focus({ preventScroll: true });
+    function konec() {
+      if (performance.now() - otevreno < 1500 || !bezi) return;
+      el.classList.remove('ukaz');
+      document.documentElement.classList.remove('uvod-bezi');
+      removeEventListener('touchmove', stop); removeEventListener('wheel', stop); removeEventListener('resize', rozmer); removeEventListener('keydown', klavesa);
+      setTimeout(() => { bezi = false; el.remove(); }, 1200);
+      if (fokus) fokus.focus({ preventScroll: true });
+    }
+    const klavesa = e => { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); konec(); } };
+    el.addEventListener('click', konec); addEventListener('keydown', klavesa);
+  }
   zavoj.addEventListener('click', e => { if (e.target === zavoj) zavri(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && zavoj.classList.contains('ukaz')) zavri(); });
 
@@ -873,5 +1020,20 @@ window.RECEPTY = (async () => {
   setTimeout(zavri, klid ? 2500 : 3800);
 })();
 </script>
+<template id="finale-sablona">
+<div id="finale" role="dialog" aria-modal="true" aria-label="Veselé Vánoce a šťastný nový rok od Oily Crew">
+  <canvas aria-hidden="true"></canvas>
+  <div class="fin-stred">
+    <svg class="fin-hv" viewBox="0 0 24 24" fill="none" stroke="#e2c27d" stroke-width="1" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg>
+    <p class="fin-pre">Všech 24 okének je otevřených.<br>Děkujeme, že jste byli s námi celý advent.</p>
+    <h2 class="fin-h"><span>Veselé</span><span><em>Vánoce</em></span></h2>
+    <div class="fin-cara"></div>
+    <p class="fin-prani"><span>šťastný nový rok <span class="fin-rok"></span></span><span>a hodně úspěchů</span></p>
+    <div class="fin-crew">OILY CREW</div>
+    <img class="fin-logo" src="img/yl-logo-svetle.svg" alt="Young Living">
+  </div>
+  <div class="fin-zavrit">Klepnutím zavřete</div>
+</div>
+</template>
 </body>
 </html>
